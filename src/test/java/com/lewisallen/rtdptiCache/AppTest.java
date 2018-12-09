@@ -8,7 +8,7 @@ import org.junit.Test;
 public class AppTest {
 	
 	@Test
-	public void setup() {
+	public void test() {
 		System.out.println("Success");
 	}
 }
