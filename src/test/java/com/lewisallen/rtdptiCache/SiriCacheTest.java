@@ -39,12 +39,11 @@ public class SiriCacheTest {
 		SIRICache.siriCache.put("1", j);
 			
 		// Get JSON Object using method that wraps with "payload"
-		String res = SIRICache.getSiriJson(new String[]{"1"});
-		
 		try {
+			String res = SIRICache.getSiriJson(new String[]{"1"});
 			JSONObject resJSONObject = new JSONObject(res);
 			assert(resJSONObject.has("payload"));
-		} catch (JSONException e) {
+		} catch (JSONException e){
 			e.printStackTrace();
 			fail();
 		}
@@ -52,8 +51,13 @@ public class SiriCacheTest {
 	
 	@Test
 	public void testDodgyCode(){
-		String res = SIRICache.getSiriJson(new String[]{"Dodgy"});
-		assertEquals(res, "{\"payload\":{}}");
+		try {
+			String res = SIRICache.getSiriJson(new String[]{"Dodgy"});
+			assertEquals(res, "{\"payload\":{}}");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 }
 

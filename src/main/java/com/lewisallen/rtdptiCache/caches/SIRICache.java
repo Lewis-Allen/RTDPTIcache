@@ -10,21 +10,16 @@ public class SIRICache {
 
 	public static Map<Object, JSONObject> siriCache = new HashMap<Object, JSONObject>();
 	
-	public static String getSiriJson(String[] naptans){
+	public static String getSiriJson(String[] naptans) throws JSONException{
 		
 		JSONObject k = new JSONObject();
 		
-		try {	
-			JSONObject j = new JSONObject();
-			for(String s : naptans){
-				j.put(s, SIRICache.siriCache.get(s));
-			}
-			
-			k.put("payload", j);
-		} catch (JSONException e){
-			e.printStackTrace();
-			return "{\"payload\": {}";
+		JSONObject j = new JSONObject();
+		for(String s : naptans){
+			j.put(s, SIRICache.siriCache.get(s));
 		}
+			
+		k.put("payload", j);
 		
 		return k.toString();
 	}
