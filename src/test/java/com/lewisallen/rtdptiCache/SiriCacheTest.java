@@ -1,5 +1,6 @@
 package com.lewisallen.rtdptiCache;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.json.JSONException;
@@ -10,6 +11,12 @@ import com.lewisallen.rtdptiCache.caches.SIRICache;
 
 
 public class SiriCacheTest {
+	
+	@Test
+	public void testInitialisation(){
+		@SuppressWarnings("unused")
+		SIRICache cache = new SIRICache();
+	}
 	
 	/**
 	 * Asserts getting from cache wraps in payload.
@@ -41,6 +48,12 @@ public class SiriCacheTest {
 			e.printStackTrace();
 			fail();
 		}
+	}
+	
+	@Test
+	public void testDodgyCode(){
+		String res = SIRICache.getSiriJson(new String[]{"Dodgy"});
+		assertEquals(res, "{\"payload\":{}}");
 	}
 }
 

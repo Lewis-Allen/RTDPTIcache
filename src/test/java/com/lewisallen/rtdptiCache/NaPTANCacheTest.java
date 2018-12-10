@@ -9,9 +9,15 @@ import org.junit.Test;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 
 public class NaPTANCacheTest {
+	
+	@Test
+	public void testInitialisation(){
+		@SuppressWarnings("unused")
+		NaPTANCache cache = new NaPTANCache();
+	}
 
 	@Test
-	public void testNaPTANCache() {
+	public void testNaPTANCacheCodes() {
 		
 		// Populate data.
 		for(int i = 0; i < 10; i++){

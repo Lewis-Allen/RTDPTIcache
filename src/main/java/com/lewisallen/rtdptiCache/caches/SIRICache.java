@@ -21,9 +21,9 @@ public class SIRICache {
 			}
 			
 			k.put("payload", j);
-			
 		} catch (JSONException e){
 			e.printStackTrace();
+			return "{\"payload\": {}";
 		}
 		
 		return k.toString();
