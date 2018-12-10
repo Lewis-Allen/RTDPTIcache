@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache;
+package com.lewisallen.rtdptiCache.cacheTests;
 
 import static org.junit.Assert.assertEquals;
 
