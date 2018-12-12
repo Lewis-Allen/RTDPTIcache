@@ -1,5 +1,5 @@
 flyway.user=travis
 flyway.password=
 flyway.schemas=test
-flyway.url=127.0.0.1
+flyway.url=jdbc:mysql:127.0.0.1
 flyway.locations=filesystem:db/migration
