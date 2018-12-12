@@ -9,4 +9,4 @@ CREATE TABLE `naptan` (
   `Identifier` text,
   `Northing` text,
   `Retrieve` tinyint(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
