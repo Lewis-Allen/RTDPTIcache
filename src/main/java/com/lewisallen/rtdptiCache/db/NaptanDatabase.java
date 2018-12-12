@@ -12,10 +12,15 @@ public class NaptanDatabase {
 	
 	private String query = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
 	
-	public ResultSet queryNaptan() throws ClassNotFoundException, SQLException
+	public ResultSet queryNaptan() throws SQLException
 	{
 		Dotenv env = Dotenv.load();
-		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
 		
 		String connectionString = String.format("jdbc:mysql://%s:%s/%s", env.get("DB_HOST"), env.get("DB_PORT"), env.get("DB_NAME"));
 		Connection conn = DriverManager.getConnection(connectionString, env.get("DB_USERNAME"), env.get("DB_PASSWORD"));

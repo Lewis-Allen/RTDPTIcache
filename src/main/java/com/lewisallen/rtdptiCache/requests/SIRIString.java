@@ -1,56 +1,65 @@
 package com.lewisallen.rtdptiCache.requests;
 
-import java.io.IOException;
-import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.Text;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 public class SIRIString {
 
 	// Xml string that will be sent to SIRI
-	private String xml;
+	private String xmlString;
 	
-	private final String baseXml = "<Siri xmlns=\"http://www.siri.org.uk/siri\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.siri.org.uk/schema/1.3/siri.xsd\"  version=\"1.3\"><ServiceRequest></ServiceRequest></Siri>";
-	private final String stopXml = "<StopMonitoringRequest version=\"1.3\"><PreviewInterval>PT60M</PreviewInterval></StopMonitoringRequest>";
-	
-	public SIRIString(){
+	public String generateXml(String[] naptans){
+		Document doc = new Document();
 		
-	}
-	
-	public void generateXml(String[] naptans){
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
-		DocumentBuilder builder;  
-		Document doc;
-		try {  
-		    builder = factory.newDocumentBuilder();
-		    doc = builder.parse(new InputSource(new StringReader(baseXml)));
+		Namespace ns = Namespace.getNamespace("http://www.siri.org.uk/siri");
+		Namespace ns2 = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		
+		Element siri = new Element("Siri", ns);
+		siri.setAttribute("schemaLocation","http://www.siri.org.uk/schema/1.3/siri.xsd", ns2);
+		siri.addNamespaceDeclaration(ns2);
+		siri.setAttribute("version","1.3");
+		
+		doc.setRootElement(siri);
 
-			Node serviceDelivery = doc.getDocumentElement().getElementsByTagName("ServiceRequest").item(0);
-			
-			for(String naptan : naptans)
-			{
-				serviceDelivery.appendChild(busStopNode(naptan, builder));
-			}
-			
-			System.out.println(doc.toString());
-		} catch (Exception e) {  
-		    e.printStackTrace();  
-		} 
+		Element serviceRequest = new Element("ServiceRequest", ns);
+		siri.addContent(serviceRequest);
+		
+		for(String s : naptans){
+			serviceRequest.addContent(individualStopXml(s, ns));
+		}
+		
+		XMLOutputter out = new XMLOutputter(Format.getCompactFormat().setOmitDeclaration(true));
+		//System.out.println(out.outputString(doc));
+		
+		this.xmlString = out.outputString(doc);
+		return out.outputString(doc);
 	}
 	
-	private Node busStopNode(String naptan, DocumentBuilder builder) throws SAXException, IOException{
-		Document doc = builder.parse(new InputSource(new StringReader(stopXml)));
+	public Element individualStopXml(String naptan, Namespace ns){
+		// Create root "StopMonitoringRequest" element.
+		Element stopMonitoringRequest = new Element("StopMonitoringRequest", ns);
+		stopMonitoringRequest.setAttribute("version", "1.3");
 		
-		Document monitoringRef = builder.parse(new InputSource(new StringReader("<MonitoringRef></MonitoringRef>")));
-		monitoringRef.setNodeValue(naptan);
+		// Create preview interval child.
+		Element previewInterval = new Element("PreviewInterval", ns);
+		previewInterval.setContent(new Text("PT60M"));
 		
-		doc.getDocumentElement().appendChild(monitoringRef);
-		return doc;
+		stopMonitoringRequest.addContent(previewInterval);
+		
+		// Create monitoring ref child.
+		Element monitoringRef = new Element("MonitoringRef", ns);
+		monitoringRef.addContent(new Text(naptan));     
+		
+		stopMonitoringRequest.addContent(monitoringRef);
+		
+		return stopMonitoringRequest;
+	}
+
+	public String getXml() {
+		return xmlString;
 	}
 }

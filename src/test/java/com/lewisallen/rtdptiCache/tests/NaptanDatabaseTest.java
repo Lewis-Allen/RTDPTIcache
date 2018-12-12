@@ -19,7 +19,7 @@ public class NaptanDatabaseTest {
 		try {
 			@SuppressWarnings("unused")
 			ResultSet rs = db.queryNaptan();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			fail();
 		}

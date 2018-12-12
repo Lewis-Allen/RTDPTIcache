@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 
 
-public class SiriCacheTest {
+public class SIRICacheTest {
 	
 	@Test
 	public void testInitialisation(){
