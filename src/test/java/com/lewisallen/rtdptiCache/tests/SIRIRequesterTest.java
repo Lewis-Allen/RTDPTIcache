@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
 import com.lewisallen.rtdptiCache.AppConfig;
@@ -14,8 +11,8 @@ import com.lewisallen.rtdptiCache.requests.SIRIRequester;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class SIRIRequesterTest {
 	
 	
