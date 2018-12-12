@@ -3,7 +3,7 @@ package com.lewisallen.rtdptiCache;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.lewisallen.rtdptiCache.requests.SIRIRequester;
+import com.lewisallen.rtdptiCache.requests.SIRIString;
 
 @SpringBootApplication
 public class RtdptiCacheApplication {
@@ -13,6 +13,7 @@ public class RtdptiCacheApplication {
 		
 		new AppConfig();
 		
-		SIRIRequester req = new SIRIRequester();
+		SIRIString xml = new SIRIString();
+		xml.generateXml(new String[]{"123","124"});
 	}
 }

@@ -9,11 +9,12 @@ import io.github.cdimascio.dotenv.Dotenv;
 @PropertySource("application.properties")
 public class AppConfig {
 	
+	public static String siriUri;
+	
 	public AppConfig(){
 		Dotenv dotenv = Dotenv.load();
 		
 		AppConfig.siriUri = dotenv.get("SIRI_URI");
 	}
 	
-	public static String siriUri;
 }
