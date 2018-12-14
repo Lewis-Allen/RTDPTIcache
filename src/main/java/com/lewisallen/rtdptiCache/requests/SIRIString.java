@@ -33,7 +33,6 @@ public class SIRIString {
 		}
 		
 		XMLOutputter out = new XMLOutputter(Format.getCompactFormat().setOmitDeclaration(true));
-		//System.out.println(out.outputString(doc));
 		
 		this.xmlString = out.outputString(doc);
 		return out.outputString(doc);

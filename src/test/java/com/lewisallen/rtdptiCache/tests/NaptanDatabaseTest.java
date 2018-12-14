@@ -11,7 +11,6 @@ import com.lewisallen.rtdptiCache.db.NaptanDatabase;
 
 public class NaptanDatabaseTest {
 
-	
 	@Test
 	public void testDatabaseRetrieval(){
 		NaptanDatabase db = new NaptanDatabase();
@@ -19,7 +18,7 @@ public class NaptanDatabaseTest {
 		try {
 			@SuppressWarnings("unused")
 			ResultSet rs = db.queryNaptan();
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 			fail();
 		}
