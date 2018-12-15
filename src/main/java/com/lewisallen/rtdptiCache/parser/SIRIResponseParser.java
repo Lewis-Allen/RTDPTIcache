@@ -18,6 +18,10 @@ import com.lewisallen.rtdptiCache.caches.SIRICache;
 
 public class SIRIResponseParser {
 	
+    /**
+     * Parses a response from the SIRI service and updates the cache.
+     * @param response A response received from the SIRI service.
+     */
 	public void parse(ResponseEntity<String> response){
 		JSONObject siriResponse = XML.toJSONObject(response.getBody());
 		JSONArray monitoredStops = siriResponse.getJSONObject("Siri")

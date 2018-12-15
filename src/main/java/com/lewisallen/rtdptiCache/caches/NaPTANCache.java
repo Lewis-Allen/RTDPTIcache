@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.db.NaptanDatabase;
@@ -41,6 +42,10 @@ public class NaPTANCache {
 			System.out.println("Could not connect to db." + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	public static Set<String> getCachedCodes(){
+	    return NaPTANCache.naptanCache.keySet();
 	}
 
 }

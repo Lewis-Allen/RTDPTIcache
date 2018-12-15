@@ -11,8 +11,6 @@ import com.lewisallen.rtdptiCache.requests.SIRIRequester;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
 public class SIRIRequesterTest {
 	
 	
