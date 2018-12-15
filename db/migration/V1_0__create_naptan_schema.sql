@@ -37,5 +37,3 @@ VALUES
 	'108895',
 	1
 );
-
-INSERT INTO naptan (SMS, LongDes) VALUES ('DeLorean');
