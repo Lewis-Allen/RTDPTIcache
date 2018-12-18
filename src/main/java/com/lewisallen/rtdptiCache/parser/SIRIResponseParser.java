@@ -24,10 +24,12 @@ public class SIRIResponseParser {
      */
 	public void parse(ResponseEntity<String> response){
 		JSONObject siriResponse = XML.toJSONObject(response.getBody());
+
+		// To Do - Add a catch here. Consider when a catch might be thrown. No stop visits for all bus locations requested?
 		JSONArray monitoredStops = siriResponse.getJSONObject("Siri")
-	  										   .getJSONObject("ServiceDelivery")
-	  										   .getJSONObject("StopMonitoringDelivery")
-	  										   .getJSONArray("MonitoredStopVisit");
+					.getJSONObject("ServiceDelivery")
+					.getJSONObject("StopMonitoringDelivery")
+					.getJSONArray("MonitoredStopVisit");
 		
 		 List<JSONObject> monitoredStopsList = new ArrayList<JSONObject>();
 	        
@@ -64,10 +66,13 @@ public class SIRIResponseParser {
         	 
         	 // Create JSON objects to store in cache.
         	 JSONObject jsonToCache = new JSONObject();
-        	 
-        	 jsonToCache.put("StopName", NaPTANCache.naptanCache.get(naptanKey));
+
+        	 // Store some name information from the NaPTAN Cache alongside the stop visits.
+        	 jsonToCache.put("StopName", NaPTANCache.naptanCache.get(naptanKey).getLongDescription());
+        	 jsonToCache.put("Identifier", NaPTANCache.naptanCache.get(naptanKey).getIdentifier());
         	 jsonToCache.put("MonitoredStopVisits", trimmedList);
-        	 
+
+        	 // Add final object to local cache.
         	 cache.put(naptanKey, jsonToCache);
          }
          
