@@ -16,6 +16,8 @@ import java.util.List;
 @RestController
 public class StopController {
 
+    // To Do - Add logger
+
     @RequestMapping(value="api/stop", method=RequestMethod.POST)
     public ResponseEntity<String> stops(@RequestBody JSONObject json){
         try
