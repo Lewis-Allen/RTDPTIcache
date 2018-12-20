@@ -51,10 +51,16 @@ public class SIRIString {
 		
 		// Create monitoring ref child.
 		Element monitoringRef = new Element("MonitoringRef", ns);
-		monitoringRef.addContent(new Text(naptan));     
-		
+		monitoringRef.addContent(new Text(naptan));
+
 		stopMonitoringRequest.addContent(monitoringRef);
-		
+
+		// Add Max stop visits of 8
+		Element maxStopVisits = new Element("MaximumStopVisits", ns);
+		maxStopVisits.addContent(new Text("8"));
+
+		stopMonitoringRequest.addContent(maxStopVisits);
+
 		return stopMonitoringRequest;
 	}
 
