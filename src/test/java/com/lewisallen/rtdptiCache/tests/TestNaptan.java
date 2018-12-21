@@ -1,9 +1,8 @@
 package com.lewisallen.rtdptiCache.tests;
 
+import com.lewisallen.rtdptiCache.Naptan;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.lewisallen.rtdptiCache.Naptan;
 
 public class TestNaptan {
 

@@ -1,8 +1,7 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import org.junit.Test;
-
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
+import org.junit.Test;
 
 public class ScheduledTaskTest {
     

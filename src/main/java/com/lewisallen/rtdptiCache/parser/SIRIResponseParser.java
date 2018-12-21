@@ -1,25 +1,17 @@
 package com.lewisallen.rtdptiCache.parser;
 
-import java.time.OffsetDateTime;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.sun.scenario.effect.Offset;
+import com.lewisallen.rtdptiCache.caches.NaPTANCache;
+import com.lewisallen.rtdptiCache.caches.SIRICache;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.http.ResponseEntity;
 
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
-import com.lewisallen.rtdptiCache.caches.SIRICache;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SIRIResponseParser {
 

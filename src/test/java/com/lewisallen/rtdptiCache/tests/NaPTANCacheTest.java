@@ -1,15 +1,14 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.db.NaptanDatabase;
+import org.junit.Test;
+
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class NaPTANCacheTest {
 

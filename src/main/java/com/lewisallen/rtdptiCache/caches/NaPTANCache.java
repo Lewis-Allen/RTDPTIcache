@@ -1,13 +1,13 @@
 package com.lewisallen.rtdptiCache.caches;
 
+import com.lewisallen.rtdptiCache.Naptan;
+import com.lewisallen.rtdptiCache.db.NaptanDatabase;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import com.lewisallen.rtdptiCache.Naptan;
-import com.lewisallen.rtdptiCache.db.NaptanDatabase;
 
 public class NaPTANCache {
 

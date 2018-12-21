@@ -1,18 +1,15 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import static org.junit.Assert.assertEquals;
-
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
+import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
+import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.lewisallen.rtdptiCache.caches.SIRICache;
-import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
+import static org.junit.Assert.assertEquals;
 
 public class SIRIResponseParserTest {
 

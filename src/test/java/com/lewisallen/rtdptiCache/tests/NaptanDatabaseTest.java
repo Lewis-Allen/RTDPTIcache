@@ -1,13 +1,12 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import static org.junit.Assert.fail;
+import com.lewisallen.rtdptiCache.db.NaptanDatabase;
+import org.junit.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.junit.Test;
-
-import com.lewisallen.rtdptiCache.db.NaptanDatabase;
+import static org.junit.Assert.fail;
 
 public class NaptanDatabaseTest {
 

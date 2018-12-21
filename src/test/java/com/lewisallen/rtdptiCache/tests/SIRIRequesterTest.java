@@ -1,15 +1,13 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import static org.junit.Assert.assertEquals;
-
+import com.lewisallen.rtdptiCache.AppConfig;
+import com.lewisallen.rtdptiCache.requests.SIRIRequester;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
-import com.lewisallen.rtdptiCache.AppConfig;
-import com.lewisallen.rtdptiCache.requests.SIRIRequester;
-
-import io.github.cdimascio.dotenv.Dotenv;
+import static org.junit.Assert.assertEquals;
 
 public class SIRIRequesterTest {
 	

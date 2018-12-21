@@ -1,9 +1,8 @@
 package com.lewisallen.rtdptiCache;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
-import io.github.cdimascio.dotenv.Dotenv;
 
 @Configuration
 @PropertySource("application.properties")

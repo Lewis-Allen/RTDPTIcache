@@ -1,13 +1,12 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
+import com.lewisallen.rtdptiCache.caches.SIRICache;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.lewisallen.rtdptiCache.caches.SIRICache;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 public class SIRICacheTest {
