@@ -33,7 +33,7 @@ public class StopController {
         catch (Exception e)
         {
             e.printStackTrace();
+            return new ResponseEntity(null,HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(null,HttpStatus.BAD_REQUEST);
     }
 }

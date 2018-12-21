@@ -11,8 +11,6 @@ public class AppConfig {
 	
 	public static String siriUri;
 	
-	public static int[] naptans;
-	
 	public AppConfig(){
 		Dotenv dotenv = Dotenv.load();
 		
