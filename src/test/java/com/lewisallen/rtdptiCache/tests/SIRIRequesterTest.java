@@ -10,25 +10,22 @@ import org.springframework.util.StringUtils;
 import static org.junit.Assert.assertEquals;
 
 public class SIRIRequesterTest {
-	
-	
+
 	@Before
 	public void setup(){
 		new AppConfig();
 	}
-	
-	
+
 	@Test
 	public void testEnv(){
 		Dotenv env = Dotenv.load();
-		
+
 		SIRIRequester requester = new SIRIRequester();
 		assertEquals(requester.getUri(), env.get("SIRI_URI"));
 		assert(!StringUtils.isEmpty(requester.getUri()));
 	}
 	
 	/*
-	
 	@Test
 	public void testSiriRequest(){
 		SIRIRequester siriRequest = new SIRIRequester();

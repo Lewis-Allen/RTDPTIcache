@@ -31,9 +31,9 @@ public class SIRIResponseParser {
 
         // Check if there are any visits, if not then we can simply wipe the cache.
         if(siriResponse.getJSONObject("Siri")
-                       .getJSONObject("ServiceDelivery")
-                       .getJSONObject("StopMonitoringDelivery")
-                       .has("MonitoredStopVisit"))
+                .getJSONObject("ServiceDelivery")
+                .getJSONObject("StopMonitoringDelivery")
+                .has("MonitoredStopVisit"))
         {
             JSONArray monitoredStops;
             List<JSONObject> monitoredStopsList = new ArrayList<JSONObject>();
@@ -81,15 +81,13 @@ public class SIRIResponseParser {
             // Create a cache to hold list of stops alongside other info.
             for(Object naptanKey : groupedList.keySet()){
 
-                // Sort list of stops by ascending expected arrival time.
-                Collections.sort(groupedList.get(naptanKey), new JSONSorter());
-
-                // Remove irrelevant info from json and add departure.
+                // Remove irrelevant info from json and add departure. Sort stops by departure time.
                 List<JSONObject> trimmedList = groupedList.get(naptanKey)
-                                                          .stream()
-                                                          .map((JSONObject j) -> removeFields(j))
-                                                          .map((JSONObject j) -> addDeparture(j))
-                                                          .collect(Collectors.toList());
+                        .stream()
+                        .map((JSONObject j) -> removeFields(j))
+                        .map((JSONObject j) -> addDeparture(j))
+                        .sorted(new DepartureComparator())
+                        .collect(Collectors.toList());
 
                 // Create JSON objects to store in cache.
                 JSONObject jsonToCache = new JSONObject();

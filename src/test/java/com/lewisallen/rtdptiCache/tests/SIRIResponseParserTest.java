@@ -2,6 +2,7 @@ package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
+import com.lewisallen.rtdptiCache.parser.DepartureComparator;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
@@ -77,5 +78,15 @@ public class SIRIResponseParserTest {
 		parser.parse(res);
 
 		assert(SIRICache.siriCache.containsKey("149000006061"));
+	}
+
+	@Test
+	public void TestBadJSON(){
+		JSONObject o1 = new JSONObject();
+		JSONObject o2 = new JSONObject();
+
+		DepartureComparator sorter = new DepartureComparator();
+
+		assertEquals(sorter.compare(o1,o2), 0);
 	}
 }
