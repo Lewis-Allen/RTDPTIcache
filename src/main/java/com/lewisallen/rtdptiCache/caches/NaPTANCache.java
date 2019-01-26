@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class NaPTANCache {
 
-	public static Map<String, Naptan> naptanCache = new HashMap<String, Naptan>();
+	public static Map<String, Naptan> naptanCache = new HashMap<>();
 	
 	public static Map<String, String> getStopNames(String[] codes){
 		Map<String, String> res = new HashMap<String, String>();

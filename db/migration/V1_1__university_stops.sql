@@ -1,4 +1,4 @@
-UPDATE `naptan`
+UPDATE naptan
 SET Retrieve = 1
 WHERE SystemCodeNumber IN
 (
@@ -18,4 +18,13 @@ WHERE SystemCodeNumber IN
  '149000007061',
  '149000006230',
  '149000007231'
+);
+
+UPDATE stations
+SET Retrieve = 1
+WHERE CRSCode IN
+(
+    'BTN', -- Brighton
+    'MCB', -- Moulsecoomb
+    'FMR'  -- Falmer
 );

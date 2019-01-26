@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class SIRICache {
 
-	public static Map<Object, JSONObject> siriCache = new HashMap<Object, JSONObject>();
+	public static Map<Object, JSONObject> siriCache = new HashMap<>();
 	
 	public static String getSiriJson(String[] naptans) throws JSONException{
 		
