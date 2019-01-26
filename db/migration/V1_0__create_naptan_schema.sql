@@ -8,8 +8,7 @@ CREATE TABLE `naptan` (
   `Lng` text,
   `Identifier` text,
   `Northing` text,
-  `Retrieve` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`SystemCodeNumber`)
+  `Retrieve` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- INSERT the entire naptan db for brighton (approx 1350 rows)

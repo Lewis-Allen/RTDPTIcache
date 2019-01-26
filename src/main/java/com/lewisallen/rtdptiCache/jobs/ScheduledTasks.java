@@ -77,7 +77,7 @@ public class ScheduledTasks {
         log.debug("updateTrainsCache: starting Trains cache update at {}", dateFormat.format(new Date()));
 
         GetBoardRequestParams params = new GetBoardRequestParams();
-        
+
         params.setCrs("MCB");
 
         StationBoardResponseType departureBoard = soapService.getDepartureBoard(params, accessToken);
