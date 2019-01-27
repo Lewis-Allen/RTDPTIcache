@@ -10,4 +10,10 @@ public class ScheduledTaskTest {
         ScheduledTasks tasks = new ScheduledTasks();
         tasks.updateNaPTANCache();
     }
+
+    @Test
+    public void testUpdateTrainStationCache(){
+        ScheduledTasks tasks = new ScheduledTasks();
+        tasks.updateStationCache();
+    }
 }
