@@ -3,18 +3,27 @@ package com.lewisallen.rtdptiCache.tests;
 import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class NaPTANCacheTest {
 
+	@Before
+	public void initialiseNaPTAN(){
+		new NaPTANCache();
+	}
+
 	@Test
-	public void testNaPTANCacheCodes() {
-		
+	public void testNaPTANStopNames() {
+		NaPTANCache.naptanCache = new HashMap<>();
+
 		// Populate data.
 		for(int i = 0; i < 10; i++){
 			NaPTANCache.naptanCache.put(Integer.toString(i), new Naptan(Integer.toString(i), "Example Location" + Integer.toString(i), "adj"));
@@ -33,6 +42,19 @@ public class NaPTANCacheTest {
 		for(int i = 0; i < 10; i++){
 			assertEquals(res.containsKey(Integer.toString(i)), true);
 		}
+	}
+
+	@Test
+	public void testCachedCodes(){
+		NaPTANCache.naptanCache = new HashMap<>();
+
+		for(int i = 0; i < 10; i++){
+			NaPTANCache.naptanCache.put(Integer.toString(i), new Naptan(Integer.toString(i), "Example Location" + Integer.toString(i), "adj"));
+		}
+
+		Set<String> keys = NaPTANCache.getCachedCodes();
+
+		assertEquals(10, keys.size());
 	}
 	
 	@Test

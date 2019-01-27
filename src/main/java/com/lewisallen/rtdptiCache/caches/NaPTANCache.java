@@ -4,7 +4,6 @@ import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,25 +21,22 @@ public class NaPTANCache {
 		return res;
 	}
 	
-	public static void populateCache(TransportDatabase db){
+	public static void populateCache(TransportDatabase db) {
 		try {
 			Map<String, Naptan> naptans = new HashMap<String, Naptan>();
 			ResultSet rs = db.queryNaptan();
-			while(rs.next()){
+			while (rs.next()) {
 				String code = rs.getString("SystemCodeNumber");
 				Naptan naptan = new Naptan(code,
-										   rs.getString("LongDescription"),
-										   rs.getString("Identifier"));
-				
+						rs.getString("LongDescription"),
+						rs.getString("Identifier"));
+
 				naptans.put(code, naptan);
 			}
-			
+
 			NaPTANCache.naptanCache = naptans;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.out.println("Error whilst retrieving data from db: " + e.getMessage());
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Error populating naptan cache: " + e.getMessage());
 		}
 	}
 	

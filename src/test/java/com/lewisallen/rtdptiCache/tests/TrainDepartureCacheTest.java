@@ -2,9 +2,15 @@ package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TrainDepartureCacheTest {
+
+    @Before
+    public void InitialiseTrainDepartureCache(){
+        new TrainDepartureCache();
+    }
 
     @Test
     public void testTrainCache() {

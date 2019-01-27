@@ -4,7 +4,6 @@ import com.lewisallen.rtdptiCache.Station;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -38,12 +37,9 @@ public class TrainStationCache {
             }
 
             TrainStationCache.stationCache = stations;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.out.println("Error whilst retrieving data from db: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error whilst retrieving train data from db: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
 }
