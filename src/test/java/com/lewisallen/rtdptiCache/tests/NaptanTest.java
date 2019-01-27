@@ -4,7 +4,7 @@ import com.lewisallen.rtdptiCache.Naptan;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestNaptan {
+public class NaptanTest {
 
 	private Naptan naptan;
 	

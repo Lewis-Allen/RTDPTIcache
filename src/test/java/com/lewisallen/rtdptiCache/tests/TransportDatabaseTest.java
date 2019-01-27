@@ -1,6 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.db.NaptanDatabase;
+import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import org.junit.Test;
 
 import java.sql.ResultSet;
@@ -8,11 +8,11 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.fail;
 
-public class NaptanDatabaseTest {
+public class TransportDatabaseTest {
 
 	@Test
 	public void testDatabaseRetrieval(){
-		NaptanDatabase db = new NaptanDatabase();
+		TransportDatabase db = new TransportDatabase();
 		
 		try {
 			@SuppressWarnings("unused")

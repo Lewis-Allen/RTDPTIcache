@@ -1,7 +1,7 @@
 package com.lewisallen.rtdptiCache.caches;
 
 import com.lewisallen.rtdptiCache.Naptan;
-import com.lewisallen.rtdptiCache.db.NaptanDatabase;
+import com.lewisallen.rtdptiCache.db.TransportDatabase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class NaPTANCache {
 		return res;
 	}
 	
-	public static void populateCache(NaptanDatabase db){
+	public static void populateCache(TransportDatabase db){
 		try {
 			Map<String, Naptan> naptans = new HashMap<String, Naptan>();
 			ResultSet rs = db.queryNaptan();
@@ -39,7 +39,7 @@ public class NaPTANCache {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			System.out.println("Could not connect to db." + e.getMessage());
+			System.out.println("Error whilst retrieving data from db: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

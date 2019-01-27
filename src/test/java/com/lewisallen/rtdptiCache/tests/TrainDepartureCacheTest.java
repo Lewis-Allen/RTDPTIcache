@@ -1,15 +1,15 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.caches.TrainCache;
+import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import org.json.JSONObject;
 import org.junit.Test;
 
-public class TrainCacheTest {
+public class TrainDepartureCacheTest {
 
     @Test
     public void testTrainCache() {
         for(int i = 0; i < 10; i++){
-            TrainCache.trainCache.put(Integer.toString(i), new JSONObject());
+            TrainDepartureCache.trainDepartureCache.put(Integer.toString(i), new JSONObject());
         }
 
         // Generate list of keys to pass to function.
@@ -19,7 +19,7 @@ public class TrainCacheTest {
         }
 
         // Get response from cache.
-        String res = TrainCache.getTrainJSON(stationCodes);
+        String res = TrainDepartureCache.getTrainJSON(stationCodes);
 
 		// Put into JSON Object
 		JSONObject j = new JSONObject(res);
