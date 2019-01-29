@@ -9,7 +9,7 @@ import java.util.Map;
 public class TrainDepartureCache {
     public static Map<Object, JSONObject> trainDepartureCache = new HashMap<>();
 
-    public static String getTrainJSON(String[] stationCodes) throws JSONException {
+    public static JSONObject getTrainJSON(String[] stationCodes) throws JSONException {
         JSONObject k = new JSONObject();
 
         JSONObject j = new JSONObject();
@@ -17,8 +17,8 @@ public class TrainDepartureCache {
             j.put(stationCode, trainDepartureCache.get(stationCode));
         }
 
-        k.put("payload", j);
+        k.put("trainStations", j);
 
-        return k.toString();
+        return k;
     }
 }

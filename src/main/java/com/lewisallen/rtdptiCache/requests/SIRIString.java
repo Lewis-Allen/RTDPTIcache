@@ -11,6 +11,7 @@ public class SIRIString {
 
 	// Xml string that will be sent to SIRI
 	private String xmlString;
+	private int MAX_STOP_VISITS = 9;
 	
 	public String generateXml(String[] naptans){
 		Document doc = new Document();
@@ -57,7 +58,7 @@ public class SIRIString {
 
 		// Add Max stop visits of 8
 		Element maxStopVisits = new Element("MaximumStopVisits", ns);
-		maxStopVisits.addContent(new Text("8"));
+		maxStopVisits.addContent(new Text(Integer.toString(MAX_STOP_VISITS)));
 
 		stopMonitoringRequest.addContent(maxStopVisits);
 

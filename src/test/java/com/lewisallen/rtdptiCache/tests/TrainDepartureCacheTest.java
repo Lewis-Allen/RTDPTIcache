@@ -25,14 +25,11 @@ public class TrainDepartureCacheTest {
         }
 
         // Get response from cache.
-        String res = TrainDepartureCache.getTrainJSON(stationCodes);
-
-		// Put into JSON Object
-		JSONObject j = new JSONObject(res);
+        JSONObject res = TrainDepartureCache.getTrainJSON(stationCodes);
 
         // Test response.
 		for(int i = 0; i < 10; i++){
-            assert(j.getJSONObject("payload").has(Integer.toString(i)));
+            assert(res.getJSONObject("trainStations").has(Integer.toString(i)));
         }
 }
 }

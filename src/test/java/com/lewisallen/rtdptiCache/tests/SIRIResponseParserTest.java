@@ -34,8 +34,8 @@ public class SIRIResponseParserTest {
         // Ensure the data has been added to the cache.
         assert(SIRICache.siriCache.containsKey("149000006061"));
 
-        JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}));
-        int length = j.getJSONObject("payload").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
+        JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}).toString());
+        int length = j.getJSONObject("busStops").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
 
         assertEquals(length, 7);
     }
@@ -53,8 +53,8 @@ public class SIRIResponseParserTest {
         assert(SIRICache.siriCache.containsKey("149000006061"));
 
         // Ensure the data added is correct.
-        JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}));
-        int length = j.getJSONObject("payload").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
+        JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}).toString());
+        int length = j.getJSONObject("busStops").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
         assertEquals(length, 1);
     }
 
