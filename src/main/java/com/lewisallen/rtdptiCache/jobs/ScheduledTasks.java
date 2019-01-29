@@ -87,6 +87,7 @@ public class ScheduledTasks {
         log.debug("updateTrainsDepartureCache: starting Trains cache update at {}", dateFormat.format(new Date()));
 
         GetBoardRequestParams params = new GetBoardRequestParams();
+        params.setTimeWindow(60); // Set time window to 60 minutes.
 
         Map<Object, JSONObject> temporaryDepartureCache = new HashMap<>();
 
