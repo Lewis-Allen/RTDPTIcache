@@ -39,7 +39,7 @@ public class SIRIResponseParser {
                 .has("MonitoredStopVisit"))
         {
             JSONArray monitoredStops;
-            List<JSONObject> monitoredStopsList = new ArrayList<JSONObject>();
+            List<JSONObject> monitoredStopsList = new ArrayList<>();
 
             // Handle when only one monitored stop is available (it is returned as a JSONObject rather than a JSONArray).
             if(siriResponse.getJSONObject("Siri")
@@ -71,7 +71,7 @@ public class SIRIResponseParser {
 
             // Go through the JSON list and group items by into lists by their MonitoringRef
             Map<Object, List<JSONObject>> groupedList = monitoredStopsList.parallelStream()
-                    .collect(Collectors.groupingByConcurrent(a ->
+                    .collect(Collectors.groupingBy(a ->
                     {
                         try {
                             return a.get("MonitoringRef").toString();

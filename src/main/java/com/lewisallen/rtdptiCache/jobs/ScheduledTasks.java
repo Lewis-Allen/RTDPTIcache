@@ -8,6 +8,7 @@ import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
 import com.lewisallen.rtdptiCache.requests.SIRIRequester;
 import com.lewisallen.rtdptiCache.requests.SIRIString;
+import com.thalesgroup.rtti._2012_01_13.ldb.types.ArrayOfNRCCMessages;
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
 import com.thalesgroup.rtti._2017_10_01.ldb.GetBoardRequestParams;
 import com.thalesgroup.rtti._2017_10_01.ldb.LDBServiceSoap;
@@ -94,34 +95,47 @@ public class ScheduledTasks {
         for(String crsCode : TrainStationCache.getCachedCodes()){
             params.setCrs(crsCode);
 
+            // Query the station data from the Darwin API.
             StationBoardResponseType departureBoard = soapService.getDepartureBoard(params, accessToken);
 
-            List<ServiceItem> service = departureBoard.getGetStationBoardResult().getTrainServices().getService();
-
-            String due, destination, status, platform;
-
-            // Create a list of JSON Objects for the departures from this station.
+            // Create a list of hold the departures for this station.
             List<JSONObject> thisStationDepartures = new ArrayList<>();
 
-            for(ServiceItem si : service){
-                due = si.getStd();
-                destination = si.getDestination().getLocation().get(0).getLocationName();
-                status = si.getEtd();
-                platform = si.getPlatform();
+            if(departureBoard.getGetStationBoardResult().getTrainServices() != null)
+            {
+                List<ServiceItem> service = departureBoard.getGetStationBoardResult().getTrainServices().getService();
 
-                JSONObject departure = new JSONObject();
-                departure.put("due", due);
-                departure.put("destination", destination);
-                departure.put("status", status);
-                departure.put("platform", platform);
+                String due, destination, status, platform;
 
-                thisStationDepartures.add(departure);
+                // Create a list of JSON Objects for the departures from this station.
+                thisStationDepartures = new ArrayList<>();
+
+                for(ServiceItem si : service){
+                    due = si.getStd();
+                    destination = si.getDestination().getLocation().get(0).getLocationName();
+                    status = si.getEtd();
+                    platform = si.getPlatform();
+
+                    JSONObject departure = new JSONObject();
+                    departure.put("due", due);
+                    departure.put("destination", destination);
+                    departure.put("status", status);
+                    departure.put("platform", platform);
+
+                    thisStationDepartures.add(departure);
+                }
             }
 
             // JSON Object for a stations departures
             JSONObject stationJSON = new JSONObject();
             stationJSON.put("stationName", TrainStationCache.stationCache.get(crsCode).getStationName());
             stationJSON.put("departures", thisStationDepartures);
+
+            // Add any messages to the JSON.
+            ArrayOfNRCCMessages nrccMessages = departureBoard.getGetStationBoardResult().getNrccMessages();
+            if(nrccMessages != null){
+                stationJSON.put("nrccMessages", nrccMessages.getMessage());
+            }
 
             // Add the final station object to the temporary cache.
             temporaryDepartureCache.put(crsCode, stationJSON);
