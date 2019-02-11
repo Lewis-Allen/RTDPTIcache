@@ -2,6 +2,7 @@ package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -31,7 +32,7 @@ public class TrainDepartureCacheTest {
 
         // Test response.
 		for(int i = 0; i < 10; i++){
-            assert(res.getJSONObject("trainStations").has(Integer.toString(i)));
+            Assertions.assertTrue(res.getJSONObject("trainStations").has(Integer.toString(i)));
         }
 }
 }

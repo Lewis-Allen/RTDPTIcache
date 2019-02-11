@@ -3,11 +3,8 @@ package com.lewisallen.rtdptiCache.tests;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 
 public class SIRICacheTest {
 	
@@ -31,7 +28,7 @@ public class SIRICacheTest {
 			j.put("Key", randomInt);
 		} catch (JSONException e) {
 			e.printStackTrace();
-			fail("Failed to add key with random integer");
+			Assertions.fail("Failed to add key with random integer");
 		}
 		
 		// Insert JSON Object into cache
@@ -40,10 +37,10 @@ public class SIRICacheTest {
 		// Ensure method returns stops.
 		try {
 			JSONObject res = SIRICache.getSiriJson(new String[]{"1"});
-			assert(res.getJSONObject("busStops").has("1"));
+			Assertions.assertTrue(res.getJSONObject("busStops").has("1"));
 		} catch (JSONException e){
 			e.printStackTrace();
-			fail();
+			Assertions.fail();
 		}
 	}
 	
@@ -51,10 +48,10 @@ public class SIRICacheTest {
 	public void testDodgyCode(){
 		try {
 			JSONObject res = SIRICache.getSiriJson(new String[]{"Dodgy"});
-			assertEquals(res.toString(), "{\"busStops\":{}}");
+			Assertions.assertEquals(res.toString(), "{\"busStops\":{}}");
 		} catch (JSONException e) {
 			e.printStackTrace();
-			fail();
+			Assertions.fail();
 		}
 	}
 }

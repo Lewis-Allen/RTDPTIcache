@@ -1,9 +1,8 @@
 package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.Station;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StationTest {
 
@@ -14,7 +13,7 @@ public class StationTest {
         String stationName = station.getStationName();
         String crsCode = station.getCrsCode();
 
-        assertEquals(stationName, "Moulsecoomb");
-        assertEquals(crsCode, "MCB");
+        Assertions.assertEquals(stationName, "Moulsecoomb");
+        Assertions.assertEquals(crsCode, "MCB");
     }
 }

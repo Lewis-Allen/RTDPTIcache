@@ -5,13 +5,11 @@ import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
 import com.lewisallen.rtdptiCache.parser.DepartureComparator;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
 public class SIRIResponseParserTest {
 
@@ -33,12 +31,12 @@ public class SIRIResponseParserTest {
         parser.parse(res);
 
         // Ensure the data has been added to the cache.
-        assert(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
 
         JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}).toString());
         int length = j.getJSONObject("busStops").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
 
-        assertEquals(length, 7);
+        Assertions.assertEquals(length, 7);
     }
 
 
@@ -51,12 +49,12 @@ public class SIRIResponseParserTest {
         parser.parse(res);
 
         // Check the data was successfully added to the cache.
-        assert(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
 
         // Ensure the data added is correct.
         JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}).toString());
         int length = j.getJSONObject("busStops").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
-        assertEquals(length, 1);
+        Assertions.assertEquals(length, 1);
     }
 
     @Test
@@ -71,7 +69,7 @@ public class SIRIResponseParserTest {
         parser.parse(res);
 
         // Check cache has been wiped.
-        assert(SIRICache.siriCache.isEmpty());
+        Assertions.assertTrue(SIRICache.siriCache.isEmpty());
     }
 
     @Test
@@ -82,7 +80,7 @@ public class SIRIResponseParserTest {
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(res);
 
-        assert(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
     }
 
     @Test
@@ -92,6 +90,6 @@ public class SIRIResponseParserTest {
 
         DepartureComparator sorter = new DepartureComparator();
 
-        assertEquals(sorter.compare(o1,o2), 0);
+        Assertions.assertEquals(sorter.compare(o1,o2), 0);
     }
 }

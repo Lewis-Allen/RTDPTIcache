@@ -1,6 +1,7 @@
 package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.requests.SIRIString;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class SIRIStringTest {
@@ -13,7 +14,7 @@ public class SIRIStringTest {
 		xmlString.generateXml(naptans);
 		
 		for(String s : naptans){
-			assert(xmlString.getXml().contains(s));
+			Assertions.assertTrue(xmlString.getXml().contains(s));
 		}
 	}
 }

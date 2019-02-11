@@ -4,6 +4,7 @@ package com.lewisallen.rtdptiCache.tests;
 import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,9 +12,6 @@ import org.junit.jupiter.api.TestInstance;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NaPTANCacheTest {
@@ -43,7 +41,7 @@ public class NaPTANCacheTest {
 		
 		// Test response.
 		for(int i = 0; i < 10; i++){
-			assertEquals(res.containsKey(Integer.toString(i)), true);
+			Assertions.assertEquals(res.containsKey(Integer.toString(i)), true);
 		}
 	}
 
@@ -57,7 +55,7 @@ public class NaPTANCacheTest {
 
 		Set<String> keys = NaPTANCache.getCachedCodes();
 
-		assertEquals(10, keys.size());
+		Assertions.assertEquals(10, keys.size());
 	}
 	
 	@Test
@@ -66,7 +64,7 @@ public class NaPTANCacheTest {
 			NaPTANCache.populateCache(new TransportDatabase());
 		} catch (Exception e){
 			e.printStackTrace();
-			fail("Failed to populate cache.");
+			Assertions.fail("Failed to populate cache.");
 		}
 	}
 
