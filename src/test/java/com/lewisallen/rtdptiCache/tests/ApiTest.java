@@ -43,7 +43,7 @@ public class ApiTest {
         req.put("codes","14900000670");
 
         JSONObject res = new JSONObject(controller.stops(req).getBody());
-        System.out.println(res.toString());
+
         Assertions.assertTrue(res.has("payload"));
         Assertions.assertTrue(res.getJSONObject("payload").has("busStops"));
         Assertions.assertTrue(res.getJSONObject("payload").getJSONObject("busStops").has("14900000670"));
@@ -54,7 +54,7 @@ public class ApiTest {
         req.put("CRS", "MCB");
 
         res = new JSONObject(controller.stops(req).getBody());
-        System.out.println(res.toString());
+
         Assertions.assertTrue(res.has("payload"));
         Assertions.assertTrue(res.getJSONObject("payload").has("trainStations"));
         Assertions.assertTrue(res.getJSONObject("payload").getJSONObject("trainStations").has("MCB"));
