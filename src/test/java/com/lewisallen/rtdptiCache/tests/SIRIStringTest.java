@@ -1,7 +1,7 @@
 package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.requests.SIRIString;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SIRIStringTest {
 

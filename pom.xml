@@ -15,12 +15,24 @@
    <name>rtdptiCache</name>
    <url>http://maven.apache.org</url>
    <dependencies>
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <version>4.12</version><!--$NO-MVN-MAN-VER$-->
-         <scope>test</scope>
-      </dependency>
+       <dependency>
+           <groupId>org.junit.platform</groupId>
+           <artifactId>junit-platform-launcher</artifactId>
+           <version>1.4.0</version>
+           <scope>test</scope>
+       </dependency>
+       <dependency>
+           <groupId>org.junit.jupiter</groupId>
+           <artifactId>junit-jupiter-api</artifactId>
+           <version>5.4.0</version>
+           <scope>test</scope>
+       </dependency>
+       <dependency>
+           <groupId>org.junit.jupiter</groupId>
+           <artifactId>junit-jupiter-engine</artifactId>
+           <version>5.4.0</version>
+           <scope>test</scope>
+       </dependency>
       <dependency>
          <groupId>org.springframework.boot</groupId>
          <artifactId>spring-boot-starter-webflux</artifactId>

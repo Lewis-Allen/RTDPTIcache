@@ -5,12 +5,13 @@ import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
 import com.lewisallen.rtdptiCache.parser.DepartureComparator;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
 import org.json.JSONObject;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class SIRIResponseParserTest {
 
@@ -18,7 +19,7 @@ public class SIRIResponseParserTest {
         NOTE: Several of these tests assume that stop "149000006061" has the retrieve flag set in the cache.
               These could do with being rewritten.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setup(){
         ScheduledTasks tasks = new ScheduledTasks();
         tasks.updateNaPTANCache();

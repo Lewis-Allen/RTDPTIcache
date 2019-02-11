@@ -1,21 +1,24 @@
 package com.lewisallen.rtdptiCache.tests;
 
+
 import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NaPTANCacheTest {
 
-	@Before
+	@BeforeAll
 	public void initialiseNaPTAN(){
 		new NaPTANCache();
 	}
@@ -63,7 +66,7 @@ public class NaPTANCacheTest {
 			NaPTANCache.populateCache(new TransportDatabase());
 		} catch (Exception e){
 			e.printStackTrace();
-			fail();
+			fail("Failed to populate cache.");
 		}
 	}
 

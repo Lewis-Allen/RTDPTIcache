@@ -2,12 +2,14 @@ package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TrainDepartureCacheTest {
 
-    @Before
+    @BeforeAll
     public void InitialiseTrainDepartureCache(){
         new TrainDepartureCache();
     }

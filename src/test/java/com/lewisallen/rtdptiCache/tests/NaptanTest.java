@@ -1,14 +1,16 @@
 package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.Naptan;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NaptanTest {
 
 	private Naptan naptan;
 	
-	@Before
+	@BeforeAll
 	public void setup(){
 		naptan = new Naptan("123456789", "England", "opp");
 	}

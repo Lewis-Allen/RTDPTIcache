@@ -3,10 +3,10 @@ package com.lewisallen.rtdptiCache.tests;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public class SIRICacheTest {
@@ -31,7 +31,7 @@ public class SIRICacheTest {
 			j.put("Key", randomInt);
 		} catch (JSONException e) {
 			e.printStackTrace();
-			fail();
+			fail("Failed to add key with random integer");
 		}
 		
 		// Insert JSON Object into cache
