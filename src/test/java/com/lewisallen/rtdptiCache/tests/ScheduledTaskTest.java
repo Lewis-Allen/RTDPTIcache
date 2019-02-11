@@ -44,15 +44,31 @@ public class ScheduledTaskTest {
 
     @Test
     @DisabledIfEnvironmentVariable(named="CI", matches="true")
-    void testUpdateStationsCache(){
+    void testUpdateStationDeparturesCache(){
         ScheduledTasks tasks = new ScheduledTasks();
-        tasks.updateStationCache();
+        tasks.updateTrainsDepartureCache();
     }
 
     @Test
     @EnabledIfEnvironmentVariable(named="CI", matches="true")
-    void ciTestUpdateStationsCache(){
+    void ciTestUpdateStationDeparturesCache(){
         AppConfig.ldbToken = System.getenv("LDB_TOKEN");
-        testUpdateStationsCache();
+        testUpdateStationDeparturesCache();
+    }
+
+    // All at once.
+    @Test
+    @DisabledIfEnvironmentVariable(named="CI", matches="true")
+    void testUpdateAllCaches(){
+        ScheduledTasks tasks = new ScheduledTasks();
+        tasks.updateCaches();
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named="CI", matches="true")
+    void ciTestUpdateAllCaches(){
+        AppConfig.siriUri = System.getenv("SIRI_URI");
+        AppConfig.ldbToken = System.getenv("LDB_TOKEN");
+        testUpdateAllCaches();
     }
 }
