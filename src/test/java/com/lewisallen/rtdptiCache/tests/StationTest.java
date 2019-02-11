@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class StationTest {
 
     @Test
-    public void stationTest(){
+    void stationTest(){
         Station station = new Station("Moulsecoomb", "MCB");
 
         String stationName = station.getStationName();

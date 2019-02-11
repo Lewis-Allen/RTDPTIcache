@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class SIRIStringTest {
 
 	@Test
-	public void testXmlBuilder(){
+	void testXmlBuilder(){
 		String[] naptans = new String[]{"123456789", "987654321"};
 		SIRIString xmlString = new SIRIString();
 		

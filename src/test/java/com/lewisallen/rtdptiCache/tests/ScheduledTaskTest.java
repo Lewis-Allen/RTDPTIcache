@@ -17,7 +17,7 @@ public class ScheduledTaskTest {
     }
     
     @Test
-    public void testUpdateNaPTANCache(){
+    void testUpdateNaPTANCache(){
         ScheduledTasks tasks = new ScheduledTasks();
         tasks.updateNaPTANCache();
     }

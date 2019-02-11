@@ -16,7 +16,14 @@ public class SIRICache {
 		
 		JSONObject j = new JSONObject();
 		for(String s : naptans){
-			j.put(s, SIRICache.siriCache.get(s));
+			if(SIRICache.siriCache.containsKey(s))
+			{
+				j.put(s, SIRICache.siriCache.get(s));
+			}
+			else
+			{
+				j.put(s, new JSONObject());
+			}
 		}
 			
 		k.put("busStops", j);

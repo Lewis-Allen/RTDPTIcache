@@ -1,6 +1,5 @@
 package com.lewisallen.rtdptiCache.tests;
 
-
 import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
@@ -17,12 +16,12 @@ import java.util.Set;
 public class NaPTANCacheTest {
 
 	@BeforeAll
-	public void initialiseNaPTAN(){
+	void initialiseNaPTAN(){
 		new NaPTANCache();
 	}
 
 	@Test
-	public void testNaPTANStopNames() {
+	void testNaPTANStopNames() {
 		NaPTANCache.naptanCache = new HashMap<>();
 
 		// Populate data.
@@ -46,7 +45,7 @@ public class NaPTANCacheTest {
 	}
 
 	@Test
-	public void testCachedCodes(){
+	void testCachedCodes(){
 		NaPTANCache.naptanCache = new HashMap<>();
 
 		for(int i = 0; i < 10; i++){
@@ -59,7 +58,7 @@ public class NaPTANCacheTest {
 	}
 	
 	@Test
-	public void testCachePopulate(){
+	void testCachePopulate(){
 		try {
 			NaPTANCache.populateCache(new TransportDatabase());
 		} catch (Exception e){

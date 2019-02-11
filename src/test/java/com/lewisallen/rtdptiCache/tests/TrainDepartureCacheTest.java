@@ -11,12 +11,12 @@ import org.junit.jupiter.api.TestInstance;
 public class TrainDepartureCacheTest {
 
     @BeforeAll
-    public void InitialiseTrainDepartureCache(){
+    void InitialiseTrainDepartureCache(){
         new TrainDepartureCache();
     }
 
     @Test
-    public void testTrainCache() {
+    void testTrainCache() {
         for(int i = 0; i < 10; i++){
             TrainDepartureCache.trainDepartureCache.put(Integer.toString(i), new JSONObject());
         }
@@ -34,5 +34,5 @@ public class TrainDepartureCacheTest {
 		for(int i = 0; i < 10; i++){
             Assertions.assertTrue(res.getJSONObject("trainStations").has(Integer.toString(i)));
         }
-}
+    }
 }

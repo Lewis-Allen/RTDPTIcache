@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class TransportDatabaseTest {
 
 	@Test
-	public void testDatabaseRetrieval(){
+	void testDatabaseRetrieval(){
 		TransportDatabase db = new TransportDatabase();
 		
 		try {

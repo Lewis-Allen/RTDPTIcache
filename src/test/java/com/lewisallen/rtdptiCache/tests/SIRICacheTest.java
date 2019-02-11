@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class SIRICacheTest {
 	
 	@Test
-	public void testInitialisation(){
+	void testInitialisation(){
 		@SuppressWarnings("unused")
 		SIRICache cache = new SIRICache();
 	}
@@ -18,7 +18,7 @@ public class SIRICacheTest {
 	 * Asserts getting from cache wraps in payload.
 	 */
 	@Test
-	public void testSIRICacheWrapping() {
+	void testSIRICacheWrapping() {
 		
 		// Create a JSON Object with a random key/value
 		String randomInt = Double.toString(Math.random());
@@ -45,10 +45,13 @@ public class SIRICacheTest {
 	}
 	
 	@Test
-	public void testDodgyCode(){
+	void testDodgyCode(){
 		try {
 			JSONObject res = SIRICache.getSiriJson(new String[]{"Dodgy"});
-			Assertions.assertEquals(res.toString(), "{\"busStops\":{}}");
+			System.out.println(res.toString());
+			Assertions.assertTrue(res.has("busStops"));
+			Assertions.assertTrue(res.getJSONObject("busStops").has("Dodgy"));
+			Assertions.assertTrue(res.getJSONObject("busStops").getJSONObject("Dodgy").isEmpty());
 		} catch (JSONException e) {
 			e.printStackTrace();
 			Assertions.fail();

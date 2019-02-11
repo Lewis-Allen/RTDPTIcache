@@ -17,7 +17,7 @@ public class TrainStationCache {
     }
 
     public static Map<String, String> getStationNames(String[] crsCodes){
-        Map<String, String> res = new HashMap<String, String>();
+        Map<String, String> res = new HashMap<>();
         for(String s : crsCodes){
             res.put(s, TrainStationCache.stationCache.get(s).getStationName());
         }

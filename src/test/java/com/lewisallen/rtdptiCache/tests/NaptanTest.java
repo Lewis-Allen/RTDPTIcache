@@ -11,22 +11,22 @@ public class NaptanTest {
 	private Naptan naptan;
 	
 	@BeforeAll
-	public void setup(){
+	void setup(){
 		naptan = new Naptan("123456789", "England", "opp");
 	}
 	
 	@Test
-	public void codeRetrieveTest(){
+	void codeRetrieveTest(){
 		naptan.getSystemCodeNumber();
 	}
 	
 	@Test
-	public void identifierRetrieveTest(){
+	void identifierRetrieveTest(){
 		naptan.getIdentifier();
 	}
 	
 	@Test
-	public void longDescriptionRetrieveTest(){
+	void longDescriptionRetrieveTest(){
 		naptan.getLongDescription();
 	}
 	

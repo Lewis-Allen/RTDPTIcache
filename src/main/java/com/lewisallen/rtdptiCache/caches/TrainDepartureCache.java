@@ -14,7 +14,13 @@ public class TrainDepartureCache {
 
         JSONObject j = new JSONObject();
         for(String stationCode : stationCodes){
-            j.put(stationCode, trainDepartureCache.get(stationCode));
+            if(trainDepartureCache.containsKey(stationCode)){
+                j.put(stationCode, trainDepartureCache.get(stationCode));
+            }
+            else
+            {
+                j.put(stationCode, new JSONObject());
+            }
         }
 
         k.put("trainStations", j);

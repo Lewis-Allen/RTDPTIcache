@@ -16,12 +16,12 @@ import java.util.Set;
 public class StationCacheTest {
 
 	@BeforeAll
-	public void initialiseStationCache(){
+	void initialiseStationCache(){
 		new TrainStationCache();
 	}
 
 	@Test
-	public void testStationNames() {
+	void testStationNames() {
 		// Populate data.
 		for(int i = 0; i < 10; i++){
 			TrainStationCache.stationCache.put(Integer.toString(i), new Station("Example Location" + Integer.toString(i), Integer.toString(i)));
@@ -43,7 +43,7 @@ public class StationCacheTest {
 	}
 
 	@Test
-	public void testCachedCodes(){
+	void testCachedCodes(){
 		TrainStationCache.stationCache = new HashMap<>();
 
 		for(int i = 0; i < 10; i++){
@@ -56,7 +56,7 @@ public class StationCacheTest {
 	}
 	
 	@Test
-	public void testCachePopulate(){
+	void testCachePopulate(){
 		try {
 			TrainStationCache.populateCache(new TransportDatabase());
 		} catch (Exception e){
