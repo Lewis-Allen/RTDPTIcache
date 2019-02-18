@@ -17,5 +17,4 @@ public class AppConfig {
 		AppConfig.siriUri = dotenv.get("SIRI_URI");
 		AppConfig.ldbToken = dotenv.get("LDB_TOKEN");
 	}
-	
 }
