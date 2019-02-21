@@ -1,10 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <title>RTDPTI</title>
+    <meta http-equiv="refresh" content="15">
+    <meta charset="UTF-8">
+    <title>RTDPTI</title>
+    <style>
+        body {
+            margin: 20px;
+            -webkit-font-smoothing: antialiased;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Lato', sans-serif;
+            background-color: #babac0;
+            /* Background pattern from Toptal Subtle Patterns
+            background-image: url({{ url('/images/triangular_@2X.png')}});*/
+        }
+
+        /* Container stylings */
+        .parent {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            height: 100%;
+            width: 100%;
+        }
+
+        .busStop {
+            margin-bottom: 20px;
+            flex-basis: 400px;
+        }
+
+        .station {
+            margin-bottom: 20px;
+            flex-basis: 635px;
+        }
+
+        /* Table Stylings */
+        table {
+            text-align: center;
+            table-layout: fixed;
+            background-color: #2C3845;
+            width: 100%;
+        }
+
+        th {
+            background-color: #0a0d10;
+            padding: 10px 10px 10px;
+            border: 1px solid #3c4c5d;
+        }
+
+        tr {
+            padding-bottom: 10px;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #1e262f;
+        }
+
+        td {
+            padding: 10px 10px 10px;
+            border: 1px solid #3c4c5d;
+            height: 1.2em;
+        }
+        a {
+            color: #fff;
+        }
+  </style>
 </head>
 <body>
+    <div class="parent">
 
+        <th:block th:if="${#maps.containsKey(departureInformation.payload, 'busStops')}">
+            <th:block th:each="busStop : ${departureInformation.payload.busStops}">
+                <div th:replace="fragments/TransportLoc :: busStop(${busStop})"></div>
+            </th:block>
+        </th:block>
+
+        <th:block th:if="${#maps.containsKey(departureInformation.payload, 'trainStations')}">
+            <th:block th:each="trainStation : ${departureInformation.payload.trainStations}">
+                <div th:replace="fragments/TransportLoc :: trainStation(${trainStation})"></div>
+            </th:block>
+        </th:block>
+
+    </div>
+    <div th:text="${departureInformation}"></div>
 </body>
 </html>

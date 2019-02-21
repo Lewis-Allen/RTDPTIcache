@@ -1,0 +1,46 @@
+<div class="busStop" th:fragment="busStop(busStop)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table>
+        <thead>
+            <tr>
+                <th th:text="${busStop.value.StopName + ' ' +  busStop.value.Identifier}" colspan=12></th>
+            </tr>
+            <tr>
+                <th colspan=3>Route</th>
+                <th colspan=5>Destination</th>
+                <th colspan=4>Departure</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Bus Visits -->
+            <tr th:each="busVisit : ${busStop.value.MonitoredStopVisits}">
+                <td th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}" colspan=3></td>
+                <td th:text="${busVisit.MonitoredVehicleJourney.DestinationName}" colspan=5></td>
+                <td th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}" colspan=4></td>
+            </tr>
+
+            <!-- Padding -->
+            <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(busStop.value.MonitoredStopVisits), 1)}">
+                <td colspan=3></td>
+                <td colspan=5></td>
+                <td colspan=4></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="station" th:fragment="trainStation(station)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table>
+        <thead>
+            <tr>
+                <th th:text="${station.value.stationName + ' Rail Station'}" colspan=12></th>
+            </tr>
+            <tr>
+                <th colspan=2>Due</th>
+                <th colspan=6>Destination</th>
+                <th colspan=2>Status</th>
+                <th colspan=2>Platform</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
