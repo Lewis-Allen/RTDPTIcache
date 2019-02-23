@@ -41,6 +41,27 @@
             </tr>
         </thead>
         <tbody>
+
+        <!-- If there are no departures, check for any nrcc messages and display. -->
+        <th:block th:switch="${#maps.containsKey(station.value, 'nrccMessages') and #lists.size(station.value.departures) == 0}">
+            <th:block th:case="true">
+                <tr th:each="nrccMessage : ${station.value.nrccMessages}">
+                    <td colspan="12" th:utext="${nrccMessage.value}"></td>
+                </tr>
+            </th:block>
+            <!-- Otherwise we display all journeys and times. -->
+            <th:block th:case="false">
+                <tr th:each="departure : ${station.value.departures}">
+                    <td colspan="2" th:text="${departure.due}">Hello</td>
+                    <td colspan="6" th:text="${departure.destination}">World</td>
+                    <td colspan="2" th:text="${departure.status}">Test</td>
+                    <th:block th:switch="${#maps.containsKey(departure, 'platform')}">
+                        <td th:case="true" colspan="2" th:text="${departure.platform}">Values</td>
+                        <td th:case="false" colspan="2"> - </td>
+                    </th:block>
+                </tr>
+            </th:block>
+        </th:block>
         </tbody>
     </table>
 </div>

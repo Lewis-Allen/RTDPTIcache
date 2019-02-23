@@ -67,4 +67,24 @@ public class NaPTANCacheTest {
 		}
 	}
 
+	@Test
+	void testDoesStopExist()
+	{
+		Assertions.assertFalse(NaPTANCache.checkStopExists("shouldn't exist"));
+
+		NaPTANCache.naptanCache.put("shouldn't exist", new Naptan("shouldn't exist'", "Test", "adj"));
+
+		Assertions.assertTrue(NaPTANCache.checkStopExists("shouldn't exist"));
+	}
+
+	@Test
+	void testGetNaptan()
+	{
+		Naptan naptan = new Naptan("naptan", "Test Naptan", "adj");
+		Assertions.assertEquals(NaPTANCache.getNaptan("naptan"), null);
+
+		NaPTANCache.naptanCache.put("naptan", naptan);
+
+		Assertions.assertEquals(NaPTANCache.getNaptan("naptan"), naptan);
+	}
 }

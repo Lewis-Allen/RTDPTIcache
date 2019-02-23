@@ -39,6 +39,13 @@ public class NaPTANCache {
 			System.out.println("Error populating naptan cache: " + e.getMessage());
 		}
 	}
+
+	public static boolean checkStopExists(String naptan) { return NaPTANCache.naptanCache.containsKey(naptan); }
+
+	public static Naptan getNaptan(String naptan)
+	{
+		return NaPTANCache.naptanCache.containsKey(naptan) ? NaPTANCache.naptanCache.get(naptan) : null;
+	}
 	
 	public static Set<String> getCachedCodes(){
 	    return NaPTANCache.naptanCache.keySet();

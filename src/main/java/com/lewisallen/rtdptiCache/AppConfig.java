@@ -17,4 +17,14 @@ public class AppConfig {
 		AppConfig.siriUri = dotenv.get("SIRI_URI");
 		AppConfig.ldbToken = dotenv.get("LDB_TOKEN");
 	}
+
+	/**
+	 * Method to update properties from system variables.
+	 * Used for continuous integration.
+	 */
+	public static void updateFromSystem()
+	{
+		AppConfig.siriUri = System.getenv("SIRI_URI");
+		AppConfig.ldbToken = System.getenv("LDB_TOKEN");
+	}
 }

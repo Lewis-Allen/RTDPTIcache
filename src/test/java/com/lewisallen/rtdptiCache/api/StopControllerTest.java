@@ -1,7 +1,6 @@
-package com.lewisallen.rtdptiCache.tests;
+package com.lewisallen.rtdptiCache.api;
 
 
-import com.lewisallen.rtdptiCache.api.StopController;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import org.json.JSONArray;
@@ -13,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 
 @SpringBootTest
-public class ApiTest {
+public class StopControllerTest {
 
     private StopController controller = new StopController();
 
