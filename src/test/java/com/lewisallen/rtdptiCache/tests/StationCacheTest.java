@@ -1,6 +1,8 @@
 package com.lewisallen.rtdptiCache.tests;
 
+import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.Station;
+import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.TrainStationCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import org.junit.jupiter.api.Assertions;
@@ -63,5 +65,26 @@ public class StationCacheTest {
 			e.printStackTrace();
 			Assertions.fail("Failed to populate cache");
 		}
+	}
+
+	@Test
+	void testDoesStopExist()
+	{
+		Assertions.assertFalse(TrainStationCache.checkStopExists("shouldn't exist"));
+
+		TrainStationCache.stationCache.put("shouldn't exist", new Station("shouldn't exist'", "Test"));
+
+		Assertions.assertTrue(TrainStationCache.checkStopExists("shouldn't exist"));
+	}
+
+	@Test
+	void testGetStation()
+	{
+		Station station = new Station("TestStation", "TST");
+		Assertions.assertEquals(TrainStationCache.getStation("TST"), null);
+
+		TrainStationCache.stationCache.put("TST", station);
+
+		Assertions.assertEquals(TrainStationCache.getStation("TST"), station);
 	}
 }

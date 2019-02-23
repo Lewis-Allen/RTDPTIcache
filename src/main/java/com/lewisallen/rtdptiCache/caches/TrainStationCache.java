@@ -1,5 +1,6 @@
 package com.lewisallen.rtdptiCache.caches;
 
+import com.lewisallen.rtdptiCache.Naptan;
 import com.lewisallen.rtdptiCache.Station;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 
@@ -41,5 +42,12 @@ public class TrainStationCache {
             System.out.println("Error whilst retrieving train data from db: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkStopExists(String stationCode) { return TrainStationCache.stationCache.containsKey(stationCode); }
+
+    public static Station getStation(String stationCode)
+    {
+        return TrainStationCache.stationCache.containsKey(stationCode) ? TrainStationCache.stationCache.get(stationCode) : null;
     }
 }

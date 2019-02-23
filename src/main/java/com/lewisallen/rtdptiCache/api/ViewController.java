@@ -2,9 +2,11 @@ package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
 import com.lewisallen.rtdptiCache.Naptan;
+import com.lewisallen.rtdptiCache.Station;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
+import com.lewisallen.rtdptiCache.caches.TrainStationCache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -72,6 +74,27 @@ public class ViewController {
                 }
             }
 
+            if(departureInformation.getJSONObject("payload").has("trainStations")) {
+                JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("trainStations");
+                {
+                    for (String aString : codesArray.keySet())
+                    {
+                        if (departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).isEmpty()) {
+                            if (TrainStationCache.checkStopExists(aString))
+                            {
+                                Station station = TrainStationCache.getStation(aString);
+                                departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).put("stationName", station.getStationName());
+                                departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).put("departures", new ArrayList<>());
+                            }
+                            else
+                            {
+                                departureInformation.getJSONObject("payload").getJSONObject("trainStations").remove(aString);
+                            }
+                        }
+                    }
+                }
+            }
+
             // Thymeleaf apparently doesn't like parsing JSON...
             // This converts the json back into a 'java object' which Thymeleaf doesn't complain about.
             Gson gson = new Gson();
@@ -96,41 +119,26 @@ public class ViewController {
 
         // Add any bus stops to the JSON
         if(request.has("codes")){
-            if(request.get("codes") instanceof JSONArray) {
-                JSONArray busCodeList = request.getJSONArray("codes");
+            JSONArray busCodeList = request.getJSONArray("codes");
 
-                List<String> busCodes = new ArrayList<>();
-                for (int i = 0; i < busCodeList.length(); i++) {
-                    busCodes.add(busCodeList.get(i).toString());
-                }
+            List<String> busCodes = new ArrayList<>();
+            for (int i = 0; i < busCodeList.length(); i++) {
+                busCodes.add(busCodeList.get(i).toString());
+            }
 
-                busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
-            }
-            else
-            {
-                String[] singleStop = new String[]{request.get("codes").toString()};
-                busesAndTrains.put("busStops", SIRICache.getSiriJson(singleStop).get("busStops"));
-            }
+            busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
         }
 
         // Add any train stations to the JSON
         if(request.has("crs")){
-            // Grab as object if only one CRS requested, else array
-            if(request.get("crs") instanceof JSONArray){
-                JSONArray trainCodeList = request.getJSONArray("crs");
+            JSONArray trainCodeList = request.getJSONArray("crs");
 
-                List<String> trainCodes = new ArrayList<>();
-                for(int i = 0; i < trainCodeList.length(); i++){
-                    trainCodes.add(trainCodeList.get(i).toString());
-                }
+            List<String> trainCodes = new ArrayList<>();
+            for(int i = 0; i < trainCodeList.length(); i++){
+                trainCodes.add(trainCodeList.get(i).toString());
+            }
 
-                busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
-            }
-            else
-            {
-                String[] singleCRS = new String[]{request.get("crs").toString()};
-                busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(singleCRS).get("trainStations"));
-            }
+            busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
         }
 
         // Wrap all JSON into one object

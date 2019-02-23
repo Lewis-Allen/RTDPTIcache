@@ -1,6 +1,9 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.lewisallen.rtdptiCache.AppConfig;
+import com.lewisallen.rtdptiCache.caches.NaPTANCache;
+import com.lewisallen.rtdptiCache.caches.SIRICache;
+import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.HashMap;
 
 /**
  * TODO: Redo these tests.
@@ -131,6 +136,47 @@ class ViewControllerTest {
                 .get()
                 .uri(builder -> builder.path("/dashboard")
                         .queryParam("crs[]", multipleCRS).build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        // Test existing stop but no data
+        // Wipe Bus Departure cache
+        SIRICache.siriCache = new HashMap<>();
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("code[]", singleCode).build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        // Test non existent bus stop.
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("code[]", "nonexistantbusstop").build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        // Wipe Train Departures
+        TrainDepartureCache.trainDepartureCache = new HashMap<>();
+
+        // Test empty station
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("crs[]", singleCRS).build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        // Test non existent train station.
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("crs[]", "nonexistantcrs").build())
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
