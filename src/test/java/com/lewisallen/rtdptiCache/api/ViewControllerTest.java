@@ -139,6 +139,27 @@ class ViewControllerTest {
                 .expectStatus()
                 .is2xxSuccessful();
 
+        // Test different templates
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("template", "fourbuses")
+                        .queryParam("code[]", multipleCodes)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("template", "onetrain")
+                        .queryParam("crs[]", singleCRS)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
         // Test existing stop but no data
         // Wipe Bus Departure cache
         SIRICache.siriCache = new HashMap<>();
@@ -179,5 +200,6 @@ class ViewControllerTest {
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
+
     }
 }

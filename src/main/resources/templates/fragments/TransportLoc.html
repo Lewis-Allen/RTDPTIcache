@@ -31,12 +31,12 @@
     <table>
         <thead>
             <tr>
-                <th th:text="${station.value.stationName + ' Rail Station'}" colspan=12></th>
+                <th class="stationHeader" th:text="${station.value.stationName + ' Rail Station'}" colspan=24></th>
             </tr>
             <tr>
                 <th colspan=2>Due</th>
-                <th colspan=6>Destination</th>
-                <th colspan=2>Status</th>
+                <th colspan=17>Destination</th>
+                <th colspan=3>Status</th>
                 <th colspan=2>Platform</th>
             </tr>
         </thead>
@@ -46,19 +46,27 @@
         <th:block th:switch="${#maps.containsKey(station.value, 'nrccMessages') and #lists.size(station.value.departures) == 0}">
             <th:block th:case="true">
                 <tr th:each="nrccMessage : ${station.value.nrccMessages}">
-                    <td colspan="12" th:utext="${nrccMessage.value}"></td>
+                    <td colspan="24" th:utext="${nrccMessage.value}"></td>
                 </tr>
             </th:block>
             <!-- Otherwise we display all journeys and times. -->
             <th:block th:case="false">
                 <tr th:each="departure : ${station.value.departures}">
                     <td colspan="2" th:text="${departure.due}">Hello</td>
-                    <td colspan="6" th:text="${departure.destination}">World</td>
-                    <td colspan="2" th:text="${departure.status}">Test</td>
+                    <td colspan="17" class="destination" th:text="${departure.destination}">World</td>
+                    <td colspan="3" th:text="${departure.status}">Test</td>
                     <th:block th:switch="${#maps.containsKey(departure, 'platform')}">
                         <td th:case="true" colspan="2" th:text="${departure.platform}">Values</td>
                         <td th:case="false" colspan="2"> - </td>
                     </th:block>
+                </tr>
+
+                <!-- Padding -->
+                <tr th:each="i : ${#numbers.sequence(0, 14 - #lists.size(station.value.departures), 1)}">
+                    <td class="route" colspan=2></td>
+                    <td colspan=17></td>
+                    <td colspan=3></td>
+                    <td colspan=2></td>
                 </tr>
             </th:block>
         </th:block>
