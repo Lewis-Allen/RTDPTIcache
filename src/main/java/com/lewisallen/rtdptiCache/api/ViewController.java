@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -95,12 +99,17 @@ public class ViewController {
                 }
             }
 
+
+
             // Thymeleaf apparently doesn't like parsing JSON...
             // This converts the json back into a 'java object' which Thymeleaf doesn't complain about.
             Gson gson = new Gson();
             Object departureInformation2 = gson.fromJson(departureInformation.toString(), Object.class);
             model.addAttribute("departureInformation", departureInformation2);
         }
+
+        // Add clock attributes.
+        model.addAttribute("localDateTime", LocalDateTime.now());
 
         // Check if a template was provided. Provide default if not.
         if(template == null)

@@ -1,7 +1,6 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.lewisallen.rtdptiCache.AppConfig;
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
@@ -54,15 +53,15 @@ class ViewControllerTest {
 
     @Test
     @EnabledIfEnvironmentVariable(named="CI", matches="true")
-    void showDashboardCI()
+    void showDefaultDashboardCI()
     {
         AppConfig.updateFromSystem();
-        showDashboard();
+        showDefaultDashboard();
     }
 
     @Test
     @DisabledIfEnvironmentVariable(named="CI", matches="true")
-    void showDashboard() {
+    void showDefaultDashboard() {
         String[] multipleCodes = new String[]{"149000006070", "149000007070"};
         String[] multipleCRS = new String[]{"BTN", "MCB"};
         String[] singleCode = new String[]{"149000007070"};

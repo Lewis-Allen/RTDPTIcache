@@ -2,27 +2,27 @@
     <table>
         <thead>
             <tr>
-                <th th:text="${busStop.value.StopName + ' ' +  busStop.value.Identifier}" colspan=12></th>
+                <th class="busStopHeader" th:text="${busStop.value.StopName + ' ' +  busStop.value.Identifier}" colspan=24></th>
             </tr>
             <tr>
-                <th colspan=3>Route</th>
-                <th colspan=5>Destination</th>
-                <th colspan=4>Departure</th>
+                <th class="route" colspan=6>Route</th>
+                <th colspan=11>Destination</th>
+                <th colspan=7>Departure</th>
             </tr>
         </thead>
         <tbody>
             <!-- Bus Visits -->
             <tr th:each="busVisit : ${busStop.value.MonitoredStopVisits}">
-                <td th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}" colspan=3></td>
-                <td th:text="${busVisit.MonitoredVehicleJourney.DestinationName}" colspan=5></td>
-                <td th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}" colspan=4></td>
+                <td class="route" th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}" colspan=6></td>
+                <td th:text="${busVisit.MonitoredVehicleJourney.DestinationName}" colspan=11 style="text-align: left;"></td>
+                <td th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}" colspan=7></td>
             </tr>
 
             <!-- Padding -->
             <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(busStop.value.MonitoredStopVisits), 1)}">
-                <td colspan=3></td>
-                <td colspan=5></td>
-                <td colspan=4></td>
+                <td class="route" colspan=6></td>
+                <td colspan=11></td>
+                <td colspan=7></td>
             </tr>
         </tbody>
     </table>
@@ -64,4 +64,14 @@
         </th:block>
         </tbody>
     </table>
+</div>
+<div class="clock" th:fragment="clock" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="clockContainer">
+        <div class="longFormatContainer">
+            <p class="longFormat" th:text="${#temporals.dayOfWeekName(localDateTime) + ', ' + #temporals.day(localDateTime) + ' ' + #temporals.monthName(localDateTime) + ', ' + #temporals.year(localDateTime)}"></p>
+        </div>
+        <div class="TwentyFourContainer">
+            <p class="TwentyFourTime" th:text="${#temporals.format(localDateTime, 'HH:mm')}"></p>
+        </div>
+    </div>
 </div>
