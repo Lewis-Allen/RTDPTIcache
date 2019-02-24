@@ -94,6 +94,7 @@ public class ScheduledTasks {
 
         for(String crsCode : TrainStationCache.getCachedCodes()){
             params.setCrs(crsCode);
+            params.setNumRows(15);
 
             // Query the station data from the Darwin API.
             StationBoardResponseType departureBoard = soapService.getDepartureBoard(params, accessToken);
