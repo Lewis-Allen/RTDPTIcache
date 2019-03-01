@@ -1,6 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.Naptan;
+import com.lewisallen.rtdptiCache.models.Naptan;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

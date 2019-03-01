@@ -59,7 +59,7 @@ public class ScheduledTasks {
     public void updateNaPTANCache(){
         log.debug("updateNaPTANCache: starting NaPTAN cache update at {}", dateFormat.format(new Date()));
         
-        NaPTANCache.populateCache(this.db);
+        NaPTANCache.populateCache(this.db, NaPTANCache.naptanQuery);
         
         log.debug("updateNaPTANCache: NaPTAN cache update complete at {}", dateFormat.format(new Date()));
     }
@@ -79,7 +79,7 @@ public class ScheduledTasks {
     public void updateStationCache(){
         log.debug("updateStationCache: starting Stations cache update at {}", dateFormat.format(new Date()));
 
-        TrainStationCache.populateCache(this.db);
+        TrainStationCache.populateCache(this.db, TrainStationCache.stationQuery);
 
         log.debug("updateStationCache: Station cache update complete at {}", dateFormat.format(new Date()));
     }

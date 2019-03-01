@@ -1,6 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.Station;
+import com.lewisallen.rtdptiCache.models.Station;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

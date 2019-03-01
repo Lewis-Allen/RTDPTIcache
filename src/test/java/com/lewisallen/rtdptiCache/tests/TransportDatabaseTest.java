@@ -1,5 +1,7 @@
 package com.lewisallen.rtdptiCache.tests;
 
+import com.lewisallen.rtdptiCache.caches.NaPTANCache;
+import com.lewisallen.rtdptiCache.caches.TrainStationCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,8 @@ public class TransportDatabaseTest {
 		
 		try {
 			@SuppressWarnings("unused")
-			ResultSet rs = db.queryNaptan();
+			ResultSet rs = db.query(NaPTANCache.naptanQuery);
+			rs = db.query(TrainStationCache.stationQuery);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 			Assertions.fail();

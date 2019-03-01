@@ -1,8 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.Naptan;
-import com.lewisallen.rtdptiCache.Station;
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
+import com.lewisallen.rtdptiCache.models.Station;
 import com.lewisallen.rtdptiCache.caches.TrainStationCache;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import org.junit.jupiter.api.Assertions;
@@ -60,10 +58,23 @@ public class StationCacheTest {
 	@Test
 	void testCachePopulate(){
 		try {
-			TrainStationCache.populateCache(new TransportDatabase());
+			TrainStationCache.populateCache(new TransportDatabase(), TrainStationCache.stationQuery);
 		} catch (Exception e){
 			e.printStackTrace();
 			Assertions.fail("Failed to populate cache");
+		}
+
+		TrainStationCache.stationCache = new HashMap<>();
+		TrainStationCache.stationCache.put("ABC", new Station("Test", "ABC"));
+
+		// Test gibberish query to trigger exception. Cache should remain from prior set.
+		try
+		{
+			TrainStationCache.populateCache(new TransportDatabase(), "SELECT 46l");
+		}
+		catch (Exception e)
+		{
+			Assertions.assertTrue(TrainStationCache.stationCache.containsKey("ABC"));
 		}
 	}
 

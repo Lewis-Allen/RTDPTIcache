@@ -11,8 +11,15 @@ public class SIRIString {
 
 	// Xml string that will be sent to SIRI
 	private String xmlString;
+
+	// Max stops to receive in response from SIRI.
 	private int MAX_STOP_VISITS = 9;
-	
+
+	/**
+	 * Builds an XML String to send as a POST request to the SIRI Service.
+	 * @param naptans list of NaPTAN codes to build the request for.
+	 * @return XML String of request
+	 */
 	public String generateXml(String[] naptans){
 		Document doc = new Document();
 		
@@ -38,7 +45,13 @@ public class SIRIString {
 		this.xmlString = out.outputString(doc);
 		return out.outputString(doc);
 	}
-	
+
+	/**
+	 * Builds an XML element for an individual stop.
+	 * @param naptan NaPTAN code of the individual stop
+	 * @param ns Namespace
+	 * @return Element for individual stop
+	 */
 	public Element individualStopXml(String naptan, Namespace ns){
 		// Create root "StopMonitoringRequest" element.
 		Element stopMonitoringRequest = new Element("StopMonitoringRequest", ns);
@@ -56,7 +69,7 @@ public class SIRIString {
 
 		stopMonitoringRequest.addContent(monitoringRef);
 
-		// Add Max stop visits of 8
+		// Add Max stop visits
 		Element maxStopVisits = new Element("MaximumStopVisits", ns);
 		maxStopVisits.addContent(new Text(Integer.toString(MAX_STOP_VISITS)));
 
@@ -65,6 +78,10 @@ public class SIRIString {
 		return stopMonitoringRequest;
 	}
 
+	/**
+	 * Getter for the XML String
+	 * @return XML String
+	 */
 	public String getXml() {
 		return xmlString;
 	}

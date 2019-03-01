@@ -1,8 +1,8 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
-import com.lewisallen.rtdptiCache.Naptan;
-import com.lewisallen.rtdptiCache.Station;
+import com.lewisallen.rtdptiCache.models.Naptan;
+import com.lewisallen.rtdptiCache.models.Station;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
@@ -138,6 +138,7 @@ public class ViewController {
                 busCodes.add(busCodeList.get(i).toString());
             }
 
+            String[] arrayOfCodes = busCodes.stream().toArray(String[]::new);
             busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
         }
 

@@ -1,8 +1,10 @@
 package com.lewisallen.rtdptiCache.parser;
 
+import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import org.json.JSONObject;
 
 import java.util.Comparator;
+import java.util.logging.Level;
 
 public class DepartureComparator implements Comparator<JSONObject> {
 
@@ -11,7 +13,8 @@ public class DepartureComparator implements Comparator<JSONObject> {
         try {
             return Integer.compare(getDepartureSeconds(o1), getDepartureSeconds(o2));
         } catch (Exception e) {
-            e.printStackTrace();
+            String message = String.format("Error comparing departure seconds %s and %s", o1, o2);
+            ErrorHandler.handle(e, Level.WARNING, message);
             return 0;
         }
     }

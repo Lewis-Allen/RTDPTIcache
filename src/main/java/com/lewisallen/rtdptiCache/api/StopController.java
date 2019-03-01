@@ -19,62 +19,54 @@ public class StopController {
 
     @RequestMapping(value="api/stop", method=RequestMethod.POST)
     public ResponseEntity<String> stops(@RequestBody JSONObject json){
-        try
-        {
-            // Create a JSON Object to hold the response.
-            JSONObject k = new JSONObject();
+        // Create a JSON Object to hold the response.
+        JSONObject k = new JSONObject();
 
-            // Create a list to hold bus stops and train stations.
-            JSONObject busesAndTrains = new JSONObject();
+        // Create a list to hold bus stops and train stations.
+        JSONObject busesAndTrains = new JSONObject();
 
-            // Add any bus stops to the JSON
-            if(json.has("codes")){
-                if(json.get("codes") instanceof JSONArray) {
-                    JSONArray busCodeList = json.getJSONArray("codes");
+        // Add any bus stops to the JSON
+        if(json.has("codes")){
+            if(json.get("codes") instanceof JSONArray) {
+                JSONArray busCodeList = json.getJSONArray("codes");
 
-                    List<String> busCodes = new ArrayList<>();
-                    for (int i = 0; i < busCodeList.length(); i++) {
-                        busCodes.add(busCodeList.get(i).toString());
-                    }
-
-                    busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
+                List<String> busCodes = new ArrayList<>();
+                for (int i = 0; i < busCodeList.length(); i++) {
+                    busCodes.add(busCodeList.get(i).toString());
                 }
-                else
-                {
-                    String[] singleStop = new String[]{json.get("codes").toString()};
-                    busesAndTrains.put("busStops", SIRICache.getSiriJson(singleStop).get("busStops"));
-                }
+
+                busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
             }
-
-            // Add any train stations to the JSON
-            if(json.has("CRS")){
-                // Grab as object if only one CRS requested, else array
-                if(json.get("CRS") instanceof JSONArray){
-                    JSONArray trainCodeList = json.getJSONArray("CRS");
-
-                    List<String> trainCodes = new ArrayList<>();
-                    for(int i = 0; i < trainCodeList.length(); i++){
-                        trainCodes.add(trainCodeList.get(i).toString());
-                    }
-
-                    busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
-                }
-                else
-                {
-                    String[] singleCRS = new String[]{json.get("CRS").toString()};
-                    busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(singleCRS).get("trainStations"));
-                }
+            else
+            {
+                String[] singleStop = new String[]{json.get("codes").toString()};
+                busesAndTrains.put("busStops", SIRICache.getSiriJson(singleStop).get("busStops"));
             }
-
-            // Wrap all JSON into one object
-            k.put("payload", busesAndTrains);
-
-            return new ResponseEntity(k.toString(),HttpStatus.OK);
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return new ResponseEntity(null,HttpStatus.BAD_REQUEST);
+
+        // Add any train stations to the JSON
+        if(json.has("CRS")){
+            // Grab as object if only one CRS requested, else array
+            if(json.get("CRS") instanceof JSONArray){
+                JSONArray trainCodeList = json.getJSONArray("CRS");
+
+                List<String> trainCodes = new ArrayList<>();
+                for(int i = 0; i < trainCodeList.length(); i++){
+                    trainCodes.add(trainCodeList.get(i).toString());
+                }
+
+                busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
+            }
+            else
+            {
+                String[] singleCRS = new String[]{json.get("CRS").toString()};
+                busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(singleCRS).get("trainStations"));
+            }
         }
+
+        // Wrap all JSON into one object
+        k.put("payload", busesAndTrains);
+
+        return new ResponseEntity(k.toString(),HttpStatus.OK);
     }
 }

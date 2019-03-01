@@ -7,20 +7,10 @@ import java.sql.*;
 
 public class TransportDatabase {
 
-    private String naptanQuery = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
-    private String stationQuery = "SELECT StationName, CRSCode FROM stations WHERE Retrieve = 1;";
-
-    public ResultSet queryNaptan() throws SQLException, ClassNotFoundException
+    public ResultSet query(String query) throws SQLException, ClassNotFoundException
     {
         Statement stmt = getDbStatement();
-        ResultSet rs = stmt.executeQuery(this.naptanQuery);
-        return rs;
-    }
-
-    public ResultSet queryStation() throws SQLException, ClassNotFoundException
-    {
-        Statement stmt = getDbStatement();
-        ResultSet rs = stmt.executeQuery(this.stationQuery);
+        ResultSet rs = stmt.executeQuery(query);
         return rs;
     }
 

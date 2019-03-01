@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache;
+package com.lewisallen.rtdptiCache.models;
 
 public class Naptan {
 	
@@ -12,14 +12,26 @@ public class Naptan {
 		this.identifier = identifier;
 	}
 
+	/**
+	 * Getter for System Code Number.
+	 * @return System Code Number
+	 */
 	public String getSystemCodeNumber() {
 		return systemCodeNumber;
 	}
 
+	/**
+	 * Getter for Long Description
+	 * @return Long Description
+	 */
 	public String getLongDescription() {
 		return longDescription;
 	}
 
+	/**
+	 * Getter for Identifier
+	 * @return Identifier
+	 */
 	public String getIdentifier() {
 		return identifier;
 	}

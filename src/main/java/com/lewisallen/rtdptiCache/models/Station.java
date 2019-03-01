@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache;
+package com.lewisallen.rtdptiCache.models;
 
 public class Station {
 
@@ -10,10 +10,18 @@ public class Station {
         this.crsCode = crsCode;
     }
 
+    /**
+     * Getter for Station Name.
+     * @return Station Name
+     */
     public String getStationName() {
         return stationName;
     }
 
+    /**
+     * Getter for CRS Code.
+     * @return CRS Code
+     */
     public String getCrsCode() {
         return crsCode;
     }

@@ -18,6 +18,7 @@ public class AppConfig {
 		AppConfig.ldbToken = dotenv.get("LDB_TOKEN");
 	}
 
+
 	/**
 	 * Method to update properties from system variables.
 	 * Used for continuous integration.

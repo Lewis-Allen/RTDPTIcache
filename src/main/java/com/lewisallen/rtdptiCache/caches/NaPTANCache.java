@@ -1,30 +1,38 @@
 package com.lewisallen.rtdptiCache.caches;
 
-import com.lewisallen.rtdptiCache.Naptan;
+import com.lewisallen.rtdptiCache.logging.ErrorHandler;
+import com.lewisallen.rtdptiCache.models.Naptan;
 import com.lewisallen.rtdptiCache.db.TransportDatabase;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class NaPTANCache {
+
+	public static String naptanQuery = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
 
 	public static Map<String, Naptan> naptanCache = new HashMap<>();
 	
 	public static Map<String, String> getStopNames(String[] codes){
-		Map<String, String> res = new HashMap<String, String>();
+		Map<String, String> res = new HashMap<>();
 		for(String s : codes){
 			res.put(s, NaPTANCache.naptanCache.get(s).getLongDescription());
 		}
 		
 		return res;
 	}
-	
-	public static void populateCache(TransportDatabase db) {
+
+	/**
+	 * Populates the NaPTAN cache with values based off active stops in DB.
+	 * @param db
+	 */
+	public static void populateCache(TransportDatabase db, String query) {
 		try {
-			Map<String, Naptan> naptans = new HashMap<String, Naptan>();
-			ResultSet rs = db.queryNaptan();
+			Map<String, Naptan> naptans = new HashMap<>();
+			ResultSet rs = db.query(query);
 			while (rs.next()) {
 				String code = rs.getString("SystemCodeNumber");
 				Naptan naptan = new Naptan(code,
@@ -36,7 +44,8 @@ public class NaPTANCache {
 
 			NaPTANCache.naptanCache = naptans;
 		} catch (Exception e) {
-			System.out.println("Error populating naptan cache: " + e.getMessage());
+			String message = "Error populating NaPTAN cache";
+			ErrorHandler.handle(e, Level.SEVERE, message);
 		}
 	}
 
