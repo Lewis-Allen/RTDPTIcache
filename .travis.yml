@@ -6,6 +6,8 @@ before_script:
 - cp myFlywayConfig.properties.example myFlywayConfig.properties
 - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 - mvn clean flyway:migrate -Dflyway.configFiles=myFlywayConfig.properties
+before_install:
+- chmod +x mvnw
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 env:
