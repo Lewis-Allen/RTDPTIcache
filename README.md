@@ -17,4 +17,3 @@ Caching Server for the Real Time Displays for Public Transportation Information 
 
 ## To Do
 - Add prerequisites section.
-- Add mvn wrapper.
