@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 public class NaPTANCache
@@ -15,7 +16,7 @@ public class NaPTANCache
     // Queries only active stops in the NaPTAN cache.
     public static String naptanQuery = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
 
-    public static Map<String, Naptan> naptanCache = new HashMap<>();
+    public static Map<String, Naptan> naptanCache = new ConcurrentHashMap<>();
 
     /**
      * Returns stop names for the given list of codes.

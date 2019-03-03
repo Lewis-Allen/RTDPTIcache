@@ -64,48 +64,61 @@ public class ViewController
             if (departureInformation.getJSONObject("payload").has("busStops"))
             {
                 JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("busStops");
+
+                // Make a copy of the codes array to avoid a concurrent modification exception.
+                JSONObject newCodesArray = new JSONObject(codesArray, JSONObject.getNames(codesArray));
+
+                for (String stopCode : codesArray.keySet())
                 {
-                    for (String aString : codesArray.keySet())
+                    if (departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(stopCode).isEmpty())
                     {
-                        if (departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).isEmpty())
+                        if (NaPTANCache.checkStopExists(stopCode))
                         {
-                            if (NaPTANCache.checkStopExists(aString))
-                            {
-                                Naptan naptan = NaPTANCache.getNaptan(aString);
-                                departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).put("StopName", naptan.getLongDescription());
-                                departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).put("Identifier", naptan.getIdentifier());
-                                departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).put("MonitoredStopVisits", new ArrayList<>());
-                            }
-                            else
-                            {
-                                departureInformation.getJSONObject("payload").getJSONObject("busStops").remove(aString);
-                            }
+                            JSONObject objForStop = newCodesArray.getJSONObject(stopCode);
+                            Naptan naptan = NaPTANCache.getNaptan(stopCode);
+
+                            objForStop.put("StopName", naptan.getLongDescription());
+                            objForStop.put("Identifier", naptan.getIdentifier());
+                            objForStop.put("MonitoredStopVisits", new ArrayList<>());
+                            newCodesArray.put(stopCode,objForStop);
+                        }
+                        else
+                        {
+                            newCodesArray.remove(stopCode);
                         }
                     }
                 }
+
+                // Replace the bus stops array with our new codes array.
+                departureInformation.getJSONObject("payload").put("busStops", newCodesArray);
             }
 
             if (departureInformation.getJSONObject("payload").has("trainStations"))
             {
                 JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("trainStations");
+                JSONObject newCodesArray = new JSONObject(codesArray, JSONObject.getNames(codesArray));
+
+                for (String stationCOde : codesArray.keySet())
                 {
-                    for (String aString : codesArray.keySet())
+                    if (departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(stationCOde).isEmpty())
                     {
-                        if (departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).isEmpty())
+                        if (TrainStationCache.checkStopExists(stationCOde))
                         {
-                            if (TrainStationCache.checkStopExists(aString))
-                            {
-                                Station station = TrainStationCache.getStation(aString);
-                                departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).put("stationName", station.getStationName());
-                                departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).put("departures", new ArrayList<>());
-                            }
-                            else
-                            {
-                                departureInformation.getJSONObject("payload").getJSONObject("trainStations").remove(aString);
-                            }
+                            JSONObject objForStop = newCodesArray.getJSONObject(stationCOde);
+                            Station station = TrainStationCache.getStation(stationCOde);
+
+                            objForStop.put("stationName", station.getStationName());
+                            objForStop.put("departures", new ArrayList<>());
+                            newCodesArray.put(stationCOde,objForStop);
+                        }
+                        else
+                        {
+                            newCodesArray.remove(stationCOde);
                         }
                     }
                 }
+
+                departureInformation.getJSONObject("payload").put("trainStations", newCodesArray);
             }
 
             // Thymeleaf apparently doesn't like transversing JSON...

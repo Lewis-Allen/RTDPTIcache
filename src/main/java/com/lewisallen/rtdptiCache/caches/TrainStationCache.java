@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 public class TrainStationCache
@@ -15,7 +16,7 @@ public class TrainStationCache
     // Queries only active stations in the Station cache.
     public static String stationQuery = "SELECT StationName, CRSCode FROM stations WHERE Retrieve = 1;";
 
-    public static Map<String, Station> stationCache = new HashMap<>();
+    public static Map<String, Station> stationCache = new ConcurrentHashMap<>();
 
     /**
      * Get the set of codes cached in the Station cache.

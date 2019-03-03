@@ -3,12 +3,12 @@ package com.lewisallen.rtdptiCache.caches;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TrainDepartureCache
 {
-    public static Map<Object, JSONObject> trainDepartureCache = new HashMap<>();
+    public static Map<Object, JSONObject> trainDepartureCache = new ConcurrentHashMap<>();
 
     /**
      * Given a string of station codes, return the stored JSON for each code.

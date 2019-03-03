@@ -3,13 +3,13 @@ package com.lewisallen.rtdptiCache.caches;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SIRICache
 {
 
-    public static Map<Object, JSONObject> siriCache = new HashMap<>();
+    public static Map<Object, JSONObject> siriCache = new ConcurrentHashMap<>();
 
     /**
      * Given a string of NaPTAN codes, return the stored JSON for each code.
