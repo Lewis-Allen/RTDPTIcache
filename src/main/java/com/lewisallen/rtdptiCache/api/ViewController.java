@@ -40,114 +40,137 @@ public class ViewController
                                 Model model
     )
     {
-        JSONObject departureInformation;
         // Check if no transport codes were provided.
         if (codes == null && crs == null)
         {
             throw new RuntimeException("No transport codes provided. Provide codes as a parameter with code[]={code} or crs[]={crs}");
         }
-        else
+
+        JSONObject departureInfoRequest = new JSONObject();
+        if (codes != null)
         {
-            // Else we add codes to Model.
-            JSONObject j = new JSONObject();
-            if (codes != null)
-            {
-                j.put("codes", Arrays.asList(codes));
-            }
-
-            if (crs != null)
-                j.put("crs", Arrays.asList(crs));
-
-            departureInformation = getDepartureInformation(j);
-
-            // Fill in stop name for any locations that have no visits.
-            if (departureInformation.getJSONObject("payload").has("busStops"))
-            {
-                JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("busStops");
-
-                // Make a copy of the codes array to avoid a concurrent modification exception.
-                JSONObject newCodesArray = new JSONObject(codesArray, JSONObject.getNames(codesArray));
-
-                for (String stopCode : codesArray.keySet())
-                {
-                    if (departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(stopCode).isEmpty())
-                    {
-                        if (NaPTANCache.checkStopExists(stopCode))
-                        {
-                            JSONObject objForStop = newCodesArray.getJSONObject(stopCode);
-                            Naptan naptan = NaPTANCache.getNaptan(stopCode);
-
-                            objForStop.put("StopName", naptan.getLongDescription());
-                            objForStop.put("Identifier", naptan.getIdentifier());
-                            objForStop.put("MonitoredStopVisits", new ArrayList<>());
-                            newCodesArray.put(stopCode,objForStop);
-                        }
-                        else
-                        {
-                            newCodesArray.remove(stopCode);
-                        }
-                    }
-                }
-
-                // Replace the bus stops array with our new codes array.
-                departureInformation.getJSONObject("payload").put("busStops", newCodesArray);
-            }
-
-            if (departureInformation.getJSONObject("payload").has("trainStations"))
-            {
-                JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("trainStations");
-                JSONObject newCodesArray = new JSONObject(codesArray, JSONObject.getNames(codesArray));
-
-                for (String stationCOde : codesArray.keySet())
-                {
-                    if (departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(stationCOde).isEmpty())
-                    {
-                        if (TrainStationCache.checkStopExists(stationCOde))
-                        {
-                            JSONObject objForStop = newCodesArray.getJSONObject(stationCOde);
-                            Station station = TrainStationCache.getStation(stationCOde);
-
-                            objForStop.put("stationName", station.getStationName());
-                            objForStop.put("departures", new ArrayList<>());
-                            newCodesArray.put(stationCOde,objForStop);
-                        }
-                        else
-                        {
-                            newCodesArray.remove(stationCOde);
-                        }
-                    }
-                }
-
-                departureInformation.getJSONObject("payload").put("trainStations", newCodesArray);
-            }
-
-            // Thymeleaf apparently doesn't like transversing JSON...
-            // This converts the json back into a 'java object' which Thymeleaf doesn't complain about.
-            Gson gson = new Gson();
-            Object departureInformation2 = gson.fromJson(departureInformation.toString(), Object.class);
-            model.addAttribute("departureInformation", departureInformation2);
-
-            // Add clock attributes.
-            model.addAttribute("localDateTime", LocalDateTime.now());
-
-            // Check if a template was provided. Provide default if not.
-            if (template == null)
-                template = "default";
-
-            // Add the switch URL if applicable.
-            if (flipTo != null)
-            {
-                model.addAttribute("flipUrl", builder.path("/dashboard")
-                        .queryParam("code[]", codes)
-                        .queryParam("crs[]", crs)
-                        .queryParam("template", flipTo)
-                        .queryParam("flipTo", template)
-                        .build()
-                        .toUriString());
-            }
-
-            return template;
+            departureInfoRequest.put("codes", Arrays.asList(codes));
         }
+
+        if (crs != null)
+        {
+            departureInfoRequest.put("crs", Arrays.asList(crs));
+        }
+
+        JSONObject departureInformation = getDepartureInformation(departureInfoRequest);
+
+        // Fill in stop name for any locations that have no visits.
+        List<String> removedBusCodes = new ArrayList<>();
+        if (departureInformation.getJSONObject("payload").has("busStops"))
+        {
+            JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("busStops");
+
+            // Make a copy of the codes array to avoid a concurrent modification exception.
+            JSONObject newCodesArray = new JSONObject(codesArray, JSONObject.getNames(codesArray));
+
+            for (String stopCode : codesArray.keySet())
+            {
+                if (newCodesArray.getJSONObject(stopCode).isEmpty())
+                {
+                    if (NaPTANCache.checkStopExists(stopCode))
+                    {
+                        JSONObject objForStop = newCodesArray.getJSONObject(stopCode);
+                        Naptan naptan = NaPTANCache.getNaptan(stopCode);
+
+                        objForStop.put("StopName", naptan.getLongDescription());
+                        objForStop.put("Identifier", naptan.getIdentifier());
+                        objForStop.put("MonitoredStopVisits", new ArrayList<>());
+                        newCodesArray.put(stopCode, objForStop);
+                    }
+                    else
+                    {
+                        removedBusCodes.add(stopCode);
+                        newCodesArray.remove(stopCode);
+                    }
+                }
+            }
+
+            // Replace the bus stops array with our new codes array.
+            departureInformation.getJSONObject("payload").put("busStops", newCodesArray);
+        }
+
+        // Fill in trains that have no visit.
+        List<String> removedTrainCodes = new ArrayList<>();
+        if (departureInformation.getJSONObject("payload").has("trainStations"))
+        {
+            JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("trainStations");
+
+            // Make a copy of the codes array to avoid a concurrent modification exception.
+            JSONObject newCodesArray = new JSONObject(codesArray, JSONObject.getNames(codesArray));
+
+            for (String stationCode : codesArray.keySet())
+            {
+                if (newCodesArray.getJSONObject(stationCode).isEmpty())
+                {
+                    if (TrainStationCache.checkStopExists(stationCode))
+                    {
+                        JSONObject objForStop = newCodesArray.getJSONObject(stationCode);
+                        Station station = TrainStationCache.getStation(stationCode);
+
+                        objForStop.put("stationName", station.getStationName());
+                        objForStop.put("departures", new ArrayList<>());
+                        newCodesArray.put(stationCode, objForStop);
+                    }
+                    else
+                    {
+                        removedTrainCodes.add(stationCode);
+                        newCodesArray.remove(stationCode);
+                    }
+                }
+            }
+
+            departureInformation.getJSONObject("payload").put("trainStations", newCodesArray);
+        }
+
+        // Add list of codes to the model, making sure we remove any codes that were removed previously.
+        // We use this so we can add stops in the correct order on the template.
+        List<String> modelBusCodes = new ArrayList<>();
+        if(codes != null)
+        {
+            modelBusCodes = new ArrayList<>(Arrays.asList(codes));
+            modelBusCodes.removeAll(removedBusCodes);
+        }
+        model.addAttribute("busCodes", modelBusCodes);
+
+        List<String> modelTrainCodes = new ArrayList<>();
+        if(crs != null)
+        {
+            modelTrainCodes = new ArrayList<>(Arrays.asList(crs));
+            modelTrainCodes.removeAll(removedTrainCodes);
+        }
+        model.addAttribute("trainCodes", modelTrainCodes);
+
+        // Thymeleaf apparently doesn't like transversing JSON...
+        // This converts the json back into a 'java object' which Thymeleaf doesn't complain about.
+        Gson gson = new Gson();
+        Object departureInformation2 = gson.fromJson(departureInformation.toString(), Object.class);
+        model.addAttribute("departureInformation", departureInformation2);
+
+        // Add clock attributes.
+        model.addAttribute("localDateTime", LocalDateTime.now());
+
+        // Check if a template was provided. Provide default if not.
+        if (template == null)
+            template = "default";
+
+        // Add the switch URL if applicable.
+        if (flipTo != null)
+        {
+            model.addAttribute("flipUrl", builder.path("/dashboard")
+                    .queryParam("code[]", codes)
+                    .queryParam("crs[]", crs)
+                    .queryParam("template", flipTo)
+                    .queryParam("flipTo", template)
+                    .build()
+                    .toUriString());
+        }
+
+        return template;
     }
 
     private JSONObject getDepartureInformation(JSONObject request)

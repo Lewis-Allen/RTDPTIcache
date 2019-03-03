@@ -84,14 +84,14 @@
     <div class="parent">
 
         <th:block th:if="${#maps.containsKey(departureInformation.payload, 'busStops')}">
-            <th:block th:each="busStop : ${departureInformation.payload.busStops}">
-                <div th:replace="fragments/TransportLoc :: busStop(${busStop})"></div>
+            <th:block th:each="busCode : ${busCodes}">
+                <div th:replace="fragments/TransportLoc :: busStop(${departureInformation.payload.busStops.get(busCode)})"></div>
             </th:block>
         </th:block>
 
         <th:block th:if="${#maps.containsKey(departureInformation.payload, 'trainStations')}">
-            <th:block th:each="trainStation : ${departureInformation.payload.trainStations}">
-                <div th:replace="fragments/TransportLoc :: trainStation(${trainStation})"></div>
+            <th:block th:each="trainCode : ${trainCodes}">
+                <div th:replace="fragments/TransportLoc :: trainStation(${departureInformation.payload.trainStations.get(trainCode)})"></div>
             </th:block>
         </th:block>
 

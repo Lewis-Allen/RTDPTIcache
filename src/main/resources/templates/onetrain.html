@@ -155,8 +155,8 @@
     </div>
     <div class="rightContainer">
         <th:block th:if="${#maps.containsKey(departureInformation.payload, 'trainStations')}">
-            <th:block th:each="trainStation : ${departureInformation.payload.trainStations}">
-                <div th:replace="fragments/TransportLoc :: trainStation(${trainStation})"></div>
+            <th:block th:each="trainCode : ${trainCodes}">
+                <div th:replace="fragments/TransportLoc :: trainStation(${departureInformation.payload.trainStations.get(trainCode)})"></div>
             </th:block>
         </th:block>
     </div>
