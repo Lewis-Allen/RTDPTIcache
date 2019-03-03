@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Create - RTDPTI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Form</h1>
+    <form action="#" th:action="@{/dashboard}" method="get">
+        <p>Template: <input type="text" name="template" placeholder="default"></p>
+        <p>FlipTo: <input type="text" name="flipTo"></p>
+        <select multiple name="code[]">
+            <th:block th:each="bus : ${buses}">
+                <option type="text" th:text="${bus.value.getLongDescription() + ' ' + bus.value.getIdentifier()}" th:value="${bus.key}"></option>
+            </th:block>
+        </select>
+        <select multiple name="crs[]">
+            <th:block th:each="station : ${stations}">
+                <option type="text" th:text="${station.value.getStationName()}" th:value="${station.key}"></option>
+            </th:block>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

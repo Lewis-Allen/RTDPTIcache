@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ViewController
@@ -29,6 +27,15 @@ public class ViewController
     public String showTitle()
     {
         return "title";
+    }
+
+    @RequestMapping(value = "/dashboard/create", method = RequestMethod.GET)
+    public String showDashboardCreate(Model model)
+    {
+        model.addAttribute("buses", NaPTANCache.naptanCache);
+        model.addAttribute("stations", TrainStationCache.stationCache);
+
+        return "create";
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
@@ -155,11 +162,11 @@ public class ViewController
         model.addAttribute("localDateTime", LocalDateTime.now());
 
         // Check if a template was provided. Provide default if not.
-        if (template == null)
+        if (template == null || template.equals(""))
             template = "default";
 
         // Add the switch URL if applicable.
-        if (flipTo != null)
+        if (flipTo != null && !flipTo.equals(""))
         {
             model.addAttribute("flipUrl", builder.path("/dashboard")
                     .queryParam("code[]", codes)

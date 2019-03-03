@@ -55,6 +55,17 @@ class ViewControllerTest
     }
 
     @Test
+    void showDashboardCreatePage()
+    {
+        this.wtc
+                .get()
+                .uri("/dashboard/create")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+    }
+
+    @Test
     @EnabledIfEnvironmentVariable(named = "CI", matches = "true")
     void showDefaultDashboardCI()
     {
