@@ -128,33 +128,60 @@ public class SIRIResponseParser {
 
     /**
      * Calculates the seconds until departure for a provided MonitoredCall JSONObject.
+     * Attempts to get the departure seconds in the following order:
+     *  ExpectedDepartureTime > AimedDepartureTime > ExpectedArrivalTime > AimedArrivalTime
      * @param json Monitored call JSONObject
      * @return Seconds until journey departure.
      */
     private long getDepartureSeconds(JSONObject json)
     {
         long departureSeconds = 0;
+
         // Check if stop has expected departure time
         try
         {
-            OffsetDateTime expectedDepartureTime = OffsetDateTime.parse(json.get("ExpectedDepartureTime").toString());
-            departureSeconds = responseTime.until(expectedDepartureTime, ChronoUnit.SECONDS);
+            departureSeconds = parseTime(json, "ExpectedDepartureTime");
         }
-        catch (Exception e)
+        catch (Exception e1)
         {
-            // Failed to parse ExpectedDepartureTime, so try AimedDepartureTime.
-            try {
-                OffsetDateTime aimedDepartureTime = OffsetDateTime.parse(json.get("AimedDepartureTime").toString());
-                departureSeconds = responseTime.until(aimedDepartureTime, ChronoUnit.SECONDS);
-            }
-            catch (Exception ex)
+            try
             {
-                String message = "Failed to parse both ExpectedDepartureTime and AimedDepartureTime";
-                ErrorHandler.handle(ex, Level.SEVERE, message);
+                departureSeconds = parseTime(json, "AimedDepartureTime");
+            }
+            catch (Exception e2)
+            {
+                try
+                {
+                    departureSeconds = parseTime(json, "ExpectedArrivalTime");
+                }
+                catch (Exception e3)
+                {
+                    try
+                    {
+                        departureSeconds = parseTime(json, "AimedArrivalTime");
+                    }
+                    catch (Exception e4)
+                    {
+                        String message = "Failed to parse any departure time in JSON: " + json.toString();
+                        ErrorHandler.handle(e4, Level.SEVERE, message);
+                    }
+                }
             }
         }
 
         return departureSeconds;
+    }
+
+    /**
+     * Given a Monitored Call object and a key, parses the time from the given key.
+     * @param json Monitored Call JSON Object
+     * @param key key to parse
+     * @return Time in seconds until departure.
+     */
+    private long parseTime(JSONObject json, String key)
+    {
+        OffsetDateTime expectedDepartureTime = OffsetDateTime.parse(json.get(key).toString());
+        return responseTime.until(expectedDepartureTime, ChronoUnit.SECONDS);
     }
 
     /**

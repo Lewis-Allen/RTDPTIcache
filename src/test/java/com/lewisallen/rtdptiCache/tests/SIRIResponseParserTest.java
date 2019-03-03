@@ -97,6 +97,28 @@ public class SIRIResponseParserTest {
     }
 
     @Test
+    void MissingExpectedAimedDepartureExpectedArrival()
+    {
+        ResponseEntity<String> res = new ResponseEntity<>("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Siri xmlns=\"http://www.siri.org.uk/siri\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.siri.org.uk/schema/1.3/siri.xsd\"  version=\"1.3\"><ServiceDelivery><ResponseTimestamp>2018-12-15T02:19:23+00:00</ResponseTimestamp><StopMonitoringDelivery version=\"1.3\"><ResponseTimestamp>2018-12-15T02:19:23+00:00</ResponseTimestamp><MonitoredStopVisit><RecordedAtTime>2018-12-15T02:19:23+00:00</RecordedAtTime><MonitoringRef>149000006061</MonitoringRef><MonitoredVehicleJourney><LineRef>N25</LineRef><DirectionRef>A</DirectionRef><FramedVehicleJourneyRef><DataFrameRef>2018-12-14</DataFrameRef><DatedVehicleJourneyRef>2040-00007-1</DatedVehicleJourneyRef></FramedVehicleJourneyRef><PublishedLineName>N25</PublishedLineName><DirectionName>Old Steine</DirectionName><OperatorRef>BH</OperatorRef><DestinationName>Old Steine</DestinationName><Monitored>true</Monitored><VehicleRef>426</VehicleRef><MonitoredCall><AimedArrivalTime>2018-12-15T02:19:47+00:00</AimedArrivalTime></MonitoredCall></MonitoredVehicleJourney></MonitoredStopVisit></StopMonitoringDelivery></ServiceDelivery></Siri>", HttpStatus.OK);
+
+        SIRIResponseParser parser = new SIRIResponseParser();
+        parser.parse(res);
+
+        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+    }
+
+    @Test
+    void MissingAllTimes()
+    {
+        ResponseEntity<String> res = new ResponseEntity<>("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Siri xmlns=\"http://www.siri.org.uk/siri\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.siri.org.uk/schema/1.3/siri.xsd\"  version=\"1.3\"><ServiceDelivery><ResponseTimestamp>2018-12-15T02:19:23+00:00</ResponseTimestamp><StopMonitoringDelivery version=\"1.3\"><ResponseTimestamp>2018-12-15T02:19:23+00:00</ResponseTimestamp><MonitoredStopVisit><RecordedAtTime>2018-12-15T02:19:23+00:00</RecordedAtTime><MonitoringRef>149000006061</MonitoringRef><MonitoredVehicleJourney><LineRef>N25</LineRef><DirectionRef>A</DirectionRef><FramedVehicleJourneyRef><DataFrameRef>2018-12-14</DataFrameRef><DatedVehicleJourneyRef>2040-00007-1</DatedVehicleJourneyRef></FramedVehicleJourneyRef><PublishedLineName>N25</PublishedLineName><DirectionName>Old Steine</DirectionName><OperatorRef>BH</OperatorRef><DestinationName>Old Steine</DestinationName><Monitored>true</Monitored><VehicleRef>426</VehicleRef><MonitoredCall><AimedArrivalTime>asdfg</AimedArrivalTime></MonitoredCall></MonitoredVehicleJourney></MonitoredStopVisit></StopMonitoringDelivery></ServiceDelivery></Siri>", HttpStatus.OK);
+
+        SIRIResponseParser parser = new SIRIResponseParser();
+        parser.parse(res);
+
+        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+    }
+
+    @Test
     void TestBadJSON(){
         JSONObject o1 = new JSONObject();
         JSONObject o2 = new JSONObject();
