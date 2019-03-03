@@ -29,20 +29,23 @@ import java.util.HashMap;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ViewControllerTest {
+class ViewControllerTest
+{
 
     @Autowired
     private WebTestClient wtc;
 
     @BeforeAll
-    void setup() {
+    void setup()
+    {
         new AppConfig();
         ScheduledTasks tasks = new ScheduledTasks();
         tasks.updateCaches();
     }
 
     @Test
-    void showTitlePage() {
+    void showTitlePage()
+    {
         this.wtc
                 .get()
                 .uri("/")
@@ -52,7 +55,7 @@ class ViewControllerTest {
     }
 
     @Test
-    @EnabledIfEnvironmentVariable(named="CI", matches="true")
+    @EnabledIfEnvironmentVariable(named = "CI", matches = "true")
     void showDefaultDashboardCI()
     {
         AppConfig.updateFromSystem();
@@ -60,8 +63,9 @@ class ViewControllerTest {
     }
 
     @Test
-    @DisabledIfEnvironmentVariable(named="CI", matches="true")
-    void showDefaultDashboard() {
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void showDefaultDashboard()
+    {
         String[] multipleCodes = new String[]{"149000006070", "149000007070"};
         String[] multipleCRS = new String[]{"BTN", "MCB"};
         String[] singleCode = new String[]{"149000007070"};

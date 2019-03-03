@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class StopController {
+public class StopController
+{
 
-    @RequestMapping(value="api/stop", method=RequestMethod.POST)
-    public ResponseEntity<String> stops(@RequestBody JSONObject json){
+    @RequestMapping(value = "api/stop", method = RequestMethod.POST)
+    public ResponseEntity<String> stops(@RequestBody JSONObject json)
+    {
         // Create a JSON Object to hold the response.
         JSONObject k = new JSONObject();
 
@@ -26,12 +28,15 @@ public class StopController {
         JSONObject busesAndTrains = new JSONObject();
 
         // Add any bus stops to the JSON
-        if(json.has("codes")){
-            if(json.get("codes") instanceof JSONArray) {
+        if (json.has("codes"))
+        {
+            if (json.get("codes") instanceof JSONArray)
+            {
                 JSONArray busCodeList = json.getJSONArray("codes");
 
                 List<String> busCodes = new ArrayList<>();
-                for (int i = 0; i < busCodeList.length(); i++) {
+                for (int i = 0; i < busCodeList.length(); i++)
+                {
                     busCodes.add(busCodeList.get(i).toString());
                 }
 
@@ -45,13 +50,16 @@ public class StopController {
         }
 
         // Add any train stations to the JSON
-        if(json.has("CRS")){
+        if (json.has("CRS"))
+        {
             // Grab as object if only one CRS requested, else array
-            if(json.get("CRS") instanceof JSONArray){
+            if (json.get("CRS") instanceof JSONArray)
+            {
                 JSONArray trainCodeList = json.getJSONArray("CRS");
 
                 List<String> trainCodes = new ArrayList<>();
-                for(int i = 0; i < trainCodeList.length(); i++){
+                for (int i = 0; i < trainCodeList.length(); i++)
+                {
                     trainCodes.add(trainCodeList.get(i).toString());
                 }
 
@@ -67,6 +75,6 @@ public class StopController {
         // Wrap all JSON into one object
         k.put("payload", busesAndTrains);
 
-        return new ResponseEntity(k.toString(),HttpStatus.OK);
+        return new ResponseEntity(k.toString(), HttpStatus.OK);
     }
 }

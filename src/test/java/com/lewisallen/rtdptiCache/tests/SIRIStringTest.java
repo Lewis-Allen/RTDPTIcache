@@ -4,17 +4,20 @@ import com.lewisallen.rtdptiCache.requests.SIRIString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SIRIStringTest {
+public class SIRIStringTest
+{
 
-	@Test
-	void testXmlBuilder(){
-		String[] naptans = new String[]{"123456789", "987654321"};
-		SIRIString xmlString = new SIRIString();
-		
-		xmlString.generateXml(naptans);
-		
-		for(String s : naptans){
-			Assertions.assertTrue(xmlString.getXml().contains(s));
-		}
-	}
+    @Test
+    void testXmlBuilder()
+    {
+        String[] naptans = new String[]{"123456789", "987654321"};
+        SIRIString xmlString = new SIRIString();
+
+        xmlString.generateXml(naptans);
+
+        for (String s : naptans)
+        {
+            Assertions.assertTrue(xmlString.getXml().contains(s));
+        }
+    }
 }

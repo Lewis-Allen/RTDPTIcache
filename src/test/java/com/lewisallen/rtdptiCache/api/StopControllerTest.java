@@ -8,18 +8,18 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 
 @SpringBootTest
-public class StopControllerTest {
+public class StopControllerTest
+{
 
     private StopController controller = new StopController();
 
     @Test
-    void testEmptyRequest(){
+    void testEmptyRequest()
+    {
         JSONObject req = new JSONObject();
         JSONObject res = new JSONObject(controller.stops(req).getBody());
 
@@ -27,7 +27,8 @@ public class StopControllerTest {
     }
 
     @Test
-    void testDodgyRequest(){
+    void testDodgyRequest()
+    {
         JSONObject req = new JSONObject();
         req.put("codes", "dfghjkdfghjkdfghjkl");
         JSONObject res = new JSONObject(controller.stops(req).getBody());
@@ -38,10 +39,11 @@ public class StopControllerTest {
     }
 
     @Test
-    void singleStopRequests() {
+    void singleStopRequests()
+    {
         SIRICache.siriCache = new HashMap<>();
         JSONObject req = new JSONObject();
-        req.put("codes","14900000670");
+        req.put("codes", "14900000670");
 
         JSONObject res = new JSONObject(controller.stops(req).getBody());
 
@@ -63,14 +65,15 @@ public class StopControllerTest {
     }
 
     @Test
-    void multipleStopRequests(){
+    void multipleStopRequests()
+    {
         // Query multiple buses
         SIRICache.siriCache = new HashMap<>();
         JSONObject req = new JSONObject();
         JSONArray codes = new JSONArray();
         codes.put("14900000670");
         codes.put("14900000671");
-        req.put("codes",codes);
+        req.put("codes", codes);
 
         JSONObject res = new JSONObject(controller.stops(req).getBody());
 
@@ -85,7 +88,7 @@ public class StopControllerTest {
         codes = new JSONArray();
         codes.put("MCB");
         codes.put("BTN");
-        req.put("CRS",codes);
+        req.put("CRS", codes);
 
         res = new JSONObject(controller.stops(req).getBody());
 

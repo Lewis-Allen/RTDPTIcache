@@ -1,12 +1,12 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
-import com.lewisallen.rtdptiCache.models.Naptan;
-import com.lewisallen.rtdptiCache.models.Station;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import com.lewisallen.rtdptiCache.caches.TrainStationCache;
+import com.lewisallen.rtdptiCache.models.Naptan;
+import com.lewisallen.rtdptiCache.models.Station;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -22,30 +22,36 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class ViewController {
+public class ViewController
+{
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String showTitle() {
+    public String showTitle()
+    {
         return "title";
     }
 
-    @RequestMapping(value = "/dashboard", method=RequestMethod.GET)
-    public String showDashboard(@RequestParam(value="template", required = false) String template,
-                                @RequestParam(value="code[]", required = false) String[] codes,
-                                @RequestParam(value="crs[]", required = false) String[] crs,
-                                @RequestParam(value="flipTo", required = false) String flipTo,
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    public String showDashboard(@RequestParam(value = "template", required = false) String template,
+                                @RequestParam(value = "code[]", required = false) String[] codes,
+                                @RequestParam(value = "crs[]", required = false) String[] crs,
+                                @RequestParam(value = "flipTo", required = false) String flipTo,
                                 UriComponentsBuilder builder,
                                 Model model
-    ){
+    )
+    {
         JSONObject departureInformation;
         // Check if no transport codes were provided.
-        if(codes == null && crs == null){
+        if (codes == null && crs == null)
+        {
             throw new RuntimeException("No transport codes provided. Provide codes as a parameter with code[]={code} or crs[]={crs}");
         }
-        else {
+        else
+        {
             // Else we add codes to Model.
             JSONObject j = new JSONObject();
-            if (codes != null) {
+            if (codes != null)
+            {
                 j.put("codes", Arrays.asList(codes));
             }
 
@@ -55,17 +61,23 @@ public class ViewController {
             departureInformation = getDepartureInformation(j);
 
             // Fill in stop name for any locations that have no visits.
-            if (departureInformation.getJSONObject("payload").has("busStops")) {
+            if (departureInformation.getJSONObject("payload").has("busStops"))
+            {
                 JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("busStops");
                 {
-                    for (String aString : codesArray.keySet()) {
-                        if (departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).isEmpty()) {
-                            if (NaPTANCache.checkStopExists(aString)) {
+                    for (String aString : codesArray.keySet())
+                    {
+                        if (departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).isEmpty())
+                        {
+                            if (NaPTANCache.checkStopExists(aString))
+                            {
                                 Naptan naptan = NaPTANCache.getNaptan(aString);
                                 departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).put("StopName", naptan.getLongDescription());
                                 departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).put("Identifier", naptan.getIdentifier());
                                 departureInformation.getJSONObject("payload").getJSONObject("busStops").getJSONObject(aString).put("MonitoredStopVisits", new ArrayList<>());
-                            } else {
+                            }
+                            else
+                            {
                                 departureInformation.getJSONObject("payload").getJSONObject("busStops").remove(aString);
                             }
                         }
@@ -73,16 +85,22 @@ public class ViewController {
                 }
             }
 
-            if (departureInformation.getJSONObject("payload").has("trainStations")) {
+            if (departureInformation.getJSONObject("payload").has("trainStations"))
+            {
                 JSONObject codesArray = departureInformation.getJSONObject("payload").getJSONObject("trainStations");
                 {
-                    for (String aString : codesArray.keySet()) {
-                        if (departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).isEmpty()) {
-                            if (TrainStationCache.checkStopExists(aString)) {
+                    for (String aString : codesArray.keySet())
+                    {
+                        if (departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).isEmpty())
+                        {
+                            if (TrainStationCache.checkStopExists(aString))
+                            {
                                 Station station = TrainStationCache.getStation(aString);
                                 departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).put("stationName", station.getStationName());
                                 departureInformation.getJSONObject("payload").getJSONObject("trainStations").getJSONObject(aString).put("departures", new ArrayList<>());
-                            } else {
+                            }
+                            else
+                            {
                                 departureInformation.getJSONObject("payload").getJSONObject("trainStations").remove(aString);
                             }
                         }
@@ -99,14 +117,12 @@ public class ViewController {
             // Add clock attributes.
             model.addAttribute("localDateTime", LocalDateTime.now());
 
-
-
             // Check if a template was provided. Provide default if not.
             if (template == null)
                 template = "default";
 
             // Add the switch URL if applicable.
-            if(flipTo != null)
+            if (flipTo != null)
             {
                 model.addAttribute("flipUrl", builder.path("/dashboard")
                         .queryParam("code[]", codes)
@@ -130,11 +146,13 @@ public class ViewController {
         JSONObject busesAndTrains = new JSONObject();
 
         // Add any bus stops to the JSON
-        if(request.has("codes")){
+        if (request.has("codes"))
+        {
             JSONArray busCodeList = request.getJSONArray("codes");
 
             List<String> busCodes = new ArrayList<>();
-            for (int i = 0; i < busCodeList.length(); i++) {
+            for (int i = 0; i < busCodeList.length(); i++)
+            {
                 busCodes.add(busCodeList.get(i).toString());
             }
 
@@ -143,11 +161,13 @@ public class ViewController {
         }
 
         // Add any train stations to the JSON
-        if(request.has("crs")){
+        if (request.has("crs"))
+        {
             JSONArray trainCodeList = request.getJSONArray("crs");
 
             List<String> trainCodes = new ArrayList<>();
-            for(int i = 0; i < trainCodeList.length(); i++){
+            for (int i = 0; i < trainCodeList.length(); i++)
+            {
                 trainCodes.add(trainCodeList.get(i).toString());
             }
 

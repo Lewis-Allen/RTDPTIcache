@@ -10,22 +10,27 @@ import org.junit.jupiter.api.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class TransportDatabaseTest {
+public class TransportDatabaseTest
+{
 
-	ErrorHandler handler = new ErrorHandler();
+    ErrorHandler handler = new ErrorHandler();
 
-	@Test
-	void testDatabaseRetrieval(){
-		TransportDatabase db = new TransportDatabase();
-		
-		try {
-			@SuppressWarnings("unused")
-			ResultSet rs = db.query(NaPTANCache.naptanQuery);
-			rs = db.query(TrainStationCache.stationQuery);
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-			Assertions.fail();
-		}
-	}
-	
+    @Test
+    void testDatabaseRetrieval()
+    {
+        TransportDatabase db = new TransportDatabase();
+
+        try
+        {
+            @SuppressWarnings("unused")
+            ResultSet rs = db.query(NaPTANCache.naptanQuery);
+            rs = db.query(TrainStationCache.stationQuery);
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }
+
 }

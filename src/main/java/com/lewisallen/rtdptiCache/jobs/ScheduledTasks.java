@@ -25,8 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
-public class ScheduledTasks {
-    
+public class ScheduledTasks
+{
+
     private TransportDatabase db = new TransportDatabase();
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
@@ -36,7 +37,8 @@ public class ScheduledTasks {
     private Ldb soap;
     private LDBServiceSoap soapService;
 
-    public ScheduledTasks(){
+    public ScheduledTasks()
+    {
         soap = new Ldb();
         soapService = soap.getLDBServiceSoap12();
 
@@ -44,39 +46,55 @@ public class ScheduledTasks {
         accessToken.setTokenValue(AppConfig.ldbToken);
     }
 
+    /**
+     * Updates all caches.
+     */
     @Scheduled(fixedRate = 1000 * 30) // Thirty seconds
-    public void updateCaches() {
+    public void updateCaches()
+    {
         log.info("updateCaches: Starting task to update caches at {}", dateFormat.format(new Date()));
-        
+
         updateNaPTANCache();
         updateSIRICache();
         updateStationCache();
         updateTrainsDepartureCache();
-        
+
         log.info("updateCaches: Caches update complete at {}", dateFormat.format(new Date()));
     }
-    
-    public void updateNaPTANCache(){
+
+    /**
+     * Updates the NaPTAN cache.
+     */
+    public void updateNaPTANCache()
+    {
         log.debug("updateNaPTANCache: starting NaPTAN cache update at {}", dateFormat.format(new Date()));
-        
+
         NaPTANCache.populateCache(this.db, NaPTANCache.naptanQuery);
-        
+
         log.debug("updateNaPTANCache: NaPTAN cache update complete at {}", dateFormat.format(new Date()));
     }
-    
-    public void updateSIRICache(){
+
+    /**
+     * Updates the SIRI cache.
+     */
+    public void updateSIRICache()
+    {
         log.debug("updateNaPTANCache: starting SIRI cache update at {}", dateFormat.format(new Date()));
-        
+
         SIRIString xml = new SIRIString();
         String req = xml.generateXml(NaPTANCache.getCachedCodes().stream().toArray(String[]::new));
         SIRIRequester requester = new SIRIRequester();
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(requester.makeSIRIRequest(req));
-        
+
         log.debug("updateNaPTANCache: SIRI cache update complete at {}", dateFormat.format(new Date()));
     }
 
-    public void updateStationCache(){
+    /**
+     * Updates the Station cache.
+     */
+    public void updateStationCache()
+    {
         log.debug("updateStationCache: starting Stations cache update at {}", dateFormat.format(new Date()));
 
         TrainStationCache.populateCache(this.db, TrainStationCache.stationQuery);
@@ -84,7 +102,11 @@ public class ScheduledTasks {
         log.debug("updateStationCache: Station cache update complete at {}", dateFormat.format(new Date()));
     }
 
-    public void updateTrainsDepartureCache(){
+    /**
+     * Updates the Departure cache.
+     */
+    public void updateTrainsDepartureCache()
+    {
         log.debug("updateTrainsDepartureCache: starting Trains cache update at {}", dateFormat.format(new Date()));
 
         GetBoardRequestParams params = new GetBoardRequestParams();
@@ -92,7 +114,8 @@ public class ScheduledTasks {
 
         Map<Object, JSONObject> temporaryDepartureCache = new HashMap<>();
 
-        for(String crsCode : TrainStationCache.getCachedCodes()){
+        for (String crsCode : TrainStationCache.getCachedCodes())
+        {
             params.setCrs(crsCode);
             params.setNumRows(15);
 
@@ -102,7 +125,7 @@ public class ScheduledTasks {
             // Create a list of hold the departures for this station.
             List<JSONObject> thisStationDepartures = new ArrayList<>();
 
-            if(departureBoard.getGetStationBoardResult().getTrainServices() != null)
+            if (departureBoard.getGetStationBoardResult().getTrainServices() != null)
             {
                 List<ServiceItem> service = departureBoard.getGetStationBoardResult().getTrainServices().getService();
 
@@ -111,7 +134,8 @@ public class ScheduledTasks {
                 // Create a list of JSON Objects for the departures from this station.
                 thisStationDepartures = new ArrayList<>();
 
-                for(ServiceItem si : service){
+                for (ServiceItem si : service)
+                {
                     due = si.getStd();
                     destination = si.getDestination().getLocation().get(0).getLocationName();
                     status = si.getEtd();
@@ -134,7 +158,8 @@ public class ScheduledTasks {
 
             // Add any messages to the JSON.
             ArrayOfNRCCMessages nrccMessages = departureBoard.getGetStationBoardResult().getNrccMessages();
-            if(nrccMessages != null){
+            if (nrccMessages != null)
+            {
                 stationJSON.put("nrccMessages", nrccMessages.getMessage());
             }
 

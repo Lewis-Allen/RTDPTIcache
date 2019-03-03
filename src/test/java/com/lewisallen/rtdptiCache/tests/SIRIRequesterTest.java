@@ -14,35 +14,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SIRIRequesterTest {
+public class SIRIRequesterTest
+{
 
-	@BeforeAll
-	void setup(){
-		new AppConfig();
-	}
+    @BeforeAll
+    void setup()
+    {
+        new AppConfig();
+    }
 
-	@Test
-	void testEnv(){
-		Dotenv env = Dotenv.load();
+    @Test
+    void testEnv()
+    {
+        Dotenv env = Dotenv.load();
 
-		SIRIRequester requester = new SIRIRequester();
-		Assertions.assertEquals(requester.getUri(), env.get("SIRI_URI"));
-		Assertions.assertTrue(!StringUtils.isEmpty(requester.getUri()));
-	}
+        SIRIRequester requester = new SIRIRequester();
+        Assertions.assertEquals(requester.getUri(), env.get("SIRI_URI"));
+        Assertions.assertTrue(!StringUtils.isEmpty(requester.getUri()));
+    }
 
-	@Test
-	@DisabledIfEnvironmentVariable(named="CI", matches="true")
-	void testSiriRequest(){
-		SIRIRequester siriRequest = new SIRIRequester();
-		ResponseEntity<String> response = siriRequest.makeSIRIRequest("<ServiceDelivery></ServiceDelivery>");
-		
-	    Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
-	}
+    @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void testSiriRequest()
+    {
+        SIRIRequester siriRequest = new SIRIRequester();
+        ResponseEntity<String> response = siriRequest.makeSIRIRequest("<ServiceDelivery></ServiceDelivery>");
 
-	@Test
-	@EnabledIfEnvironmentVariable(named="CI", matches="true")
-	void ciTestSiriRequest(){
-		AppConfig.siriUri = System.getenv("SIRI_URI");
-		testSiriRequest();
-	}
+        Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void ciTestSiriRequest()
+    {
+        AppConfig.siriUri = System.getenv("SIRI_URI");
+        testSiriRequest();
+    }
 }

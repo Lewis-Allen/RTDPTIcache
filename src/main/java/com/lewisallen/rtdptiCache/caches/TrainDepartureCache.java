@@ -6,15 +6,26 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TrainDepartureCache {
+public class TrainDepartureCache
+{
     public static Map<Object, JSONObject> trainDepartureCache = new HashMap<>();
 
-    public static JSONObject getTrainJSON(String[] stationCodes) throws JSONException {
+    /**
+     * Given a string of station codes, return the stored JSON for each code.
+     *
+     * @param stationCodes List of station codes to query.
+     * @return JSON object containing all codes and their respective JSON.
+     * @throws JSONException
+     */
+    public static JSONObject getTrainJSON(String[] stationCodes) throws JSONException
+    {
         JSONObject k = new JSONObject();
 
         JSONObject j = new JSONObject();
-        for(String stationCode : stationCodes){
-            if(trainDepartureCache.containsKey(stationCode)){
+        for (String stationCode : stationCodes)
+        {
+            if (trainDepartureCache.containsKey(stationCode))
+            {
                 j.put(stationCode, trainDepartureCache.get(stationCode));
             }
             else

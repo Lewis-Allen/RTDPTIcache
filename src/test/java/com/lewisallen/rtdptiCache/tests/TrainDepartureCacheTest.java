@@ -8,22 +8,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TrainDepartureCacheTest {
+public class TrainDepartureCacheTest
+{
 
     @BeforeAll
-    void InitialiseTrainDepartureCache(){
+    void InitialiseTrainDepartureCache()
+    {
         new TrainDepartureCache();
     }
 
     @Test
-    void testTrainCache() {
-        for(int i = 0; i < 10; i++){
+    void testTrainCache()
+    {
+        for (int i = 0; i < 10; i++)
+        {
             TrainDepartureCache.trainDepartureCache.put(Integer.toString(i), new JSONObject());
         }
 
         // Generate list of keys to pass to function.
         String[] stationCodes = new String[10];
-		for(int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++)
+        {
             stationCodes[i] = Integer.toString(i);
         }
 
@@ -31,7 +36,8 @@ public class TrainDepartureCacheTest {
         JSONObject res = TrainDepartureCache.getTrainJSON(stationCodes);
 
         // Test response.
-		for(int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++)
+        {
             Assertions.assertTrue(res.getJSONObject("trainStations").has(Integer.toString(i)));
         }
     }

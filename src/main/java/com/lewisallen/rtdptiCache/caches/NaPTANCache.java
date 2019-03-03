@@ -1,8 +1,8 @@
 package com.lewisallen.rtdptiCache.caches;
 
+import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import com.lewisallen.rtdptiCache.models.Naptan;
-import com.lewisallen.rtdptiCache.db.TransportDatabase;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -10,54 +10,91 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class NaPTANCache {
+public class NaPTANCache
+{
+    // Queries only active stops in the NaPTAN cache.
+    public static String naptanQuery = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
 
-	public static String naptanQuery = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
+    public static Map<String, Naptan> naptanCache = new HashMap<>();
 
-	public static Map<String, Naptan> naptanCache = new HashMap<>();
-	
-	public static Map<String, String> getStopNames(String[] codes){
-		Map<String, String> res = new HashMap<>();
-		for(String s : codes){
-			res.put(s, NaPTANCache.naptanCache.get(s).getLongDescription());
-		}
-		
-		return res;
-	}
+    /**
+     * Returns stop names for the given list of codes.
+     *
+     * @param codes Codes for stop names.
+     * @return Map of code to stop name
+     */
+    public static Map<String, String> getStopNames(String[] codes)
+    {
+        Map<String, String> res = new HashMap<>();
+        for (String s : codes)
+        {
+            res.put(s, NaPTANCache.naptanCache.get(s).getLongDescription());
+        }
 
-	/**
-	 * Populates the NaPTAN cache with values based off active stops in DB.
-	 * @param db
-	 */
-	public static void populateCache(TransportDatabase db, String query) {
-		try {
-			Map<String, Naptan> naptans = new HashMap<>();
-			ResultSet rs = db.query(query);
-			while (rs.next()) {
-				String code = rs.getString("SystemCodeNumber");
-				Naptan naptan = new Naptan(code,
-						rs.getString("LongDescription"),
-						rs.getString("Identifier"));
+        return res;
+    }
 
-				naptans.put(code, naptan);
-			}
+    /**
+     * Populates the NaPTAN cache with values based off active stops in DB.
+     *
+     * @param db    database connector.
+     * @param query query to populate the cache.
+     */
+    public static void populateCache(TransportDatabase db, String query)
+    {
+        try
+        {
+            Map<String, Naptan> naptans = new HashMap<>();
+            ResultSet rs = db.query(query);
+            while (rs.next())
+            {
+                String code = rs.getString("SystemCodeNumber");
+                Naptan naptan = new Naptan(code,
+                        rs.getString("LongDescription"),
+                        rs.getString("Identifier"));
 
-			NaPTANCache.naptanCache = naptans;
-		} catch (Exception e) {
-			String message = "Error populating NaPTAN cache";
-			ErrorHandler.handle(e, Level.SEVERE, message);
-		}
-	}
+                naptans.put(code, naptan);
+            }
 
-	public static boolean checkStopExists(String naptan) { return NaPTANCache.naptanCache.containsKey(naptan); }
+            NaPTANCache.naptanCache = naptans;
+        }
+        catch (Exception e)
+        {
+            String message = "Error populating NaPTAN cache";
+            ErrorHandler.handle(e, Level.SEVERE, message);
+        }
+    }
 
-	public static Naptan getNaptan(String naptan)
-	{
-		return NaPTANCache.naptanCache.containsKey(naptan) ? NaPTANCache.naptanCache.get(naptan) : null;
-	}
-	
-	public static Set<String> getCachedCodes(){
-	    return NaPTANCache.naptanCache.keySet();
-	}
+    /**
+     * Checks if a stop exists in the cache.
+     *
+     * @param naptan NaPTAN code of stop to check.
+     * @return Whether stop exists or not.
+     */
+    public static boolean checkStopExists(String naptan)
+    {
+        return NaPTANCache.naptanCache.containsKey(naptan);
+    }
+
+    /**
+     * Get the NaPTAN object for supplied code
+     *
+     * @param naptan the NaPTAN code to get
+     * @return NaPTAN object for given code.
+     */
+    public static Naptan getNaptan(String naptan)
+    {
+        return NaPTANCache.naptanCache.containsKey(naptan) ? NaPTANCache.naptanCache.get(naptan) : null;
+    }
+
+    /**
+     * Get the set of codes cached in the NaPTAN cache.
+     *
+     * @return Set of codes cached.
+     */
+    public static Set<String> getCachedCodes()
+    {
+        return NaPTANCache.naptanCache.keySet();
+    }
 
 }

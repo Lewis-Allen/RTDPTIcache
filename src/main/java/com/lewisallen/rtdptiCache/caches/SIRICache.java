@@ -6,28 +6,37 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SIRICache {
+public class SIRICache
+{
 
-	public static Map<Object, JSONObject> siriCache = new HashMap<>();
+    public static Map<Object, JSONObject> siriCache = new HashMap<>();
 
-	public static JSONObject getSiriJson(String[] naptans) throws JSONException{
+    /**
+     * Given a string of NaPTAN codes, return the stored JSON for each code.
+     *
+     * @param naptans List of codes to query.
+     * @return JSON object containing all codes and their respective JSON.
+     * @throws JSONException
+     */
+    public static JSONObject getSiriJson(String[] naptans) throws JSONException
+    {
+        JSONObject k = new JSONObject();
 
-		JSONObject k = new JSONObject();
+        JSONObject j = new JSONObject();
+        for (String s : naptans)
+        {
+            if (SIRICache.siriCache.containsKey(s))
+            {
+                j.put(s, SIRICache.siriCache.get(s));
+            }
+            else
+            {
+                j.put(s, new JSONObject());
+            }
+        }
 
-		JSONObject j = new JSONObject();
-		for(String s : naptans){
-			if(SIRICache.siriCache.containsKey(s))
-			{
-				j.put(s, SIRICache.siriCache.get(s));
-			}
-			else
-			{
-				j.put(s, new JSONObject());
-			}
-		}
+        k.put("busStops", j);
 
-		k.put("busStops", j);
-
-		return k;
-	}
+        return k;
+    }
 }
