@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class ViewController
@@ -137,7 +139,7 @@ public class ViewController
         // Add list of codes to the model, making sure we remove any codes that were removed previously.
         // We use this so we can add stops in the correct order on the template.
         List<String> modelBusCodes = new ArrayList<>();
-        if(codes != null)
+        if (codes != null)
         {
             modelBusCodes = new ArrayList<>(Arrays.asList(codes));
             modelBusCodes.removeAll(removedBusCodes);
@@ -145,7 +147,7 @@ public class ViewController
         model.addAttribute("busCodes", modelBusCodes);
 
         List<String> modelTrainCodes = new ArrayList<>();
-        if(crs != null)
+        if (crs != null)
         {
             modelTrainCodes = new ArrayList<>(Arrays.asList(crs));
             modelTrainCodes.removeAll(removedTrainCodes);

@@ -22,7 +22,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ScheduledTasks
@@ -112,7 +116,7 @@ public class ScheduledTasks
         GetBoardRequestParams params = new GetBoardRequestParams();
         params.setTimeWindow(60); // Set time window to 60 minutes.
 
-        Map<Object, JSONObject> temporaryDepartureCache = new HashMap<>();
+        Map<Object, JSONObject> temporaryDepartureCache = new ConcurrentHashMap<>();
 
         for (String crsCode : TrainStationCache.getCachedCodes())
         {

@@ -175,12 +175,36 @@ class ViewControllerTest
                 .expectStatus()
                 .is2xxSuccessful();
 
+        // Test empty template
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("template", "")
+                        .queryParam("code[]", multipleCodes)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
         // Test flipping
         this.wtc
                 .get()
                 .uri(builder -> builder.path("/dashboard")
                         .queryParam("template", "fourbuses")
                         .queryParam("flipTo", "onetrain")
+                        .queryParam("crs[]", singleCRS)
+                        .queryParam("code[]", multipleCodes)
+                        .build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+
+        // Test empty flipTo
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("template", "fourbuses")
+                        .queryParam("flipTo", "")
                         .queryParam("crs[]", singleCRS)
                         .queryParam("code[]", multipleCodes)
                         .build())

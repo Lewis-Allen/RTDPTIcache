@@ -11,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -30,7 +30,7 @@ public class SIRIResponseParser
     public void parse(ResponseEntity<String> response)
     {
         JSONObject siriResponse = XML.toJSONObject(response.getBody());
-        Map<Object, JSONObject> cache = new HashMap<Object, JSONObject>();
+        Map<Object, JSONObject> cache = new ConcurrentHashMap<Object, JSONObject>();
 
         // Store the time of response for later calculation of time until departure.
         this.responseTime = OffsetDateTime.parse(responsePathTransverser(siriResponse, "ServiceDelivery")
@@ -209,11 +209,7 @@ public class SIRIResponseParser
         JSONObject result = siriResponse.getJSONObject("Siri")
                 .getJSONObject("ServiceDelivery");
 
-        /*
-        result = key.equals("StopMonitoringDelivery") ? result.getJSONObject(key)
-                : result.getJSONObject("StopMonitoringDelivery").getJSONObject(key);
-                */
-        if(key.equals("StopMonitoringDelivery"))
+        if (key.equals("StopMonitoringDelivery"))
         {
             result = result.getJSONObject(key);
         }
@@ -222,18 +218,6 @@ public class SIRIResponseParser
             result = result.getJSONObject("StopMonitoringDelivery")
                     .getJSONObject("MonitoredStopVisit");
         }
-/*
-        switch (key)
-        {
-            case "StopMonitoringDelivery":
-                result = result.getJSONObject("StopMonitoringDelivery");
-                break;
-
-            case "MonitoredStopVisit":
-                result = result.getJSONObject("StopMonitoringDelivery")
-                        .getJSONObject("MonitoredStopVisit");
-                break;
-        }*/
 
         return result;
     }
