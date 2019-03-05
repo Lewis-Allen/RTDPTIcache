@@ -209,6 +209,20 @@ public class SIRIResponseParser
         JSONObject result = siriResponse.getJSONObject("Siri")
                 .getJSONObject("ServiceDelivery");
 
+        /*
+        result = key.equals("StopMonitoringDelivery") ? result.getJSONObject(key)
+                : result.getJSONObject("StopMonitoringDelivery").getJSONObject(key);
+                */
+        if(key.equals("StopMonitoringDelivery"))
+        {
+            result = result.getJSONObject(key);
+        }
+        else if (key.equals("MonitoredStopVisit"))
+        {
+            result = result.getJSONObject("StopMonitoringDelivery")
+                    .getJSONObject("MonitoredStopVisit");
+        }
+/*
         switch (key)
         {
             case "StopMonitoringDelivery":
@@ -219,7 +233,7 @@ public class SIRIResponseParser
                 result = result.getJSONObject("StopMonitoringDelivery")
                         .getJSONObject("MonitoredStopVisit");
                 break;
-        }
+        }*/
 
         return result;
     }
