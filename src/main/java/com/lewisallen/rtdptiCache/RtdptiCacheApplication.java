@@ -11,11 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableConfigurationProperties(ThymeleafProperties.class)
 public class RtdptiCacheApplication
 {
-
     public static void main(String[] args)
     {
         SpringApplication.run(RtdptiCacheApplication.class, args);
-
-        new AppConfig();
     }
 }
