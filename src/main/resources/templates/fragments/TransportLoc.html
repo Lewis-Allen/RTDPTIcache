@@ -83,3 +83,78 @@
         </div>
     </div>
 </div>
+<div class="busStop" th:fragment="busStop2(busStop)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table>
+        <thead>
+        <tr>
+            <th class="busStopHeader" th:text="${busStop.StopName + ' ' +  busStop.Identifier}" colspan=3></th>
+        </tr>
+        <tr>
+            <th class="shrink">Route</th>
+            <th>Destination</th>
+            <th class="shrink">Departure</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Bus Visits -->
+        <tr th:each="busVisit : ${busStop.MonitoredStopVisits}">
+            <td class="shrink" th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}" ></td>
+            <td class="destination" th:text="${busVisit.MonitoredVehicleJourney.DestinationName}"></td>
+            <td class="shrink" th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}" ></td>
+        </tr>
+
+        <!-- Padding -->
+        <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(busStop.MonitoredStopVisits), 1)}">
+            <td class="shrink" ></td>
+            <td></td>
+            <td class="shrink"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="station" th:fragment="trainStation2(station)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table>
+        <thead>
+        <tr>
+            <th class="stationHeader" th:text="${station.stationName + ' Rail Station'}" colspan=4></th>
+        </tr>
+        <tr>
+            <th class="shrink">Due</th>
+            <th>Destination</th>
+            <th class="shrink">Status</th>
+            <th class="shrink">Platform</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <!-- If there are no departures, check for any nrcc messages and display. -->
+        <th:block th:switch="${#maps.containsKey(station, 'nrccMessages') and #lists.size(station.departures) == 0}">
+            <th:block th:case="true">
+                <tr th:each="nrccMessage : ${station.nrccMessages}">
+                    <td colspan=4 th:utext="${nrccMessage.value}"></td>
+                </tr>
+            </th:block>
+            <!-- Otherwise we display all journeys and times. -->
+            <th:block th:case="false">
+                <tr th:each="departure : ${station.departures}">
+                    <td class="shrink" th:text="${departure.due}"></td>
+                    <td class="destination" th:text="${departure.destination}"></td>
+                    <td class="shrink" th:text="${departure.status}"></td>
+                    <th:block th:switch="${#maps.containsKey(departure, 'platform')}">
+                        <td class="shrink" th:case="true" th:text="${departure.platform}"></td>
+                        <td class="shrink" th:case="false"> - </td>
+                    </th:block>
+                </tr>
+
+                <!-- Padding -->
+                <tr th:each="i : ${#numbers.sequence(0, 14 - #lists.size(station.departures), 1)}">
+                    <td class="shrink"></td>
+                    <td></td>
+                    <td class="shrink"></td>
+                    <td class="shrink"></td>
+                </tr>
+            </th:block>
+        </th:block>
+        </tbody>
+    </table>
+</div>

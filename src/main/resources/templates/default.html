@@ -13,46 +13,67 @@
     <title>Dashboard - RTDPTI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
         body {
-            margin: 20px;
+            margin: 5px;
             -webkit-font-smoothing: antialiased;
             color: #fff;
-            font-size: 1.2rem;
             font-family: 'Lato', sans-serif;
             background-color: #babac0;
-            /* Background pattern from Toptal Subtle Patterns
-            background-image: url({{ url('/images/triangular_@2X.png')}});*/
+            box-sizing: border-box;
+            font-size: 20px;
         }
 
         /* Container stylings */
-        .parent {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+        .busParent {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            grid-gap: 10px;
             height: 100%;
             width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Container stylings */
+        .trainParent {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
+            grid-gap: 10px;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .busStop {
-            margin-bottom: 20px;
-            flex-basis: 425px;
+            box-sizing: border-box;
         }
 
         .station {
-            margin-bottom: 20px;
-            flex-basis: 80%;
+            box-sizing: border-box;
+            font-size: calc(1vw + 1vh);
         }
 
-        .destination {
-            text-align: left;
+        .busStopHeader {
+            font-size: 1.2em;
         }
 
-        /* Table Stylings */
+        .stationHeader {
+            font-size: 1.2em;
+            font-size: calc(1.5vw + 1.5vh);
+        }
+
         table {
             text-align: center;
-            table-layout: fixed;
             background-color: #2C3845;
-            width: 100%;
+            width: 90%;
+            height: 90%;
+            margin: auto;
         }
 
         th {
@@ -70,31 +91,38 @@
         }
 
         td {
-            padding: 10px 10px 10px;
+            padding: 8px 8px 8px;
             border: 1px solid #3c4c5d;
             height: 1.2em;
         }
 
-        a {
-            color: #fff;
+        .destination {
+            text-align: left;
         }
+
+        .shrink {
+            width: 1%;
+            white-space: nowrap;
+            padding-left: 1vw;
+            padding-right: 1vw;
+        }
+
   </style>
 </head>
 <body>
-    <div class="parent">
-
-        <th:block th:if="${#maps.containsKey(departureInformation.payload, 'busStops')}">
-            <th:block th:each="busCode : ${busCodes}">
-                <div th:replace="fragments/TransportLoc :: busStop(${departureInformation.payload.busStops.get(busCode)})"></div>
-            </th:block>
+<div class="busParent">
+    <th:block th:if="${#maps.containsKey(departureInformation.payload, 'busStops')}">
+        <th:block th:each="busCode : ${busCodes}">
+            <div th:replace="fragments/TransportLoc :: busStop2(${departureInformation.payload.busStops.get(busCode)})"></div>
         </th:block>
-
-        <th:block th:if="${#maps.containsKey(departureInformation.payload, 'trainStations')}">
-            <th:block th:each="trainCode : ${trainCodes}">
-                <div th:replace="fragments/TransportLoc :: trainStation(${departureInformation.payload.trainStations.get(trainCode)})"></div>
-            </th:block>
+    </th:block>
+</div>
+<div class="trainParent">
+    <th:block th:if="${#maps.containsKey(departureInformation.payload, 'trainStations')}">
+        <th:block th:each="trainCode : ${trainCodes}">
+            <div th:replace="fragments/TransportLoc :: trainStation2(${departureInformation.payload.trainStations.get(trainCode)})"></div>
         </th:block>
-
-    </div>
+    </th:block>
+</div>
 </body>
 </html>

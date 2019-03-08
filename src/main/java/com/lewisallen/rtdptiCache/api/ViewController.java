@@ -171,10 +171,10 @@ public class ViewController
         if (flipTo != null && !flipTo.equals(""))
         {
             model.addAttribute("flipUrl", builder.path("/dashboard")
-                    .queryParam("code[]", codes)
-                    .queryParam("crs[]", crs)
                     .queryParam("template", flipTo)
                     .queryParam("flipTo", template)
+                    .queryParam("code[]", codes)
+                    .queryParam("crs[]", crs)
                     .build()
                     .toUriString());
         }
