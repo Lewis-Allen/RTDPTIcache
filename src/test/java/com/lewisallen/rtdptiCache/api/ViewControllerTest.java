@@ -4,6 +4,7 @@ import com.lewisallen.rtdptiCache.AppConfig;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * TODO: Redo these tests.
@@ -265,5 +268,20 @@ class ViewControllerTest
                 .expectStatus()
                 .is2xxSuccessful();
 
+    }
+
+    @Test
+    void testTemplateList()
+    {
+
+        ViewController viewController = new ViewController();
+
+        // Attempt to find the default template.
+        List<String> filesNames = viewController.filesInDashboardTemplateDirectory(Paths.get("templates", "dashboardTemplates"));
+        Assertions.assertTrue(filesNames.contains("default"));
+
+        // Give a nonsense path.
+        filesNames = viewController.filesInDashboardTemplateDirectory(Paths.get("thisisnotarealpath"));
+        Assertions.assertTrue(filesNames.size() == 0);
     }
 }

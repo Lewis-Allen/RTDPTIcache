@@ -5,6 +5,7 @@ import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
 import com.lewisallen.rtdptiCache.caches.TrainStationCache;
+import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import com.lewisallen.rtdptiCache.models.Naptan;
 import com.lewisallen.rtdptiCache.models.Station;
 import org.json.JSONArray;
@@ -16,13 +17,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 @Controller
 public class ViewController
 {
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showTitle()
     {
@@ -36,12 +41,58 @@ public class ViewController
         SortedMap<String, Station> stationCopy = new TreeMap<>(TrainStationCache.stationCache);
 
         // ToDo: Sort the maps based on name
-
-
         model.addAttribute("buses", busesCopy);
         model.addAttribute("stations", stationCopy);
 
+        // ToDo: Get list of templates from /resources/templates/dashboardTemplates
+        Path path = Paths.get( "templates", "dashboardTemplates");
+        List<String> availableTemplates = filesInDashboardTemplateDirectory(path);
+        model.addAttribute("availableTemplates", availableTemplates);
+
         return "create";
+    }
+
+    /**
+     * Retrieves list of files in dashboard template directory.
+     * @param path Path to dashboard template directory.
+     * @return List of files.
+     */
+    public List<String> filesInDashboardTemplateDirectory(Path path)
+    {
+        List<String> fileNames = new ArrayList<>();
+
+        // Attempt to list all the files in given directory.
+        try
+        {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            Path dashboardTemplateDirectory = Paths.get(classLoader.getResource(path.toString()).toURI());
+
+            // Gets a list of dashboard templates with no file extension.
+            fileNames = Files.walk(dashboardTemplateDirectory)
+                    .filter(p -> p.toString().endsWith(".html"))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .map(this::removeExtension)
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
+        catch (Exception e)
+        {
+            ErrorHandler.handle(e, Level.WARNING, "Error parsing dashboard template directory.");
+        }
+
+        return fileNames;
+    }
+
+    /**
+     * Removes a file extension from a file.
+     * @param filename Name of file.
+     * @return Filename without extension.
+     */
+    private String removeExtension(String filename)
+    {
+        int pos = filename.lastIndexOf(".");
+        return pos > 0 ? filename.substring(0, pos) : filename;
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
@@ -219,7 +270,8 @@ public class ViewController
                 trainCodes.add(trainCodeList.get(i).toString());
             }
 
-            busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
+            busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream()
+                    .toArray(String[]::new)).get("trainStations"));
         }
 
         // Wrap all JSON into one object
