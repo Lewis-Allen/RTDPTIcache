@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ViewController
@@ -34,8 +32,14 @@ public class ViewController
     @RequestMapping(value = "/dashboard/create", method = RequestMethod.GET)
     public String showDashboardCreate(Model model)
     {
-        model.addAttribute("buses", NaPTANCache.naptanCache);
-        model.addAttribute("stations", TrainStationCache.stationCache);
+        SortedMap<String, Naptan> busesCopy = new TreeMap<>(NaPTANCache.naptanCache);
+        SortedMap<String, Station> stationCopy = new TreeMap<>(TrainStationCache.stationCache);
+
+        // ToDo: Sort the maps based on name
+
+
+        model.addAttribute("buses", busesCopy);
+        model.addAttribute("stations", stationCopy);
 
         return "create";
     }
@@ -179,7 +183,7 @@ public class ViewController
                     .toUriString());
         }
 
-        return template;
+        return "dashboardTemplates/" + template;
     }
 
     private JSONObject getDepartureInformation(JSONObject request)
@@ -201,7 +205,6 @@ public class ViewController
                 busCodes.add(busCodeList.get(i).toString());
             }
 
-            String[] arrayOfCodes = busCodes.stream().toArray(String[]::new);
             busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
         }
 

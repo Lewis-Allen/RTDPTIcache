@@ -4,23 +4,182 @@
     <meta charset="UTF-8">
     <title>Create - RTDPTI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        body {
+            font-size: 20px;
+            font-family: 'Roboto', Arial;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .wrapper {
+            width: 90%;
+            max-width: 1260px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 300px;
+            grid-gap: 10px;
+        }
+
+        select {
+            height: 600px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #warning {
+            color: #800000;
+        }
+
+        .sortableBus, .sortableStation {
+            min-height: 50%;
+        }
+
+        .selectedBuses, .selectedStations {
+            background-color: #ffeead;
+        }
+    </style>
 </head>
 <body>
-    <h1>Form</h1>
-    <form action="#" th:action="@{/dashboard}" method="get">
-        <p>Template: <input type="text" name="template" placeholder="default"></p>
-        <p>FlipTo: <input type="text" name="flipTo"></p>
-        <select multiple name="code[]">
-            <th:block th:each="bus : ${buses}">
-                <option type="text" th:text="${bus.value.getLongDescription() + ' ' + bus.value.getIdentifier()}" th:value="${bus.key}"></option>
-            </th:block>
-        </select>
-        <select multiple name="crs[]">
-            <th:block th:each="station : ${stations}">
-                <option type="text" th:text="${station.value.getStationName()}" th:value="${station.key}"></option>
-            </th:block>
-        </select>
-        <button type="submit">Submit</button>
-    </form>
+    <h1 class="title">Create Dashboard</h1>
+    <div class="wrapper">
+        <h2>Template: <input id="template" title="Template to display (defaults if left blank)" type="text" name="template"></h2>
+            <p>Choose a template for displaying transport information (default if left blank).</p>
+
+        <h2>Switch to: <input id="flipTo" title="Template to flip to every 15 seconds" type="text" name="flipTo"></h2>
+            <p>If appropriate, choose a template in which to switch to every 15 seconds.</p>
+
+        <div class="container">
+            <div id="busList-A">
+                <h2>Bus Stop List</h2>
+                <ul class="sortableBus">
+                    <th:block th:each="bus : ${buses}">
+                        <li th:id="${bus.key}" th:text="${bus.value.getLongDescription() + ' ' + bus.value.getIdentifier()}" ></li>
+                    </th:block>
+                </ul>
+            </div>
+
+            <div id="busList-B">
+                <h2>Selected Bus Stops</h2>
+                <ul class="sortableBus selectedBuses">
+                </ul>
+            </div>
+
+            <div id="stationList-A">
+                <h2>Station List</h2>
+                <ul class="sortableStation">
+                    <th:block th:each="station : ${stations}">
+                        <li th:id="${station.key}" th:text="${station.value.getStationName()}"></li>
+                    </th:block>
+                </ul>
+            </div>
+
+            <div id="stationList-B">
+                <h2>Selected Stations</h2>
+                <ul class="sortableStation selectedStations">
+                </ul>
+            </div>
+        </div>
+
+        <p id="warning"></p>
+        <button onclick="loadDashboard()">Submit</button>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+    // Jquery to allow drag and drop in lists.
+    $(function() {
+        var oldList, newList, item;
+        $('.sortableBus').sortable({
+            start: function(event, ui) {
+                item = ui.item;
+                newList = oldList = ui.item.parent().parent();
+            },
+            change: function(event, ui) {
+                document.getElementById('warning').innerHTML = '';
+                if(ui.sender) newList = ui.placeholder.parent().parent();
+            },
+            connectWith: ".sortableBus"
+        }).disableSelection();
+    });
+
+    $(function() {
+        var oldList, newList, item;
+        $('.sortableStation').sortable({
+            start: function(event, ui) {
+                item = ui.item;
+                newList = oldList = ui.item.parent().parent();
+            },
+            change: function(event, ui) {
+                document.getElementById('warning').innerHTML = '';
+                if(ui.sender) newList = ui.placeholder.parent().parent();
+            },
+            connectWith: ".sortableStation"
+        }).disableSelection();
+    });
+
+    // Submit functionality
+    function loadDashboard()
+    {
+        var template = document.querySelector('#template').value;
+        var flipTo = document.querySelector('#flipTo').value;
+
+        // Get all selected stop codes.
+        var codes = [];
+        document.querySelectorAll('#busList-B .selectedBuses li')
+            .forEach(function(stop) {
+                codes.push(stop.id);
+            });
+
+        // Get all selected station codes.
+        var crs = [];
+        document.querySelectorAll('#stationList-B .selectedStations li')
+            .forEach(function(station) {
+                crs.push(station.id);
+            });
+
+        // Start building the query string:
+        var queryString = "?";
+
+        if(template !== "")
+        {
+            queryString += ("template=" + template + "&");
+        }
+
+        if(flipTo !== "")
+        {
+            queryString += ("flipTo=" + flipTo + "&");
+        }
+
+        if(codes.length === 0 && crs.length === 0)
+        {
+            document.getElementById('warning').innerHTML = "Please select some bus stops or stations to display";
+        }
+        else
+        {
+            if(codes !== undefined && codes.length !== 0)
+            {
+                queryString += ("code[]=" + codes.join("&code[]=") + "&");
+            }
+
+            if(crs !== undefined && crs.length !== 0)
+            {
+                queryString += ("crs[]=" + crs.join("&crs[]=") + "&");
+            }
+
+            window.location = '/dashboard' + queryString;
+        }
+    }
+</script>
 </body>
 </html>

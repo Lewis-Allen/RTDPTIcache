@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * {
-            box-sizing: border-box;
+           box-sizing: border-box;
         }
 
         html {
@@ -25,7 +25,7 @@
         }
 
         body {
-            margin: 0px;
+            margin: 0;
             width: 100%;
             height: 100%;
             -webkit-font-smoothing: antialiased;
@@ -98,34 +98,35 @@
         }
 
         .rightContainer {
-            flex-basis: 68%;
-            max-width: 68%;
+            flex-basis: 69%;
+            max-width: 69%;
+        }
+
+        .station {
+            box-sizing: border-box;
+            font-size: calc(1vw + 1vh);
+        }
+
+        .stationHeader {
+            font-size: calc(1.5vw + 1.5vh);
         }
 
         /* Container stylings */
-        .busParent {
+        .trainParent {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
             grid-gap: 10px;
             height: 100%;
             width: 100%;
             box-sizing: border-box;
         }
 
-        .busStop {
-            box-sizing: border-box;
-        }
-
-        .busStopHeader {
-            font-size: 1.2em;
-        }
-
         table {
             text-align: center;
             background-color: #2C3845;
             width: 90%;
-            height: 90%;
+            height: 98%;
             margin: auto;
         }
 
@@ -168,10 +169,10 @@
         <div th:replace="fragments/TransportLoc :: clock"></div>
     </div>
     <div class="rightContainer">
-        <div class="busParent">
-            <th:block th:if="${#maps.containsKey(departureInformation.payload, 'busStops')}">
-                <th:block th:each="busCode : ${busCodes}">
-                    <div th:replace="fragments/TransportLoc :: busStop2(${departureInformation.payload.busStops.get(busCode)})"></div>
+        <div class="trainParent">
+            <th:block th:if="${#maps.containsKey(departureInformation.payload, 'trainStations')}">
+                <th:block th:each="trainCode : ${trainCodes}">
+                    <div th:replace="fragments/TransportLoc :: trainStation(${departureInformation.payload.trainStations.get(trainCode)})"></div>
                 </th:block>
             </th:block>
         </div>

@@ -14,6 +14,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         html {
             width: 100%;
             height: 100%;
@@ -21,22 +25,24 @@
         }
 
         body {
+            margin: 0px;
             width: 100%;
             height: 100%;
-            margin: 0;
             -webkit-font-smoothing: antialiased;
             color: #fff;
-            font-size: 1.3rem;
             font-family: 'Lato', sans-serif;
             background-color: #babac0;
+            box-sizing: border-box;
+            font-size: 20px;
         }
 
         .parent {
             display: flex;
-            width: 98.5%;
-            height: 98.5%;
+            width: 100%;
+            height: 100%;
             padding-top: 10px;
             padding-left: 10px;
+            box-sizing: border-box;
         }
 
         .leftContainer {
@@ -53,7 +59,7 @@
         }
 
         .clockContainer {
-            font-size: 30px;
+            font-size: 1em;
             width: 100%;
             background-color: #555;
             display: flex;
@@ -72,6 +78,7 @@
         }
 
         .longFormat {
+            font-size: calc(1vw + 1vh);
             margin: 10px 0;
         }
 
@@ -85,32 +92,37 @@
         }
 
         .TwentyFourTime {
-            font-size: 150px;
+            font-size: calc(4vw + 4vh);
             text-align: center;
             margin: auto;
         }
 
         .rightContainer {
-            flex-basis: 69%;
-            max-width: 69%;
-
-            display: flex;
-            flex-wrap: wrap;
-            align-content: space-around;
+            flex-basis: 68%;
+            max-width: 68%;
         }
 
-        .innerFlex {
-            flex-basis: 50%;
-            height: 50%;
-
-            display: flex;
-            justify-content: center;
+        /* Container stylings */
+        .busParent {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-gap: 10px;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* Table Stylings */
+        .busStop {
+            box-sizing: border-box;
+        }
+
+        .busStopHeader {
+            font-size: 1.2em;
+        }
+
         table {
             text-align: center;
-            table-layout: fixed;
             background-color: #2C3845;
             width: 90%;
             height: 90%;
@@ -121,10 +133,6 @@
             background-color: #0a0d10;
             padding: 10px 10px 10px;
             border: 1px solid #3c4c5d;
-        }
-
-        .busStopHeader {
-            font-size: 23px;
         }
 
         tr {
@@ -139,27 +147,35 @@
             padding: 8px 8px 8px;
             border: 1px solid #3c4c5d;
             height: 1.2em;
+            box-sizing: content-box;
         }
 
-        a {
-            color: #fff;
+        .destination {
+            text-align: left;
+        }
+
+        .shrink {
+            width: 1%;
+            white-space: nowrap;
+            padding-left: 1vw;
+            padding-right: 1vw;
         }
   </style>
 </head>
 <body>
-    <div class="parent">
-        <div class="leftContainer">
-            <div th:replace="fragments/TransportLoc :: clock"></div>
-        </div>
-        <div class="rightContainer">
+<div class="parent">
+    <div class="leftContainer">
+        <div th:replace="fragments/TransportLoc :: clock"></div>
+    </div>
+    <div class="rightContainer">
+        <div class="busParent">
             <th:block th:if="${#maps.containsKey(departureInformation.payload, 'busStops')}">
                 <th:block th:each="busCode : ${busCodes}">
-                    <div class="innerFlex">
-                        <div th:replace="fragments/TransportLoc :: busStop(${departureInformation.payload.busStops.get(busCode)})"></div>
-                    </div>
+                    <div th:replace="fragments/TransportLoc :: busStop(${departureInformation.payload.busStops.get(busCode)})"></div>
                 </th:block>
             </th:block>
         </div>
     </div>
+</div>
 </body>
 </html>

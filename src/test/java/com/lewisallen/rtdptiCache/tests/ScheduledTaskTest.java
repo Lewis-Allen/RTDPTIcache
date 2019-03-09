@@ -81,4 +81,38 @@ public class ScheduledTaskTest
         AppConfig.ldbToken = System.getenv("LDB_TOKEN");
         testUpdateAllCaches();
     }
+
+    @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void testUpdateBuses()
+    {
+        ScheduledTasks tasks = new ScheduledTasks();
+        tasks.updateBusCaches();
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void ciTestUpdateBuses()
+    {
+        AppConfig.siriUri = System.getenv("SIRI_URI");
+        AppConfig.ldbToken = System.getenv("LDB_TOKEN");
+        testUpdateBuses();
+    }
+
+    @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void testUpdateTrains()
+    {
+        ScheduledTasks tasks = new ScheduledTasks();
+        tasks.updateTrainCaches();
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void ciTestUpdateTrains()
+    {
+        AppConfig.siriUri = System.getenv("SIRI_URI");
+        AppConfig.ldbToken = System.getenv("LDB_TOKEN");
+        testUpdateTrains();
+    }
 }

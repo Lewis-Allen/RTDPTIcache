@@ -1,78 +1,3 @@
-<div class="busStop" th:fragment="busStop(busStop)" xmlns:th="http://www.w3.org/1999/xhtml">
-    <table>
-        <thead>
-            <tr>
-                <th class="busStopHeader" th:text="${busStop.StopName + ' ' +  busStop.Identifier}" colspan=24></th>
-            </tr>
-            <tr>
-                <th class="route" colspan=6>Route</th>
-                <th colspan=11>Destination</th>
-                <th colspan=7>Departure</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Bus Visits -->
-            <tr th:each="busVisit : ${busStop.MonitoredStopVisits}">
-                <td class="route" th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}" colspan=6></td>
-                <td th:text="${busVisit.MonitoredVehicleJourney.DestinationName}" colspan=11 style="text-align: left;"></td>
-                <td th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}" colspan=7></td>
-            </tr>
-
-            <!-- Padding -->
-            <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(busStop.MonitoredStopVisits), 1)}">
-                <td class="route" colspan=6></td>
-                <td colspan=11></td>
-                <td colspan=7></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="station" th:fragment="trainStation(station)" xmlns:th="http://www.w3.org/1999/xhtml">
-    <table>
-        <thead>
-            <tr>
-                <th class="stationHeader" th:text="${station.stationName + ' Rail Station'}" colspan=24></th>
-            </tr>
-            <tr>
-                <th colspan=2>Due</th>
-                <th colspan=16>Destination</th>
-                <th colspan=3>Status</th>
-                <th colspan=3>Platform</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        <!-- If there are no departures, check for any nrcc messages and display. -->
-        <th:block th:switch="${#maps.containsKey(station, 'nrccMessages') and #lists.size(station.departures) == 0}">
-            <th:block th:case="true">
-                <tr th:each="nrccMessage : ${station.nrccMessages}">
-                    <td colspan="24" th:utext="${nrccMessage.value}"></td>
-                </tr>
-            </th:block>
-            <!-- Otherwise we display all journeys and times. -->
-            <th:block th:case="false">
-                <tr th:each="departure : ${station.departures}">
-                    <td colspan="2" th:text="${departure.due}">Hello</td>
-                    <td colspan="16" class="destination" th:text="${departure.destination}">World</td>
-                    <td colspan="3" th:text="${departure.status}">Test</td>
-                    <th:block th:switch="${#maps.containsKey(departure, 'platform')}">
-                        <td th:case="true" colspan="3" th:text="${departure.platform}">Values</td>
-                        <td th:case="false" colspan="3"> - </td>
-                    </th:block>
-                </tr>
-
-                <!-- Padding -->
-                <tr th:each="i : ${#numbers.sequence(0, 14 - #lists.size(station.departures), 1)}">
-                    <td class="route" colspan=2></td>
-                    <td colspan=16></td>
-                    <td colspan=3></td>
-                    <td colspan=3></td>
-                </tr>
-            </th:block>
-        </th:block>
-        </tbody>
-    </table>
-</div>
 <div class="clock" th:fragment="clock" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="clockContainer">
         <div class="longFormatContainer">
@@ -83,7 +8,7 @@
         </div>
     </div>
 </div>
-<div class="busStop" th:fragment="busStop2(busStop)" xmlns:th="http://www.w3.org/1999/xhtml">
+<div class="busStop" th:fragment="busStop(busStop)" xmlns:th="http://www.w3.org/1999/xhtml">
     <table>
         <thead>
         <tr>
@@ -112,7 +37,7 @@
         </tbody>
     </table>
 </div>
-<div class="station" th:fragment="trainStation2(station)" xmlns:th="http://www.w3.org/1999/xhtml">
+<div class="station" th:fragment="trainStation(station)" xmlns:th="http://www.w3.org/1999/xhtml">
     <table>
         <thead>
         <tr>

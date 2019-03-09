@@ -22,6 +22,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,17 +55,34 @@ public class ScheduledTasks
     /**
      * Updates all caches.
      */
-    @Scheduled(fixedRate = 1000 * 30) // Thirty seconds
     public void updateCaches()
     {
-        log.info("updateCaches: Starting task to update caches at {}", dateFormat.format(new Date()));
-
+        LocalDateTime start = LocalDateTime.now();
         updateNaPTANCache();
         updateSIRICache();
         updateStationCache();
         updateTrainsDepartureCache();
+        log.info("updateCaches: Caches update complete at {}, taking {} milliseconds", dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS));
+    }
 
-        log.info("updateCaches: Caches update complete at {}", dateFormat.format(new Date()));
+    @Scheduled(fixedRate = 1000 * 30)
+    public void updateBusCaches()
+    {
+        LocalDateTime start = LocalDateTime.now();
+        updateNaPTANCache();
+        updateSIRICache();
+        log.info("updateBusCaches: Buses update complete at {}, taking {} milliseconds on {}",
+                dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
+    }
+
+    @Scheduled(fixedRate = 1000 * 15)
+    public void updateTrainCaches()
+    {
+        LocalDateTime start = LocalDateTime.now();
+        updateStationCache();
+        updateTrainsDepartureCache();
+        log.info("updateStationCaches: Stations update complete at {}, taking {} milliseconds on {}",
+                dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
     }
 
     /**
