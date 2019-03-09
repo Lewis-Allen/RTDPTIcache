@@ -1,6 +1,7 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
+import com.lewisallen.rtdptiCache.Utils;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
@@ -72,7 +73,7 @@ public class ViewController
                     .filter(p -> p.toString().endsWith(".html"))
                     .map(Path::getFileName)
                     .map(Path::toString)
-                    .map(this::removeExtension)
+                    .map(Utils::removeExtension)
                     .sorted()
                     .collect(Collectors.toList());
         }
@@ -82,17 +83,6 @@ public class ViewController
         }
 
         return fileNames;
-    }
-
-    /**
-     * Removes a file extension from a file.
-     * @param filename Name of file.
-     * @return Filename without extension.
-     */
-    private String removeExtension(String filename)
-    {
-        int pos = filename.lastIndexOf(".");
-        return pos > 0 ? filename.substring(0, pos) : filename;
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
