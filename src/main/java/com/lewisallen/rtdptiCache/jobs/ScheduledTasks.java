@@ -62,7 +62,8 @@ public class ScheduledTasks
         updateSIRICache();
         updateStationCache();
         updateTrainsDepartureCache();
-        log.info("updateCaches: Caches update complete at {}, taking {} milliseconds", dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS));
+        log.info("updateCaches: Caches update complete at {}, taking {} milliseconds on {}",
+                dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
     }
 
     @Scheduled(fixedRate = 1000 * 30)
