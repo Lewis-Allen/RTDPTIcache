@@ -7,12 +7,12 @@ import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TransportDatabaseTest
 {
-
     ErrorHandler handler = new ErrorHandler();
 
     @Test
@@ -22,9 +22,9 @@ public class TransportDatabaseTest
 
         try
         {
-            @SuppressWarnings("unused")
-            ResultSet rs = db.query(NaPTANCache.naptanQuery);
-            rs = db.query(TrainStationCache.stationQuery);
+            Connection conn = db.getDbConnection();
+            db.query(NaPTANCache.naptanQuery, conn);
+            db.query(TrainStationCache.stationQuery, conn);
         }
         catch (SQLException | ClassNotFoundException e)
         {

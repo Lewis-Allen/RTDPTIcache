@@ -4,7 +4,9 @@ import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import com.lewisallen.rtdptiCache.models.Station;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +19,8 @@ public class TrainStationCache
     public static String stationQuery = "SELECT StationName, CRSCode FROM stations WHERE Retrieve = 1;";
 
     public static Map<String, Station> stationCache = new ConcurrentHashMap<>();
+
+    private static Connection conn;
 
     /**
      * Get the set of codes cached in the Station cache.
@@ -56,7 +60,9 @@ public class TrainStationCache
         try
         {
             Map<String, Station> stations = new HashMap<>();
-            ResultSet rs = db.query(query);
+
+            conn = db.getDbConnection();
+            ResultSet rs = db.query(query, conn);
             while (rs.next())
             {
                 String code = rs.getString("CRSCode");
@@ -71,6 +77,19 @@ public class TrainStationCache
         {
             String message = "Error in populate cache whilst retrieving train data from db:";
             ErrorHandler.handle(e, Level.SEVERE, message);
+        }
+        finally
+        {
+            try
+            {
+                if(conn != null)
+                    conn.close();
+            }
+            catch (SQLException e)
+            {
+                String message = "Error closing connection to database.";
+                ErrorHandler.handle(e, Level.SEVERE, message);
+            }
         }
     }
 

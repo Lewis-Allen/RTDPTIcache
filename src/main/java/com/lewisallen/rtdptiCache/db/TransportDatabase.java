@@ -7,6 +7,7 @@ import java.sql.*;
 
 public class TransportDatabase
 {
+    private Statement stmt;
 
     /**
      * Executes the provided query on the database.
@@ -15,30 +16,20 @@ public class TransportDatabase
      * @param query The query to execute.
      * @return Results of query.
      * @throws SQLException
-     * @throws ClassNotFoundException
      */
-    public ResultSet query(String query) throws SQLException, ClassNotFoundException
+    public ResultSet query(String query, Connection conn) throws SQLException
     {
-        Statement stmt = getDbStatement();
+        stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         return rs;
     }
 
-    /**
-     * Generates the interface for a SQL statement.
-     *
-     * @return Interface for SQL statement.
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
-    public Statement getDbStatement() throws SQLException, ClassNotFoundException
-    {
+    public Connection getDbConnection() throws SQLException, ClassNotFoundException {
         Dotenv env = Dotenv.load();
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         String connectionString = String.format("jdbc:mysql://%s:%s/%s", env.get("DB_HOST"), env.get("DB_PORT"), env.get("DB_NAME"));
         Connection conn = DriverManager.getConnection(connectionString, env.get("DB_USERNAME"), env.get("DB_PASSWORD"));
-        Statement stmt = conn.createStatement();
-        return stmt;
+        return conn;
     }
 }

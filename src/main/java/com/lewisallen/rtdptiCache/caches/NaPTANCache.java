@@ -4,7 +4,9 @@ import com.lewisallen.rtdptiCache.db.TransportDatabase;
 import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import com.lewisallen.rtdptiCache.models.Naptan;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +19,8 @@ public class NaPTANCache
     public static String naptanQuery = "SELECT SystemCodeNumber, LongDescription, Identifier FROM naptan WHERE Active = 'True' AND Retrieve = 1;";
 
     public static Map<String, Naptan> naptanCache = new ConcurrentHashMap<>();
+
+    private static Connection conn;
 
     /**
      * Returns stop names for the given list of codes.
@@ -46,7 +50,9 @@ public class NaPTANCache
         try
         {
             Map<String, Naptan> naptans = new HashMap<>();
-            ResultSet rs = db.query(query);
+
+            conn = db.getDbConnection();
+            ResultSet rs = db.query(query, conn);
             while (rs.next())
             {
                 String code = rs.getString("SystemCodeNumber");
@@ -63,6 +69,19 @@ public class NaPTANCache
         {
             String message = "Error populating NaPTAN cache";
             ErrorHandler.handle(e, Level.SEVERE, message);
+        }
+        finally
+        {
+            try
+            {
+                if(conn != null)
+                    conn.close();
+            }
+            catch (SQLException e)
+            {
+                String message = "Error closing connection to database.";
+                ErrorHandler.handle(e, Level.SEVERE, message);
+            }
         }
     }
 
