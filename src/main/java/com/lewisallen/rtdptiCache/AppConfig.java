@@ -20,7 +20,7 @@ public class AppConfig implements SchedulingConfigurer
         if(isHeroku != null && isHeroku.equals("1"))
         {
             AppConfig.siriUri = System.getenv("SIRI_URI");
-            AppConfig.ldbToken = System.getenv("LBD_TOKEN");
+            AppConfig.ldbToken = System.getenv("LDB_TOKEN");
         }
         else
         {
