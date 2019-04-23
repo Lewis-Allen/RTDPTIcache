@@ -16,10 +16,19 @@ public class AppConfig implements SchedulingConfigurer
 
     public AppConfig()
     {
-        Dotenv dotenv = Dotenv.load();
+        String isHeroku = System.getenv("ISHEROKU");
+        if(isHeroku != null && isHeroku.equals("1"))
+        {
+            AppConfig.siriUri = System.getenv("SIRI_URI");
+            AppConfig.ldbToken = System.getenv("LBD_TOKEN");
+        }
+        else
+        {
+            Dotenv dotenv = Dotenv.load();
+            AppConfig.siriUri = dotenv.get("SIRI_URI");
+            AppConfig.ldbToken = dotenv.get("LDB_TOKEN");
+        }
 
-        AppConfig.siriUri = dotenv.get("SIRI_URI");
-        AppConfig.ldbToken = dotenv.get("LDB_TOKEN");
     }
 
     /**
