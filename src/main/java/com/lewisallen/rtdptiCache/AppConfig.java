@@ -19,8 +19,7 @@ public class AppConfig implements SchedulingConfigurer
         String isHeroku = System.getenv("ISHEROKU");
         if(isHeroku != null && isHeroku.equals("1"))
         {
-            AppConfig.siriUri = System.getenv("SIRI_URI");
-            AppConfig.ldbToken = System.getenv("LDB_TOKEN");
+            updateFromSystem();
         }
         else
         {
@@ -33,7 +32,7 @@ public class AppConfig implements SchedulingConfigurer
 
     /**
      * Method to update properties from system variables.
-     * Used for continuous integration.
+     * Used for continuous integration and heroku deployment.
      */
     public static void updateFromSystem()
     {

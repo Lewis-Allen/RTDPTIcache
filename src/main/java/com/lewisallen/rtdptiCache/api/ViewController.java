@@ -1,7 +1,6 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
-import com.lewisallen.rtdptiCache.Utils;
 import com.lewisallen.rtdptiCache.caches.NaPTANCache;
 import com.lewisallen.rtdptiCache.caches.SIRICache;
 import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class ViewController
@@ -45,9 +46,8 @@ public class ViewController
         model.addAttribute("buses", busesCopy);
         model.addAttribute("stations", stationCopy);
 
-        // ToDo: Get list of templates from /resources/templates/dashboardTemplates
-        Path path = Paths.get( "templates", "dashboardTemplates");
-        List<String> availableTemplates = filesInDashboardTemplateDirectory(path);
+        Path path = Paths.get( "templates.txt");
+        List<String> availableTemplates = getListOfTemplates(path);
         model.addAttribute("availableTemplates", availableTemplates);
 
         return "create";
@@ -58,31 +58,21 @@ public class ViewController
      * @param path Path to dashboard template directory.
      * @return List of files.
      */
-    public List<String> filesInDashboardTemplateDirectory(Path path)
+    public List<String> getListOfTemplates(Path path)
     {
-        List<String> fileNames = new ArrayList<>();
+        List<String> templates = new ArrayList<>();
 
-        // Attempt to list all the files in given directory.
         try
         {
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            Path dashboardTemplateDirectory = Paths.get(classLoader.getResource(path.toString()).toURI());
-
-            // Gets a list of dashboard templates with no file extension.
-            fileNames = Files.walk(dashboardTemplateDirectory)
-                    .filter(p -> p.toString().endsWith(".html"))
-                    .map(Path::getFileName)
-                    .map(Path::toString)
-                    .map(Utils::removeExtension)
-                    .sorted()
-                    .collect(Collectors.toList());
+            Stream<String> templateStream = Files.lines(path);
+            templates = templateStream.collect(Collectors.toList());
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            ErrorHandler.handle(e, Level.WARNING, "Error parsing dashboard template directory.");
+            ErrorHandler.handle(e, Level.WARNING, "Error parsing dashboard template list. File should be located in the root directory.");
         }
 
-        return fileNames;
+        return templates;
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)

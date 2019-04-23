@@ -273,15 +273,14 @@ class ViewControllerTest
     @Test
     void testTemplateList()
     {
-
         ViewController viewController = new ViewController();
 
         // Attempt to find the default template.
-        List<String> filesNames = viewController.filesInDashboardTemplateDirectory(Paths.get("templates", "dashboardTemplates"));
+        List<String> filesNames = viewController.getListOfTemplates(Paths.get("templates.txt"));
         Assertions.assertTrue(filesNames.contains("default"));
 
         // Give a nonsense path.
-        filesNames = viewController.filesInDashboardTemplateDirectory(Paths.get("thisisnotarealpath"));
+        filesNames = viewController.getListOfTemplates(Paths.get("thisisnotarealpath"));
         Assertions.assertTrue(filesNames.size() == 0);
     }
 }
