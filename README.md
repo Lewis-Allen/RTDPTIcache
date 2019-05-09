@@ -4,16 +4,15 @@
 
 Real Time Displays for Public Transportation Information application.
 
-## Deployment Instructions
+## Deployment Instructions (With Maven)
 
 1. Create an empty database instance to store naptan codes.
 2. Clone this repository and navigate into the root directory.
 3. Make a copy of the *.env.example* file in the root directory named *.env*. Place this file in the root directory and replace the values inside the file with values corresponding to your setup.
-4. Make a copy of the *myFlywayConfig.properties.example* file in the root directory named *myFlywayConfig.properties*. Place this file in the root directory and replace the values inside the file with values corresponding to your setup.
-5. Run `mvn clean flyway:migrate -Dflyway.configFiles=myFlywayConfig.properties` to create and populate the naptan database.
-6. Run `mvn generate-sources`
-7. Run `mvn clean install`
-8. Run `mvn java:exec`
+4. Populate the naptan database by running the provided migrations. - Run from root directory `./mvnw flyway:migrate -Dflyway.user=<DB_USERNAME> -Dflyway.password=<DB_PASSWORD> -Dflyway.schemas=<DB_SCHEMA> -Dflyway.url=<DB_URL> -Dflyway.locations=filesystem:db/migration`
+6. Run `./mvn generate-sources`
+7. Run `./mvn clean install`
+8. Run `./mvn java:exec`
 
 ## To Do
 - Add prerequisites section.
