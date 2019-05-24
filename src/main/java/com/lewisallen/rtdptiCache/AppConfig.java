@@ -16,6 +16,11 @@ public class AppConfig implements SchedulingConfigurer
 
     public AppConfig()
     {
+        updateCredentials();
+    }
+
+    public static void updateCredentials()
+    {
         String isHeroku = System.getenv("ISHEROKU");
         if(isHeroku != null && isHeroku.equals("1"))
         {
@@ -27,7 +32,6 @@ public class AppConfig implements SchedulingConfigurer
             AppConfig.siriUri = dotenv.get("SIRI_URI");
             AppConfig.ldbToken = dotenv.get("LDB_TOKEN");
         }
-
     }
 
     /**

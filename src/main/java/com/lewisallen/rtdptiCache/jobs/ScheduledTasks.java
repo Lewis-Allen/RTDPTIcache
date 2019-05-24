@@ -49,6 +49,7 @@ public class ScheduledTasks
         soapService = soap.getLDBServiceSoap12();
 
         accessToken = new AccessToken();
+        AppConfig.updateCredentials();
         accessToken.setTokenValue(AppConfig.ldbToken);
     }
 
