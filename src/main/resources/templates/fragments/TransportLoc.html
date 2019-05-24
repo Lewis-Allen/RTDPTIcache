@@ -31,7 +31,7 @@
         <!-- Padding -->
         <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(busStop.MonitoredStopVisits), 1)}">
             <td class="shrink" ></td>
-            <td></td>
+            <td>&nbsp;</td>
             <td class="shrink"></td>
         </tr>
         </tbody>
@@ -74,7 +74,7 @@
                 <!-- Padding -->
                 <tr th:each="i : ${#numbers.sequence(0, 14 - #lists.size(station.departures), 1)}">
                     <td class="shrink"></td>
-                    <td></td>
+                    <td>&nbsp;</td>
                     <td class="shrink"></td>
                     <td class="shrink"></td>
                 </tr>
