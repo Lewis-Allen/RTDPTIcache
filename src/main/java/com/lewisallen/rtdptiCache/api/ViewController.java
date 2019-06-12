@@ -87,6 +87,7 @@ public class ViewController
     {
         String timetableString = timetable.trim().split("=")[1];
 
+        model.addAttribute("formContent", timetableString);
         JSONObject o = new JSONObject();
 
         String[] lines = timetableString.split(System.lineSeparator());
