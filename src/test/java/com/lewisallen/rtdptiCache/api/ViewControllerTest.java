@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -283,4 +284,31 @@ class ViewControllerTest
         filesNames = viewController.getListOfTemplates(Paths.get("thisisnotarealpath"));
         Assertions.assertTrue(filesNames.size() == 0);
     }
+
+    @Test
+    void testTimetableScreenGet()
+    {
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/timetable").build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+    }
+
+    @Test
+    void testTimetableScreenPost()
+    {
+        String formData = "Test Bus Stop\n" +
+                "10:30,UB1,Old Steine";
+
+        this.wtc
+                .post()
+                .uri(builder -> builder.path("/timetable").build())
+                .body(BodyInserters.fromFormData("timetable", formData))
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
+    }
+
 }

@@ -112,6 +112,6 @@ public class TrainStationCache
      */
     public static Station getStation(String stationCode)
     {
-        return TrainStationCache.stationCache.containsKey(stationCode) ? TrainStationCache.stationCache.get(stationCode) : null;
+        return TrainStationCache.stationCache.getOrDefault(stationCode, null);
     }
 }

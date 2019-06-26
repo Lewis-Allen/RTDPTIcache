@@ -104,7 +104,7 @@ public class NaPTANCache
      */
     public static Naptan getNaptan(String naptan)
     {
-        return NaPTANCache.naptanCache.containsKey(naptan) ? NaPTANCache.naptanCache.get(naptan) : null;
+        return NaPTANCache.naptanCache.getOrDefault(naptan, null);
     }
 
     /**

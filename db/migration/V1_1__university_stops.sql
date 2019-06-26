@@ -26,5 +26,6 @@ WHERE CRSCode IN
 (
     'BTN', -- Brighton
     'MCB', -- Moulsecoomb
-    'FMR'  -- Falmer
+    'FMR', -- Falmer
+    'EBN'  -- Eastborne
 );
