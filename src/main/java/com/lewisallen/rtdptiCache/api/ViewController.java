@@ -127,6 +127,7 @@ public class ViewController
                                 @RequestParam(value = "code[]", required = false) String[] codes,
                                 @RequestParam(value = "crs[]", required = false) String[] crs,
                                 @RequestParam(value = "flipTo", required = false) String flipTo,
+                                @RequestParam(value = "name", required = false) String name,
                                 UriComponentsBuilder builder,
                                 Model model
     )
@@ -260,6 +261,9 @@ public class ViewController
                     .build()
                     .toUriString());
         }
+
+        if(name != null)
+            model.addAttribute("name", name);
 
         return "dashboardTemplates/" + template;
     }

@@ -12,7 +12,14 @@
     <table>
         <thead>
         <tr>
-            <th class="busStopHeader" th:text="${busStop.StopName + ' ' +  busStop.Identifier}" colspan=3></th>
+            <th:block th:switch="${name != null}">
+                <div th:case="true">
+                    <th class="busStopHeader" th:text="${name}" colspan="3"></th>
+                </div>
+                <div th:case="false">
+                    <th class="busStopHeader" th:text="${busStop.StopName + ' ' +  busStop.Identifier}" colspan=3></th>
+                </div>
+            </th:block>
         </tr>
         <tr>
             <th class="shrink">Route</th>
@@ -41,7 +48,14 @@
     <table>
         <thead>
         <tr>
-            <th class="stationHeader" th:text="${station.stationName + ' Rail Station'}" colspan=4></th>
+            <th:block th:switch="${name != null}">
+                <div th:case="true">
+                    <th class="stationHeader" th:text="${name}" colspan="4"></th>
+                </div>
+                <div th:case="false">
+                    <th class="stationHeader" th:text="${station.stationName + ' Rail Station'}" colspan=4></th>
+                </div>
+            </th:block>
         </tr>
         <tr>
             <th class="shrink">Due</th>

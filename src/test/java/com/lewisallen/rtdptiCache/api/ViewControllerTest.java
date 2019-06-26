@@ -269,6 +269,15 @@ class ViewControllerTest
                 .expectStatus()
                 .is2xxSuccessful();
 
+        // Test name
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/dashboard")
+                        .queryParam("crs[]", "BTN")
+                        .queryParam("name", "Test Name").build())
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful();
     }
 
     @Test
