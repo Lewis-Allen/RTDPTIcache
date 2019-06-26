@@ -74,6 +74,12 @@
             </th:block>
         </select>
 
+        <h2>Override Name</h2>
+        <p>Single template only - Override the default name of the selected transport stop.</p>
+        <form>
+            <input id="name" type="text">
+        </form>
+
         <h2>Timetable File</h2>
         <p>Alternatively, <a href="/timetable">upload a timetable</a> to be displayed</p>
 
@@ -155,6 +161,7 @@
     {
         var template = document.querySelector('#template').value;
         var flipTo = document.querySelector('#flipTo').value;
+        var name = document.querySelector('#name').value;
 
         // Get all selected stop codes.
         var codes = [];
@@ -181,6 +188,11 @@
         if(flipTo !== "")
         {
             queryString += ("flipTo=" + flipTo + "&");
+        }
+
+        if(name !== "")
+        {
+            queryString += ("name=" + name + "&");
         }
 
         if(codes.length === 0 && crs.length === 0)
