@@ -59,7 +59,7 @@ public class TimetableController
         }
         else
         {
-            return "uploadForm";
+            throw new ResourceNotFoundException("No resource found for this URL.");
         }
     }
 

@@ -48,8 +48,28 @@ class TimetableControllerTest
     }
 
     @Test
+    void testMissingTimetable()
+    {
+        this.wtc
+                .get()
+                .uri(builder -> builder.path("/timetable/10000").build())
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+    }
+
+    @Test
     void testPostTimetable()
     {
+        this.wtc
+                .post()
+                .uri(builder -> builder.path("/timetable").build())
+                .body(BodyInserters.fromObject("data=Test Stop" + System.lineSeparator() + "18:00,UB1,Old Steine"))
+                .exchange()
+                .expectStatus()
+                .is3xxRedirection();
+
+        // Make request again to make sure redirect to already created resource.
         this.wtc
                 .post()
                 .uri(builder -> builder.path("/timetable").build())
