@@ -293,15 +293,4 @@ class ViewControllerTest
         filesNames = viewController.getListOfTemplates(Paths.get("thisisnotarealpath"));
         Assertions.assertTrue(filesNames.size() == 0);
     }
-
-    @Test
-    void testTimetableScreenCreate()
-    {
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/timetable/create").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
-    }
 }
