@@ -9,6 +9,7 @@ services:
 - mysql
 before_script:
 - cp .env.example .env
+- cp src/main/resources/application-travis.properties src/main/resources/application.properties
 - cp myFlywayConfig.properties.example myFlywayConfig.properties
 - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 - mvn clean flyway:migrate -Dflyway.configFiles=myFlywayConfig.properties

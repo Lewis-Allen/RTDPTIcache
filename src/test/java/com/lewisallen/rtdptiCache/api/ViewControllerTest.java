@@ -295,29 +295,13 @@ class ViewControllerTest
     }
 
     @Test
-    void testTimetableScreenGet()
+    void testTimetableScreenCreate()
     {
         this.wtc
                 .get()
-                .uri(builder -> builder.path("/timetable").build())
+                .uri(builder -> builder.path("/timetable/create").build())
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful();
     }
-
-    @Test
-    void testTimetableScreenPost()
-    {
-        String formData = "Test Bus Stop\n" +
-                "10:30,UB1,Old Steine";
-
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/timetable").build())
-                .body(BodyInserters.fromFormData("timetable", formData))
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
-    }
-
 }

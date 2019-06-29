@@ -209,3 +209,6 @@ myFlywayConfig.properties
 
 # soap request files to be generated with maven.
 thalesgroup/
+
+persistence.xml
+application.properties

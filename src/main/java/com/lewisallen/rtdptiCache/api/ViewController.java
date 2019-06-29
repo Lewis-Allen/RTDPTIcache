@@ -12,7 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -20,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -72,54 +73,6 @@ public class ViewController
         }
 
         return templates;
-    }
-
-    @GetMapping(value = "/timetable")
-    public String showLoadTemplateScreen(Model model)
-    {
-        return "uploadForm";
-    }
-
-
-
-    @RequestMapping(value = "/timetable", method = RequestMethod.POST)
-    public String loadTemplate(Model model, @RequestBody String timetable)
-    {
-        String timetableString = timetable.trim().split("=")[1];
-
-        model.addAttribute("formContent", timetableString);
-        JSONObject o = new JSONObject();
-
-        String[] lines = timetableString.split(System.lineSeparator());
-        o.put("stopName", lines[0]);
-
-        List<String> linesAsList = Arrays.asList(lines);
-        LocalTime now = LocalTime.now();
-
-        // Get only departures in future.
-        List<String> linesToDisplay = linesAsList.stream().skip(1)
-                .filter(line -> LocalTime.parse(line.split(",")[0]).isAfter(now)).collect(Collectors.toList());
-
-        JSONArray stops = new JSONArray();
-        for(int i = 0; i < linesToDisplay.size() && i < 9; i++)
-        {
-            String[] visit = linesToDisplay.get(i).split(",");
-            JSONObject stop = new JSONObject();
-            stop.put("Departure", visit[0]);
-            stop.put("Vehicle", visit[1]);
-            stop.put("Destination", visit[2]);
-            stops.put(stop);
-        }
-
-        o.put("visits", stops);
-        JSONObject wrapper = new JSONObject();
-        wrapper.put("payload", o);
-
-        Gson gson = new Gson();
-        Object departureInformation = gson.fromJson(wrapper.toString(), Object.class);
-        model.addAttribute("departureInformation", departureInformation);
-
-        return "dashboardTemplates/timetable";
     }
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)

@@ -78,19 +78,6 @@
     }
 </style>
 <body>
-<noscript>
-    <h1>This page requires JavaScript to function properly.</h1>
-</noscript>
     <div th:replace="fragments/TransportLoc :: timetable(${departureInformation.payload})"></div>
-
-    <form id="resubForm" class="hidden" action="/timetable" enctype="text/plain" method="post">
-        <textarea rows=20 cols=50 type="text" name="response" th:text="${formContent}"></textarea>
-        <input type="submit" value="submit" />
-    </form>
 </body>
-<script>
-    window.onload=function(){
-    window.setTimeout(function() { document.getElementById('resubForm').submit(); }, 120000);
-    };
-</script>
 </html>
