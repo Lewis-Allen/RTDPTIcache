@@ -5,4 +5,4 @@ CREATE TABLE `timetable` (
   `CreatedDate` datetime NOT NULL,
   `LastUsedDate` datetime NOT NULL,
   PRIMARY KEY (`TimetableId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
