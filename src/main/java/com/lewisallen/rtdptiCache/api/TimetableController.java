@@ -1,6 +1,7 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
+import com.lewisallen.rtdptiCache.logging.ResourceNotFoundException;
 import com.lewisallen.rtdptiCache.models.Timetable;
 import com.lewisallen.rtdptiCache.repositories.TimetableRepository;
 import org.json.JSONArray;

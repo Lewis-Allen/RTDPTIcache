@@ -81,7 +81,7 @@
         </form>
 
         <h2>Timetable File</h2>
-        <p>Alternatively, <a href="/timetable">upload a timetable</a> to be displayed</p>
+        <p>Alternatively, <a href="/timetable/create">upload a timetable</a> to be displayed</p>
 
         <h2>Select Transport</h2>
         <p>Drag and Drop transport locations to appear on the selected dashboard template:</p>
@@ -177,41 +177,47 @@
                 crs.push(station.id);
             });
 
-        // Start building the query string:
-        var queryString = "?";
-
-        if(template !== "")
-        {
-            queryString += ("template=" + template + "&");
-        }
-
-        if(flipTo !== "")
-        {
-            queryString += ("flipTo=" + flipTo + "&");
-        }
-
-        if(name !== "")
-        {
-            queryString += ("name=" + name + "&");
-        }
-
         if(codes.length === 0 && crs.length === 0)
         {
             document.getElementById('warning').innerHTML = "Please select some bus stops or stations to display";
         }
         else
         {
+            var json = {}
+
+            if(template !== "")
+            {
+                json.template = template;
+            }
+
+            if(flipTo !== "")
+            {
+                json.flipTo = flipTo
+            }
+
+            if(name !== "")
+            {
+                json.name = name;
+            }
+
             if(codes !== undefined && codes.length !== 0)
             {
-                queryString += ("code[]=" + codes.join("&code[]=") + "&");
+                json.buses = codes;
             }
 
             if(crs !== undefined && crs.length !== 0)
             {
-                queryString += ("crs[]=" + crs.join("&crs[]=") + "&");
+                json.trains = crs;
             }
 
-            window.location = '/dashboard' + queryString;
+            var url = window.location.origin + "/dashboard";
+
+            fetch(url, {
+                method: 'POST', body: JSON.stringify(json)
+            })
+            .then(function(response) {
+                window.location = response.url;
+            });
         }
     }
 </script>

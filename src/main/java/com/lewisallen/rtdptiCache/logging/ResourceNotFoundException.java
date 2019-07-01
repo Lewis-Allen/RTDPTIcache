@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache.api;
+package com.lewisallen.rtdptiCache.logging;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -11,7 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 /*
-    WARNING: Contains methods that rely on the data inserted by migrations.
+    WARNING: Contains tests that rely on the data inserted by migrations.
     Ensure db is populated appropriately before running tests.
     Migrations located in db/migrations
  */
