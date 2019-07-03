@@ -7,7 +7,7 @@ CREATE TABLE `dashboard` (
   `CreatedDate` datetime NOT NULL,
   `LastUsedDate` datetime NOT NULL,
   PRIMARY KEY (`DashboardId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `dashboard` (`DashboardId`,`Template`,`SwitchId`,`Name`,`DashboardData`,`CreatedDate`,`LastUsedDate`) VALUES (1,'single',NULL,NULL,'{\"template\":\"single\",\"buses\":[\"149000006062\"]}','2019-07-01 00:45:09','2019-07-01 00:45:09');
 INSERT INTO `dashboard` (`DashboardId`,`Template`,`SwitchId`,`Name`,`DashboardData`,`CreatedDate`,`LastUsedDate`) VALUES (2,'default',NULL,NULL,'{\"template\":\"default\",\"trains\":[\"BTN\"]}','2019-07-01 00:45:26','2019-07-01 00:45:26');
