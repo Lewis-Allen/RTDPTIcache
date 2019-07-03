@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 public class Dashboard
 {
     @Column(name = "dashboardid")
-    private @GeneratedValue(strategy = GenerationType.IDENTITY) @Id Long id;
+    private @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    Long id;
 
     @Column(name = "template")
     private String template;
@@ -28,7 +30,9 @@ public class Dashboard
     @Column(name = "lastuseddate")
     private LocalDateTime lastUsedDate = LocalDateTime.now();
 
-    public Dashboard(){}
+    public Dashboard()
+    {
+    }
 
     public Dashboard(String template, String overrideName, String data)
     {
@@ -74,7 +78,8 @@ public class Dashboard
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.format(
                 "Dashboard[id=%d, data='%s']",
                 id, data);

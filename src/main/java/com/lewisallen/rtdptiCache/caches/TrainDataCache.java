@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TrainDepartureCache
+public class TrainDataCache
 {
     public static Map<Object, JSONObject> trainDepartureCache = new ConcurrentHashMap<>();
 

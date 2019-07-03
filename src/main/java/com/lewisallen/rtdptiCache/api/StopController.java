@@ -1,7 +1,7 @@
 package com.lewisallen.rtdptiCache.api;
 
-import com.lewisallen.rtdptiCache.caches.SIRICache;
-import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
+import com.lewisallen.rtdptiCache.caches.BusDataCache;
+import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -40,12 +40,12 @@ public class StopController
                     busCodes.add(busCodeList.get(i).toString());
                 }
 
-                busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
+                busesAndTrains.put("busStops", BusDataCache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
             }
             else
             {
                 String[] singleStop = new String[]{json.get("codes").toString()};
-                busesAndTrains.put("busStops", SIRICache.getSiriJson(singleStop).get("busStops"));
+                busesAndTrains.put("busStops", BusDataCache.getSiriJson(singleStop).get("busStops"));
             }
         }
 
@@ -63,12 +63,12 @@ public class StopController
                     trainCodes.add(trainCodeList.get(i).toString());
                 }
 
-                busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
+                busesAndTrains.put("trainStations", TrainDataCache.getTrainJSON(trainCodes.stream().toArray(String[]::new)).get("trainStations"));
             }
             else
             {
                 String[] singleCRS = new String[]{json.get("CRS").toString()};
-                busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(singleCRS).get("trainStations"));
+                busesAndTrains.put("trainStations", TrainDataCache.getTrainJSON(singleCRS).get("trainStations"));
             }
         }
 

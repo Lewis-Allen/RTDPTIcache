@@ -1,7 +1,7 @@
 package com.lewisallen.rtdptiCache.parser;
 
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
-import com.lewisallen.rtdptiCache.caches.SIRICache;
+import com.lewisallen.rtdptiCache.caches.BusCodesCache;
+import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,8 +84,8 @@ public class SIRIResponseParser
                 JSONObject jsonToCache = new JSONObject();
 
                 // Store some name information from the NaPTAN Cache alongside the stop visits.
-                jsonToCache.put("StopName", NaPTANCache.naptanCache.get(naptanKey).getLongDescription());
-                jsonToCache.put("Identifier", NaPTANCache.naptanCache.get(naptanKey).getIdentifier());
+                jsonToCache.put("StopName", BusCodesCache.busCodeCache.get(naptanKey).getLongDescription());
+                jsonToCache.put("Identifier", BusCodesCache.busCodeCache.get(naptanKey).getIdentifier());
                 jsonToCache.put("MonitoredStopVisits", trimmedList);
 
                 // Add final object to local cache.
@@ -94,7 +94,7 @@ public class SIRIResponseParser
         }
 
         // Copy the local cache to the global cache.
-        SIRICache.siriCache = cache;
+        BusDataCache.siriCache = cache;
     }
 
     /**

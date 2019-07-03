@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SIRICache
+public class BusDataCache
 {
 
     public static Map<Object, JSONObject> siriCache = new ConcurrentHashMap<>();
@@ -25,9 +25,9 @@ public class SIRICache
         JSONObject j = new JSONObject();
         for (String s : naptans)
         {
-            if (SIRICache.siriCache.containsKey(s))
+            if (BusDataCache.siriCache.containsKey(s))
             {
-                j.put(s, SIRICache.siriCache.get(s));
+                j.put(s, BusDataCache.siriCache.get(s));
             }
             else
             {

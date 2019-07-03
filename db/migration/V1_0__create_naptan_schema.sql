@@ -2,13 +2,14 @@ CREATE TABLE `naptan` (
   `SMS` text,
   `LongDescription` text,
   `Active` text,
-  `SystemCodeNumber` text,
+  `SystemCodeNumber` varchar(20) NOT NULL,
   `Easting` text,
   `Lat` text,
   `Lng` text,
   `Identifier` text,
   `Northing` text,
-  `Retrieve` tinyint(4) NOT NULL DEFAULT '0'
+  `Retrieve` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`SystemCodeNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- INSERT the entire naptan db for brighton (approx 1350 rows)

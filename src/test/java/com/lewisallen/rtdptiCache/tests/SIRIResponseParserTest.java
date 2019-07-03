@@ -1,6 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.caches.SIRICache;
+import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
 import com.lewisallen.rtdptiCache.parser.DepartureComparator;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
@@ -24,7 +24,7 @@ public class SIRIResponseParserTest
     void setup()
     {
         ScheduledTasks tasks = new ScheduledTasks();
-        tasks.updateNaPTANCache();
+        tasks.updateBusCodesCache();
     }
 
     @Test
@@ -36,9 +36,9 @@ public class SIRIResponseParserTest
         parser.parse(res);
 
         // Ensure the data has been added to the cache.
-        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(BusDataCache.siriCache.containsKey("149000006061"));
 
-        JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}).toString());
+        JSONObject j = new JSONObject(BusDataCache.getSiriJson(new String[]{"149000006061"}).toString());
         int length = j.getJSONObject("busStops").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
 
         Assertions.assertEquals(length, 7);
@@ -55,10 +55,10 @@ public class SIRIResponseParserTest
         parser.parse(res);
 
         // Check the data was successfully added to the cache.
-        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(BusDataCache.siriCache.containsKey("149000006061"));
 
         // Ensure the data added is correct.
-        JSONObject j = new JSONObject(SIRICache.getSiriJson(new String[]{"149000006061"}).toString());
+        JSONObject j = new JSONObject(BusDataCache.getSiriJson(new String[]{"149000006061"}).toString());
         int length = j.getJSONObject("busStops").getJSONObject("149000006061").getJSONArray("MonitoredStopVisits").length();
         Assertions.assertEquals(length, 1);
     }
@@ -67,7 +67,7 @@ public class SIRIResponseParserTest
     void NoStopVisitTest()
     {
         // Add some dummy data to the cache.
-        SIRICache.siriCache.put("1", new JSONObject());
+        BusDataCache.siriCache.put("1", new JSONObject());
 
         // Parse a request containing no stop visits
         ResponseEntity<String> res = new ResponseEntity<String>("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><Siri xmlns=\"http://www.siri.org.uk/siri\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.siri.org.uk/schema/1.3/siri.xsd\"  version=\"1.3\"><ServiceDelivery><ResponseTimestamp>2018-12-20T22:01:35+00:00</ResponseTimestamp><StopMonitoringDelivery version=\"1.3\"><ResponseTimestamp>2018-12-20T22:01:35+00:00</ResponseTimestamp><Note> There is no stop information available for this request</Note></StopMonitoringDelivery></ServiceDelivery></Siri>", HttpStatus.OK);
@@ -76,7 +76,7 @@ public class SIRIResponseParserTest
         parser.parse(res);
 
         // Check cache has been wiped.
-        Assertions.assertTrue(SIRICache.siriCache.isEmpty());
+        Assertions.assertTrue(BusDataCache.siriCache.isEmpty());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class SIRIResponseParserTest
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(res);
 
-        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(BusDataCache.siriCache.containsKey("149000006061"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class SIRIResponseParserTest
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(res);
 
-        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(BusDataCache.siriCache.containsKey("149000006061"));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class SIRIResponseParserTest
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(res);
 
-        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(BusDataCache.siriCache.containsKey("149000006061"));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class SIRIResponseParserTest
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(res);
 
-        Assertions.assertTrue(SIRICache.siriCache.containsKey("149000006061"));
+        Assertions.assertTrue(BusDataCache.siriCache.containsKey("149000006061"));
     }
 
     @Test

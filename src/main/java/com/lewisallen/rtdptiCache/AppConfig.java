@@ -22,7 +22,7 @@ public class AppConfig implements SchedulingConfigurer
     public static void updateCredentials()
     {
         String isHeroku = System.getenv("ISHEROKU");
-        if(isHeroku != null && isHeroku.equals("1"))
+        if (isHeroku != null && isHeroku.equals("1"))
         {
             updateFromSystem();
         }

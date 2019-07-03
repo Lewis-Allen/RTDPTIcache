@@ -1,38 +1,41 @@
-package com.lewisallen.rtdptiCache.tests;
+package com.lewisallen.rtdptiCache.models;
 
-import com.lewisallen.rtdptiCache.models.Naptan;
+import com.lewisallen.rtdptiCache.models.Bus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NaptanTest
+public class BusTest
 {
 
-    private Naptan naptan;
+    private Bus bus;
 
     @BeforeAll
     void setup()
     {
-        naptan = new Naptan("123456789", "England", "opp");
+        bus = new Bus("123456789", "England", "opp");
     }
 
     @Test
     void codeRetrieveTest()
     {
-        naptan.getSystemCodeNumber();
+        bus.getSystemCodeNumber();
     }
 
     @Test
     void identifierRetrieveTest()
     {
-        naptan.getIdentifier();
+        bus.getIdentifier();
     }
 
     @Test
     void longDescriptionRetrieveTest()
     {
-        naptan.getLongDescription();
+        bus.getLongDescription();
     }
+
+    @Test
+    void testDefaultConstructor() { Bus bus = new Bus(); }
 
 }

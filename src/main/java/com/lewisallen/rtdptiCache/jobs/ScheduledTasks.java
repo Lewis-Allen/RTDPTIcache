@@ -1,10 +1,9 @@
 package com.lewisallen.rtdptiCache.jobs;
 
 import com.lewisallen.rtdptiCache.AppConfig;
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
-import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
-import com.lewisallen.rtdptiCache.caches.TrainStationCache;
-import com.lewisallen.rtdptiCache.db.TransportDatabase;
+import com.lewisallen.rtdptiCache.caches.BusCodesCache;
+import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
+import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
 import com.lewisallen.rtdptiCache.requests.SIRIRequester;
 import com.lewisallen.rtdptiCache.requests.SIRIString;
@@ -34,11 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ScheduledTasks
 {
 
-    private TransportDatabase db = new TransportDatabase();
-
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
     private AccessToken accessToken;
     private Ldb soap;
     private LDBServiceSoap soapService;
@@ -59,7 +55,7 @@ public class ScheduledTasks
     public void updateCaches()
     {
         LocalDateTime start = LocalDateTime.now();
-        updateNaPTANCache();
+        updateBusCodesCache();
         updateSIRICache();
         updateStationCache();
         updateTrainsDepartureCache();
@@ -71,7 +67,7 @@ public class ScheduledTasks
     public void updateBusCaches()
     {
         LocalDateTime start = LocalDateTime.now();
-        updateNaPTANCache();
+        updateBusCodesCache();
         updateSIRICache();
         log.info("updateBusCaches: Buses update complete at {}, taking {} milliseconds on {}",
                 dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
@@ -90,13 +86,13 @@ public class ScheduledTasks
     /**
      * Updates the NaPTAN cache.
      */
-    public void updateNaPTANCache()
+    public void updateBusCodesCache()
     {
-        log.debug("updateNaPTANCache: starting NaPTAN cache update at {}", dateFormat.format(new Date()));
+        log.debug("updateBusCodesCache: starting NaPTAN cache update at {}", dateFormat.format(new Date()));
 
-        NaPTANCache.populateCache(this.db, NaPTANCache.naptanQuery);
+        BusCodesCache.populateCache();
 
-        log.debug("updateNaPTANCache: NaPTAN cache update complete at {}", dateFormat.format(new Date()));
+        log.debug("updateBusCodesCache: NaPTAN cache update complete at {}", dateFormat.format(new Date()));
     }
 
     /**
@@ -104,15 +100,15 @@ public class ScheduledTasks
      */
     public void updateSIRICache()
     {
-        log.debug("updateNaPTANCache: starting SIRI cache update at {}", dateFormat.format(new Date()));
+        log.debug("updateBusCodesCache: starting SIRI cache update at {}", dateFormat.format(new Date()));
 
         SIRIString xml = new SIRIString();
-        String req = xml.generateXml(NaPTANCache.getCachedCodes().stream().toArray(String[]::new));
+        String req = xml.generateXml(BusCodesCache.getCachedCodes().stream().toArray(String[]::new));
         SIRIRequester requester = new SIRIRequester();
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(requester.makeSIRIRequest(req));
 
-        log.debug("updateNaPTANCache: SIRI cache update complete at {}", dateFormat.format(new Date()));
+        log.debug("updateBusCodesCache: SIRI cache update complete at {}", dateFormat.format(new Date()));
     }
 
     /**
@@ -122,7 +118,7 @@ public class ScheduledTasks
     {
         log.debug("updateStationCache: starting Stations cache update at {}", dateFormat.format(new Date()));
 
-        TrainStationCache.populateCache(this.db, TrainStationCache.stationQuery);
+        TrainCodesCache.populateCache();
 
         log.debug("updateStationCache: Station cache update complete at {}", dateFormat.format(new Date()));
     }
@@ -139,7 +135,7 @@ public class ScheduledTasks
 
         Map<Object, JSONObject> temporaryDepartureCache = new ConcurrentHashMap<>();
 
-        for (String crsCode : TrainStationCache.getCachedCodes())
+        for (String crsCode : TrainCodesCache.getCachedCodes())
         {
             params.setCrs(crsCode);
             params.setNumRows(15);
@@ -178,7 +174,7 @@ public class ScheduledTasks
 
             // JSON Object for a stations departures
             JSONObject stationJSON = new JSONObject();
-            stationJSON.put("stationName", TrainStationCache.stationCache.get(crsCode).getStationName());
+            stationJSON.put("stationName", TrainCodesCache.stationCache.get(crsCode).getStationName());
             stationJSON.put("departures", thisStationDepartures);
 
             // Add any messages to the JSON.
@@ -193,7 +189,7 @@ public class ScheduledTasks
         }
 
         // Replace the global cache with the just created one.
-        TrainDepartureCache.trainDepartureCache = temporaryDepartureCache;
+        TrainDataCache.trainDepartureCache = temporaryDepartureCache;
 
         log.debug("updateTrainsDepartureCache: Trains cache update complete at {}", dateFormat.format(new Date()));
     }

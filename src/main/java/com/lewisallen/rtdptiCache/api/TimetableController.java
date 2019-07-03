@@ -34,7 +34,7 @@ public class TimetableController
     {
         Optional<Timetable> result = repository.findById(timetableId);
 
-        if(result.isPresent())
+        if (result.isPresent())
         {
             Timetable timetable = result.get();
 
@@ -81,7 +81,7 @@ public class TimetableController
         String data = Arrays.asList(lines).stream().skip(1).collect(Collectors.joining(System.lineSeparator()));
 
         Optional<Timetable> existingTimetable = repository.findTimetableByData(data);
-        if(existingTimetable.isPresent())
+        if (existingTimetable.isPresent())
         {
             return new RedirectView("timetable/" + existingTimetable.get().getId());
         }
@@ -104,7 +104,7 @@ public class TimetableController
                 .filter(line -> LocalTime.parse(line.split(",")[0]).isAfter(LocalTime.now())).collect(Collectors.toList());
 
         JSONArray stops = new JSONArray();
-        for(int i = 0; i < linesToDisplay.size() && i < 9; i++)
+        for (int i = 0; i < linesToDisplay.size() && i < 9; i++)
         {
             String[] visit = linesToDisplay.get(i).split(",");
             JSONObject stop = new JSONObject();

@@ -1,8 +1,8 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.lewisallen.rtdptiCache.AppConfig;
-import com.lewisallen.rtdptiCache.caches.SIRICache;
-import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
+import com.lewisallen.rtdptiCache.caches.BusDataCache;
+import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
@@ -133,7 +133,7 @@ class DashboardControllerTest
 
         // Test existing stop but no data
         // Wipe Bus Departure cache
-        SIRICache.siriCache = new HashMap<>();
+        BusDataCache.siriCache = new HashMap<>();
         this.wtc
                 .get()
                 .uri(builder -> builder.path("/dashboard/1").build())
@@ -142,7 +142,7 @@ class DashboardControllerTest
                 .is2xxSuccessful();
 
         // Wipe Train Departures
-        TrainDepartureCache.trainDepartureCache = new HashMap<>();
+        TrainDataCache.trainDepartureCache = new HashMap<>();
 
         // Test empty station
         this.wtc

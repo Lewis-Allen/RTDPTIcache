@@ -4,6 +4,7 @@ public class Utils
 {
     /**
      * Removes a file extension from a file.
+     *
      * @param fileName Name of file.
      * @return Filename without extension.
      */

@@ -1,6 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
+import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TrainDepartureCacheTest
+public class TrainDataCacheTest
 {
 
     @BeforeAll
     void InitialiseTrainDepartureCache()
     {
-        new TrainDepartureCache();
+        new TrainDataCache();
     }
 
     @Test
@@ -22,7 +22,7 @@ public class TrainDepartureCacheTest
     {
         for (int i = 0; i < 10; i++)
         {
-            TrainDepartureCache.trainDepartureCache.put(Integer.toString(i), new JSONObject());
+            TrainDataCache.trainDepartureCache.put(Integer.toString(i), new JSONObject());
         }
 
         // Generate list of keys to pass to function.
@@ -33,7 +33,7 @@ public class TrainDepartureCacheTest
         }
 
         // Get response from cache.
-        JSONObject res = TrainDepartureCache.getTrainJSON(stationCodes);
+        JSONObject res = TrainDataCache.getTrainJSON(stationCodes);
 
         // Test response.
         for (int i = 0; i < 10; i++)

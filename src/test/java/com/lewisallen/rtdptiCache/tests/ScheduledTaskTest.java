@@ -22,11 +22,11 @@ public class ScheduledTaskTest
     void testUpdateNaPTANCache()
     {
         ScheduledTasks tasks = new ScheduledTasks();
-        tasks.updateNaPTANCache();
+        tasks.updateBusCodesCache();
     }
 
     @Test
-    public void testUpdateTrainStationCache()
+    void testUpdateTrainStationCache()
     {
         ScheduledTasks tasks = new ScheduledTasks();
         tasks.updateStationCache();

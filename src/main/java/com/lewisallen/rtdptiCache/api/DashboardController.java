@@ -1,14 +1,14 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
-import com.lewisallen.rtdptiCache.caches.NaPTANCache;
-import com.lewisallen.rtdptiCache.caches.SIRICache;
-import com.lewisallen.rtdptiCache.caches.TrainDepartureCache;
-import com.lewisallen.rtdptiCache.caches.TrainStationCache;
+import com.lewisallen.rtdptiCache.caches.BusCodesCache;
+import com.lewisallen.rtdptiCache.caches.BusDataCache;
+import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
+import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import com.lewisallen.rtdptiCache.logging.ResourceNotFoundException;
+import com.lewisallen.rtdptiCache.models.Bus;
 import com.lewisallen.rtdptiCache.models.Dashboard;
-import com.lewisallen.rtdptiCache.models.Naptan;
 import com.lewisallen.rtdptiCache.models.Station;
 import com.lewisallen.rtdptiCache.repositories.DashboardRepository;
 import org.json.JSONArray;
@@ -43,14 +43,14 @@ public class DashboardController
     @GetMapping(value = "create")
     public String showDashboardCreate(Model model)
     {
-        SortedMap<String, Naptan> busesCopy = new TreeMap<>(NaPTANCache.naptanCache);
-        SortedMap<String, Station> stationCopy = new TreeMap<>(TrainStationCache.stationCache);
+        SortedMap<String, Bus> busesCopy = new TreeMap<>(BusCodesCache.busCodeCache);
+        SortedMap<String, Station> stationCopy = new TreeMap<>(TrainCodesCache.stationCache);
 
         // ToDo: Sort the maps based on name
         model.addAttribute("buses", busesCopy);
         model.addAttribute("stations", stationCopy);
 
-        Path path = Paths.get( "templates.txt");
+        Path path = Paths.get("templates.txt");
         List<String> availableTemplates = getListOfTemplates(path);
         model.addAttribute("availableTemplates", availableTemplates);
 
@@ -59,6 +59,7 @@ public class DashboardController
 
     /**
      * Retrieves list of files in dashboard template directory.
+     *
      * @param path Path to dashboard template directory.
      * @return List of files.
      */
@@ -86,7 +87,7 @@ public class DashboardController
     {
         Optional<Dashboard> dashboardOptional = repository.findById(dashboardId);
 
-        if(dashboardOptional.isPresent())
+        if (dashboardOptional.isPresent())
         {
             Dashboard dashboard = dashboardOptional.get();
             String[] codes = new String[0];
@@ -100,7 +101,7 @@ public class DashboardController
             {
                 int length = dashboardData.getJSONArray("buses").length();
                 codes = new String[length];
-                for(int i = 0; i < length; i++)
+                for (int i = 0; i < length; i++)
                 {
                     codes[i] = dashboardData.getJSONArray("buses").getString(i);
                 }
@@ -111,7 +112,7 @@ public class DashboardController
             {
                 int length = dashboardData.getJSONArray("trains").length();
                 crs = new String[length];
-                for(int i = 0; i < length; i++)
+                for (int i = 0; i < length; i++)
                 {
                     crs[i] = dashboardData.getJSONArray("trains").getString(i);
                 }
@@ -133,13 +134,13 @@ public class DashboardController
                 {
                     if (newCodesArray.getJSONObject(stopCode).isEmpty())
                     {
-                        if (NaPTANCache.checkStopExists(stopCode))
+                        if (BusCodesCache.checkStopExists(stopCode))
                         {
                             JSONObject objForStop = newCodesArray.getJSONObject(stopCode);
-                            Naptan naptan = NaPTANCache.getNaptan(stopCode);
+                            Bus bus = BusCodesCache.getBus(stopCode);
 
-                            objForStop.put("StopName", naptan.getLongDescription());
-                            objForStop.put("Identifier", naptan.getIdentifier());
+                            objForStop.put("StopName", bus.getLongDescription());
+                            objForStop.put("Identifier", bus.getIdentifier());
                             objForStop.put("MonitoredStopVisits", new ArrayList<>());
                             newCodesArray.put(stopCode, objForStop);
                         }
@@ -168,10 +169,10 @@ public class DashboardController
                 {
                     if (newCodesArray.getJSONObject(stationCode).isEmpty())
                     {
-                        if (TrainStationCache.checkStopExists(stationCode))
+                        if (TrainCodesCache.checkStopExists(stationCode))
                         {
                             JSONObject objForStop = newCodesArray.getJSONObject(stationCode);
-                            Station station = TrainStationCache.getStation(stationCode);
+                            Station station = TrainCodesCache.getStation(stationCode);
 
                             objForStop.put("stationName", station.getStationName());
                             objForStop.put("departures", new ArrayList<>());
@@ -218,10 +219,6 @@ public class DashboardController
 
             String template = dashboard.getTemplate();
 
-            // Check if a template was provided. Provide default if not.
-            if (template == null || template.equals(""))
-                template = "default";
-
             // Add the switch URL if applicable.
             Long switchId = dashboard.getSwitchId();
             if (switchId != null)
@@ -232,7 +229,7 @@ public class DashboardController
             }
 
             String overrideName = dashboard.getOverrideName();
-            if(overrideName != null)
+            if (overrideName != null)
                 model.addAttribute("name", overrideName);
 
             dashboard.setLastUsedDate(LocalDateTime.now());
@@ -257,7 +254,7 @@ public class DashboardController
         String flipTo = json.has("flipTo") ? json.getString("flipTo") : null;
 
         Optional<Dashboard> existingDashboard = repository.findDashboardByData(request);
-        if(existingDashboard.isPresent())
+        if (existingDashboard.isPresent())
         {
             return new RedirectView("dashboard/" + existingDashboard.get().getId());
         }
@@ -267,7 +264,7 @@ public class DashboardController
             repository.saveAndFlush(dashboard);
 
             // We create another URL for a template we flip to.
-            if(flipTo != null)
+            if (flipTo != null)
             {
                 // Swap the flipTo and template in the raw data.
                 JSONObject requestCopyJSON = new JSONObject(request);
@@ -284,9 +281,6 @@ public class DashboardController
 
             return new RedirectView("dashboard/" + dashboard.getId());
         }
-
-
-
     }
 
     private JSONObject getDepartureInformation(JSONObject request)
@@ -308,7 +302,7 @@ public class DashboardController
                 busCodes.add(busCodeList.get(i).toString());
             }
 
-            busesAndTrains.put("busStops", SIRICache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
+            busesAndTrains.put("busStops", BusDataCache.getSiriJson(busCodes.stream().toArray(String[]::new)).get("busStops"));
         }
 
         // Add any train stations to the JSON
@@ -322,7 +316,7 @@ public class DashboardController
                 trainCodes.add(trainCodeList.get(i).toString());
             }
 
-            busesAndTrains.put("trainStations", TrainDepartureCache.getTrainJSON(trainCodes.stream()
+            busesAndTrains.put("trainStations", TrainDataCache.getTrainJSON(trainCodes.stream()
                     .toArray(String[]::new)).get("trainStations"));
         }
 

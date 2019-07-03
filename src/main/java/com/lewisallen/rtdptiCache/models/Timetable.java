@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 public class Timetable
 {
     @Column(name = "timetableid")
-    private @GeneratedValue(strategy = GenerationType.IDENTITY) @Id Long id;
+    private @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    Long id;
 
     @Column(name = "timetablename")
     private String name;
@@ -22,7 +24,9 @@ public class Timetable
     @Column(name = "lastuseddate")
     private LocalDateTime lastUsedDate = LocalDateTime.now();
 
-    public Timetable(){}
+    public Timetable()
+    {
+    }
 
     public Timetable(String name, String data)
     {
@@ -71,7 +75,8 @@ public class Timetable
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.format(
                 "Timetable[id=%d, name='%s', data='%s']",
                 id, name, data);

@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache.tests;
+package com.lewisallen.rtdptiCache.models;
 
 import com.lewisallen.rtdptiCache.models.Station;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +10,7 @@ public class StationTest
     @Test
     void stationTest()
     {
+        Station stationDefaultConstructor = new Station();
         Station station = new Station("Moulsecoomb", "MCB");
 
         String stationName = station.getStationName();
