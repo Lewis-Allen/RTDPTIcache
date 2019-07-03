@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 @Table(name = "timetable")
 public class Timetable
 {
+    @Id
     @Column(name = "timetableid")
     private @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
     Long id;
 
     @Column(name = "timetablename")

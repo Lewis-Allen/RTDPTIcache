@@ -21,8 +21,8 @@ public class AppConfig implements SchedulingConfigurer
 
     public static void updateCredentials()
     {
-        String isHeroku = System.getenv("ISHEROKU");
-        if (isHeroku != null && isHeroku.equals("1"))
+        String shouldUpdateFromSystem = System.getenv("RTDPTI_UPDATE_FROM_SYSTEM");
+        if (shouldUpdateFromSystem != null && shouldUpdateFromSystem.equals("1"))
         {
             updateFromSystem();
         }
@@ -40,8 +40,8 @@ public class AppConfig implements SchedulingConfigurer
      */
     public static void updateFromSystem()
     {
-        AppConfig.siriUri = System.getenv("SIRI_URI");
-        AppConfig.ldbToken = System.getenv("LDB_TOKEN");
+        AppConfig.siriUri = System.getenv("RTDPTI_SIRI_URI");
+        AppConfig.ldbToken = System.getenv("RTDPTI_LDB_TOKEN");
     }
 
     @Override
