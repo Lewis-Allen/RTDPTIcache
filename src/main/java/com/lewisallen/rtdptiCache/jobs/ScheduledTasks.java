@@ -41,12 +41,14 @@ public class ScheduledTasks
 
     public ScheduledTasks()
     {
-        soap = new Ldb();
-        soapService = soap.getLDBServiceSoap12();
-
         accessToken = new AccessToken();
         AppConfig.updateCredentials();
         accessToken.setTokenValue(AppConfig.ldbToken);
+
+        soap = new Ldb();
+        soapService = soap.getLDBServiceSoap12();
+
+
     }
 
     /**
