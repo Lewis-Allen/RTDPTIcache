@@ -128,7 +128,6 @@ public class ScheduledTasks
      */
     public void updateTrainsDepartureCache()
     {
-        System.out.println("LDB TOKEN = " + AppConfig.ldbToken);
         log.debug("updateTrainsDepartureCache: starting Trains cache update at {}", dateFormat.format(new Date()));
 
         GetBoardRequestParams params = new GetBoardRequestParams();
