@@ -10,7 +10,7 @@ services:
 before_script:
   - cp src/main/resources/application-travis.properties src/main/resources/application.properties
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
-  - mvn clean flyway:migrate -Dflyway.configFiles=myFlywayConfig.properties.example
+  - mvn clean flyway:migrate -Dflyway.configFiles=src/main/resources/application.properties
 before_install:
   - chmod +x mvnw
 after_success:
