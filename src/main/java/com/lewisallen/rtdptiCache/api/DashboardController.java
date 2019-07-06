@@ -5,12 +5,13 @@ import com.lewisallen.rtdptiCache.caches.BusCodesCache;
 import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
 import com.lewisallen.rtdptiCache.caches.TrainDataCache;
-import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import com.lewisallen.rtdptiCache.logging.ResourceNotFoundException;
 import com.lewisallen.rtdptiCache.models.Bus;
 import com.lewisallen.rtdptiCache.models.Dashboard;
 import com.lewisallen.rtdptiCache.models.Station;
+import com.lewisallen.rtdptiCache.models.Template;
 import com.lewisallen.rtdptiCache.repositories.DashboardRepository;
+import com.lewisallen.rtdptiCache.repositories.TemplateRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -19,25 +20,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping(value = "dashboard")
 public class DashboardController
 {
-    private final DashboardRepository repository;
+    private final DashboardRepository dashboardRepository;
+    private final TemplateRepository templateRepository;
 
-    public DashboardController(DashboardRepository repository)
+    public DashboardController(DashboardRepository dashboardRepository, TemplateRepository templateRepository)
     {
-        this.repository = repository;
+        this.dashboardRepository = dashboardRepository;
+        this.templateRepository = templateRepository;
     }
 
     @GetMapping(value = "create")
@@ -50,34 +46,25 @@ public class DashboardController
         model.addAttribute("buses", busesCopy);
         model.addAttribute("stations", stationCopy);
 
-        Path path = Paths.get("templates.txt");
-        List<String> availableTemplates = getListOfTemplates(path);
+        List<String> availableTemplates = getListOfTemplates();
         model.addAttribute("availableTemplates", availableTemplates);
 
         return "create";
     }
 
     /**
-     * Retrieves list of files in dashboard template directory.
+     * Retrieves list of templates from database.
      *
-     * @param path Path to dashboard template directory.
      * @return List of files.
      */
-    public List<String> getListOfTemplates(Path path)
+    public List<String> getListOfTemplates()
     {
-        List<String> templates = new ArrayList<>();
+        List<Template> templates = templateRepository.findAll();
+        List<String> templateNames = new ArrayList<>();
 
-        try
-        {
-            Stream<String> templateStream = Files.lines(path);
-            templates = templateStream.collect(Collectors.toList());
-        }
-        catch (IOException e)
-        {
-            ErrorHandler.handle(e, Level.WARNING, "Error parsing dashboard template list. File should be located in the root directory.");
-        }
+        templates.forEach((template) -> templateNames.add(template.getTemplateName()));
 
-        return templates;
+        return templateNames;
     }
 
     @GetMapping(value = "/{dashboardId}")
@@ -85,7 +72,7 @@ public class DashboardController
                                 UriComponentsBuilder builder,
                                 Model model)
     {
-        Optional<Dashboard> dashboardOptional = repository.findById(dashboardId);
+        Optional<Dashboard> dashboardOptional = dashboardRepository.findById(dashboardId);
 
         if (dashboardOptional.isPresent())
         {
@@ -233,7 +220,7 @@ public class DashboardController
                 model.addAttribute("name", overrideName);
 
             dashboard.setLastUsedDate(LocalDateTime.now());
-            repository.saveAndFlush(dashboard);
+            dashboardRepository.saveAndFlush(dashboard);
 
             return "dashboardTemplates/" + template;
 
@@ -253,7 +240,7 @@ public class DashboardController
         String name = json.has("name") ? json.getString("name") : null;
         String flipTo = json.has("flipTo") ? json.getString("flipTo") : null;
 
-        Optional<Dashboard> existingDashboard = repository.findDashboardByData(request);
+        Optional<Dashboard> existingDashboard = dashboardRepository.findDashboardByData(request);
         if (existingDashboard.isPresent())
         {
             return new RedirectView("dashboard/" + existingDashboard.get().getId());
@@ -261,7 +248,7 @@ public class DashboardController
         else
         {
             Dashboard dashboard = new Dashboard(template, name, request);
-            repository.saveAndFlush(dashboard);
+            dashboardRepository.saveAndFlush(dashboard);
 
             // We create another URL for a template we flip to.
             if (flipTo != null)
@@ -272,11 +259,11 @@ public class DashboardController
                 requestCopyJSON.put("template", flipTo);
 
                 Dashboard flipToDashboard = new Dashboard(flipTo, name, requestCopyJSON.toString(), dashboard.getId());
-                repository.saveAndFlush(flipToDashboard);
+                dashboardRepository.saveAndFlush(flipToDashboard);
 
                 dashboard.setSwitchId(flipToDashboard.getId());
 
-                repository.saveAndFlush(dashboard);
+                dashboardRepository.saveAndFlush(dashboard);
             }
 
             return new RedirectView("dashboard/" + dashboard.getId());
