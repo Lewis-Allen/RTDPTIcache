@@ -1,6 +1,5 @@
 package com.lewisallen.rtdptiCache.api;
 
-import com.lewisallen.rtdptiCache.AppConfig;
 import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
@@ -8,8 +7,6 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -37,11 +34,12 @@ class DashboardControllerTest
     @Autowired
     private WebTestClient wtc;
 
+    @Autowired
+    private ScheduledTasks tasks;
+
     @BeforeAll
     void setup()
     {
-        new AppConfig();
-        ScheduledTasks tasks = new ScheduledTasks();
         tasks.updateCaches();
     }
 
@@ -57,15 +55,6 @@ class DashboardControllerTest
     }
 
     @Test
-    @EnabledIfEnvironmentVariable(named = "CI", matches = "true")
-    void showDefaultDashboardCI()
-    {
-        AppConfig.updateFromSystem();
-        testGetDashboard();
-    }
-
-    @Test
-    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
     void testGetDashboard()
     {
         // Test dashboard with that does not exist.

@@ -1,6 +1,5 @@
 package com.lewisallen.rtdptiCache.requests;
 
-import com.lewisallen.rtdptiCache.AppConfig;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,19 +10,9 @@ public class SIRIRequester
 {
     private String uri;
 
-    public SIRIRequester()
+    public SIRIRequester(String uri)
     {
-        this.uri = AppConfig.siriUri;
-    }
-
-    /**
-     * Getter for URI.
-     *
-     * @return URI
-     */
-    public String getUri()
-    {
-        return uri;
+        this.uri = uri;
     }
 
     /**

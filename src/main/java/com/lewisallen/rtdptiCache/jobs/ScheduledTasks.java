@@ -1,6 +1,5 @@
 package com.lewisallen.rtdptiCache.jobs;
 
-import com.lewisallen.rtdptiCache.AppConfig;
 import com.lewisallen.rtdptiCache.caches.BusCodesCache;
 import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
 import com.lewisallen.rtdptiCache.caches.TrainDataCache;
@@ -17,9 +16,11 @@ import com.thalesgroup.rtti._2017_10_01.ldb.types.ServiceItem;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -32,18 +33,23 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class ScheduledTasks
 {
-
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     private AccessToken accessToken;
     private Ldb soap;
     private LDBServiceSoap soapService;
 
-    public ScheduledTasks()
+    @Value("${rtdpti.ldbtoken}")
+    private String ldbToken;
+
+    @Value("${rtdpti.siriuri}")
+    private String siriuri;
+
+    @PostConstruct
+    public void init()
     {
         accessToken = new AccessToken();
-        AppConfig.updateCredentials();
-        accessToken.setTokenValue(AppConfig.ldbToken);
+        accessToken.setTokenValue(ldbToken);
 
         soap = new Ldb();
         soapService = soap.getLDBServiceSoap();
@@ -104,7 +110,7 @@ public class ScheduledTasks
 
         SIRIString xml = new SIRIString();
         String req = xml.generateXml(BusCodesCache.getCachedCodes().stream().toArray(String[]::new));
-        SIRIRequester requester = new SIRIRequester();
+        SIRIRequester requester = new SIRIRequester(siriuri);
         SIRIResponseParser parser = new SIRIResponseParser();
         parser.parse(requester.makeSIRIRequest(req));
 

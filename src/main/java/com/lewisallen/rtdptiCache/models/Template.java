@@ -16,7 +16,9 @@ public class Template
     @Column(name = "name")
     private String templateName;
 
-    public Template() {}
+    public Template()
+    {
+    }
 
     public String getTemplateName()
     {
