@@ -168,5 +168,15 @@ class DashboardControllerTest
                 .exchange()
                 .expectStatus()
                 .is3xxRedirection();
+
+        body.remove("flipTo");
+
+        this.wtc
+                .post()
+                .uri(builder -> builder.path("/dashboard").build())
+                .body(BodyInserters.fromObject(body.toString()))
+                .exchange()
+                .expectStatus()
+                .is3xxRedirection();
     }
 }

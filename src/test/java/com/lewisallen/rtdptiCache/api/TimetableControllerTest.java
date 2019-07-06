@@ -59,6 +59,19 @@ class TimetableControllerTest
     }
 
     @Test
+    void testLateStops()
+    {
+        this.wtc
+                .post()
+                .uri(builder -> builder.path("/timetable").build())
+                .body(BodyInserters.fromObject("data =Test Stop" + System.lineSeparator() +
+                        "11:59,UB1,Old Steine"))
+                .exchange()
+                .expectStatus()
+                .is3xxRedirection();
+    }
+
+    @Test
     void testPostTimetable()
     {
         this.wtc
