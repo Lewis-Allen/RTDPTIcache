@@ -1,6 +1,7 @@
 package com.lewisallen.rtdptiCache.jobs;
 
 import com.lewisallen.rtdptiCache.caches.BusCodesCache;
+import com.lewisallen.rtdptiCache.caches.Caches;
 import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
 import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
@@ -136,6 +137,8 @@ public class ScheduledTasks
     {
         log.debug("updateTrainsDepartureCache: starting Trains cache update at {}", dateFormat.format(new Date()));
 
+        // TODO: split up the method into multiple
+
         GetBoardRequestParams params = new GetBoardRequestParams();
         params.setTimeWindow(60); // Set time window to 60 minutes.
 
@@ -195,7 +198,8 @@ public class ScheduledTasks
         }
 
         // Replace the global cache with the just created one.
-        TrainDataCache.trainDepartureCache = temporaryDepartureCache;
+        //TrainDataCache.trainDepartureCache = temporaryDepartureCache;
+        Caches.resetTrainData(temporaryDepartureCache);
 
         log.debug("updateTrainsDepartureCache: Trains cache update complete at {}", dateFormat.format(new Date()));
     }

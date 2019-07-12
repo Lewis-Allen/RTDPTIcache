@@ -15,19 +15,40 @@
     <version>1.0-SNAPSHOT</version>
     <name>rtdptiCache</name>
     <url>http://maven.apache.org</url>
+
+    <properties>
+        <!-- plugins -->
+        <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
+
+        <!-- libraries -->
+
+        <!-- test scope -->
+
+    </properties>
+
+
     <dependencies>
+
+        <!-- TODO:  -->
+
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>1.4.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- does ... -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.3.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- pulls in unit test suite -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -133,7 +154,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
+                <version>${jacoco.plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -149,11 +170,15 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--  -->
+
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>5.2.4</version>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -162,6 +187,7 @@
                     <mainClass>com.lewisallen.rtdptiCache.RtdptiCacheApplication</mainClass>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
@@ -186,6 +212,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -195,6 +222,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

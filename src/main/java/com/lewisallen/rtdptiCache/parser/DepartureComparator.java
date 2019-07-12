@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.Comparator;
 import java.util.logging.Level;
 
+// TODO: remove class
 public class DepartureComparator implements Comparator<JSONObject>
 {
 

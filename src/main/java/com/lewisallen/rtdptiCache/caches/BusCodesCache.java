@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: remove duplication here + TrainCodesCache
+
 @Component
 public class BusCodesCache
 {

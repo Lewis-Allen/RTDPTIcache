@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: remove this class, update tests
 public class TrainDataCache
 {
     public static Map<Object, JSONObject> trainDepartureCache = new ConcurrentHashMap<>();

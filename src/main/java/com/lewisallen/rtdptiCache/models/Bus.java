@@ -22,6 +22,7 @@ public class Bus
     @Column(name = "retrieve")
     private int retrieve;
 
+    // TODO: add a comment to say why we need empty ctor and also in other models
     public Bus()
     {
     }
@@ -33,31 +34,16 @@ public class Bus
         this.identifier = identifier;
     }
 
-    /**
-     * Getter for System Code Number.
-     *
-     * @return System Code Number
-     */
     public String getSystemCodeNumber()
     {
         return systemCodeNumber;
     }
 
-    /**
-     * Getter for Long Description
-     *
-     * @return Long Description
-     */
     public String getLongDescription()
     {
         return longDescription;
     }
 
-    /**
-     * Getter for Identifier
-     *
-     * @return Identifier
-     */
     public String getIdentifier()
     {
         return identifier;

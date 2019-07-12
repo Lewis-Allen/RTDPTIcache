@@ -90,6 +90,7 @@ public class Dashboard
         return template;
     }
 
+    // TODO: remove setters if not used in production code
     public void setTemplate(String template)
     {
         this.template = template;

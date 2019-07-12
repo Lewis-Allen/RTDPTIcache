@@ -1,5 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
+import com.lewisallen.rtdptiCache.caches.Caches;
 import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +34,7 @@ public class TrainDataCacheTest
         }
 
         // Get response from cache.
-        JSONObject res = TrainDataCache.getTrainJSON(stationCodes);
+        JSONObject res = Caches.getTrainJSON(stationCodes);
 
         // Test response.
         for (int i = 0; i < 10; i++)

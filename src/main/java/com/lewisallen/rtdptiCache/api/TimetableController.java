@@ -33,35 +33,30 @@ public class TimetableController
     public String showTimetable(Model model, @PathVariable Long timetableId)
     {
         Optional<Timetable> result = repository.findById(timetableId);
-
-        if (result.isPresent())
-        {
-            Timetable timetable = result.get();
-
-            JSONObject o = new JSONObject();
-            o.put("stopName", timetable.getName());
-
-            // Get departures
-            String departures = timetable.getData();
-            JSONArray stops = parseDepartureData(departures);
-
-            o.put("visits", stops);
-            JSONObject wrapper = new JSONObject();
-            wrapper.put("payload", o);
-
-            Gson gson = new Gson();
-            Object departureInformation = gson.fromJson(wrapper.toString(), Object.class);
-            model.addAttribute("departureInformation", departureInformation);
-
-            timetable.setLastUsedDate(LocalDateTime.now());
-            repository.saveAndFlush(timetable);
-
-            return "dashboardTemplates/timetable";
-        }
-        else
-        {
+        if (!result.isPresent())
             throw new ResourceNotFoundException("No resource found for this URL.");
-        }
+
+        Timetable timetable = result.get();
+
+        JSONObject o = new JSONObject();
+        o.put("stopName", timetable.getName());
+
+        // Get departures
+        String departures = timetable.getData();
+        JSONArray stops = parseDepartureData(departures);
+
+        o.put("visits", stops);
+        JSONObject wrapper = new JSONObject();
+        wrapper.put("payload", o);
+
+        Gson gson = new Gson();
+        Object departureInformation = gson.fromJson(wrapper.toString(), Object.class);
+        model.addAttribute("departureInformation", departureInformation);
+
+        timetable.setLastUsedDate(LocalDateTime.now());
+        repository.saveAndFlush(timetable);
+
+        return "dashboardTemplates/timetable";
     }
 
     @GetMapping(value = "create")
@@ -70,6 +65,15 @@ public class TimetableController
         return "uploadForm";
     }
 
+    /**
+     * TODO: example format of formData
+     *
+     * formData = " =  "
+     *
+     *
+     * @param formData
+     * @return
+     */
     @PostMapping(value = "")
     public RedirectView createNewTimetable(@RequestBody String formData)
     {
@@ -78,23 +82,27 @@ public class TimetableController
         String[] lines = timetableString.split(System.lineSeparator());
         String stopName = lines[0];
 
-        String data = Arrays.asList(lines).stream().skip(1).collect(Collectors.joining(System.lineSeparator()));
+        String data = Arrays.stream(lines).skip(1).collect(Collectors.joining(System.lineSeparator()));
 
         Optional<Timetable> existingTimetable = repository.findTimetableByData(data);
         if (existingTimetable.isPresent())
         {
             return new RedirectView("timetable/" + existingTimetable.get().getId());
         }
-        else
-        {
-            Timetable timetable = new Timetable(stopName, data);
 
-            repository.saveAndFlush(timetable);
+        Timetable timetable = new Timetable(stopName, data);
 
-            return new RedirectView("timetable/" + timetable.getId());
-        }
+        repository.saveAndFlush(timetable);
+
+        return new RedirectView("timetable/" + timetable.getId());
     }
 
+    /**
+     * TODO: example format of depatureData
+     *
+     * @param departureData
+     * @return
+     */
     private JSONArray parseDepartureData(String departureData)
     {
         List<String> lines = Arrays.asList(departureData.split(System.lineSeparator()));
@@ -104,6 +112,8 @@ public class TimetableController
                 .filter(line -> LocalTime.parse(line.split(",")[0]).isAfter(LocalTime.now())).collect(Collectors.toList());
 
         JSONArray stops = new JSONArray();
+
+        // TODO: create a constant var with value of 9 and explain what for
         for (int i = 0; i < linesToDisplay.size() && i < 9; i++)
         {
             String[] visit = linesToDisplay.get(i).split(",");

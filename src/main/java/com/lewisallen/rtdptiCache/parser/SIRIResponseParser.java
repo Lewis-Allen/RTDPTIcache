@@ -1,7 +1,7 @@
 package com.lewisallen.rtdptiCache.parser;
 
 import com.lewisallen.rtdptiCache.caches.BusCodesCache;
-import com.lewisallen.rtdptiCache.caches.BusDataCache;
+import com.lewisallen.rtdptiCache.caches.Caches;
 import com.lewisallen.rtdptiCache.logging.ErrorHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +30,8 @@ public class SIRIResponseParser
      */
     public void parse(ResponseEntity<String> response)
     {
+        // TODO: split up into multiple
+
         JSONObject siriResponse = XML.toJSONObject(response.getBody());
         Map<Object, JSONObject> cache = new ConcurrentHashMap<Object, JSONObject>();
 
@@ -64,6 +67,8 @@ public class SIRIResponseParser
                 monitoredStopsList.add(stop);
             }
 
+
+
             // Go through the JSON list and group items by into lists by their MonitoringRef
             Map<String, List<JSONObject>> groupedList = monitoredStopsList.parallelStream()
                     .collect(Collectors.groupingBy(this::getMonitoringRef));
@@ -77,7 +82,7 @@ public class SIRIResponseParser
                         .stream()
                         .map(this::removeFields)
                         .map(this::addDeparture)
-                        .sorted(new DepartureComparator())
+                        .sorted(Comparator.comparingInt(this::getSecondsUntilDeparture))
                         .collect(Collectors.toList());
 
                 // Create JSON objects to store in cache.
@@ -94,7 +99,21 @@ public class SIRIResponseParser
         }
 
         // Copy the local cache to the global cache.
-        BusDataCache.siriCache = cache;
+        Caches.resetBusData(cache);
+    }
+
+    private int getSecondsUntilDeparture(JSONObject o)
+    {
+        try {
+            return Integer.parseInt(o.getJSONObject("MonitoredVehicleJourney")
+                    .getJSONObject("MonitoredCall")
+                    .get("DepartureSeconds").toString());
+
+        } catch (Exception e) {
+            String message = String.format("Error extracting departure seconds from %s", o);
+            ErrorHandler.handle(e, Level.WARNING, message);
+            return 0;
+        }
     }
 
     /**
@@ -146,41 +165,25 @@ public class SIRIResponseParser
      */
     private long getDepartureSeconds(JSONObject json)
     {
-        long departureSeconds = 0;
+        String[] jsonKeys = new String[] {
+                "ExpectedDepartureTime",
+                "AimedDepartureTime",
+                "ExpectedArrivalTime",
+                "AimedArrivalTime"
+        };
 
-        // Check if stop has expected departure time
-        try
-        {
-            departureSeconds = parseTime(json, "ExpectedDepartureTime");
-        }
-        catch (Exception e1)
-        {
-            try
-            {
-                departureSeconds = parseTime(json, "AimedDepartureTime");
-            }
-            catch (Exception e2)
-            {
-                try
-                {
-                    departureSeconds = parseTime(json, "ExpectedArrivalTime");
-                }
-                catch (Exception e3)
-                {
-                    try
-                    {
-                        departureSeconds = parseTime(json, "AimedArrivalTime");
-                    }
-                    catch (Exception e4)
-                    {
-                        String message = "Failed to parse any departure time in JSON: " + json.toString();
-                        ErrorHandler.handle(e4, Level.SEVERE, message);
-                    }
-                }
+        for (String key : jsonKeys) {
+            try {
+                return parseTime(json, key);
+            } catch (Exception e) {
+                // empty
             }
         }
 
-        return departureSeconds;
+        String message = "Failed to parse any departure time in JSON: " + json.toString();
+        ErrorHandler.handle(new RuntimeException(message), Level.SEVERE, message);
+
+        return 0;
     }
 
     /**

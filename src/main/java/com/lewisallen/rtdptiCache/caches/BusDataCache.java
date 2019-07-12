@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: remove this class, update tests
 public class BusDataCache
 {
 
@@ -25,9 +26,9 @@ public class BusDataCache
         JSONObject j = new JSONObject();
         for (String s : naptans)
         {
-            if (BusDataCache.siriCache.containsKey(s))
+            if (siriCache.containsKey(s))
             {
-                j.put(s, BusDataCache.siriCache.get(s));
+                j.put(s, siriCache.get(s));
             }
             else
             {

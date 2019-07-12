@@ -1,6 +1,7 @@
 package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.caches.BusDataCache;
+import com.lewisallen.rtdptiCache.caches.Caches;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +44,7 @@ public class BusDataCacheTest
         // Ensure method returns stops.
         try
         {
-            JSONObject res = BusDataCache.getSiriJson(new String[]{"1"});
+            JSONObject res = Caches.getSiriJSON(new String[]{"1"});
             Assertions.assertTrue(res.getJSONObject("busStops").has("1"));
         }
         catch (JSONException e)
@@ -58,7 +59,7 @@ public class BusDataCacheTest
     {
         try
         {
-            JSONObject res = BusDataCache.getSiriJson(new String[]{"Dodgy"});
+            JSONObject res = Caches.getSiriJSON(new String[]{"Dodgy"});
             System.out.println(res.toString());
             Assertions.assertTrue(res.has("busStops"));
             Assertions.assertTrue(res.getJSONObject("busStops").has("Dodgy"));

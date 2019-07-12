@@ -14,7 +14,7 @@ public class SIRIString
     private String xmlString;
 
     // Max stops to receive in response from SIRI.
-    private int MAX_STOP_VISITS = 9;
+    private static final int MAX_STOP_VISITS = 9;
 
     /**
      * Builds an XML String to send as a POST request to the SIRI Service.
@@ -57,7 +57,7 @@ public class SIRIString
      * @param ns     Namespace
      * @return Element for individual stop
      */
-    public Element individualStopXml(String naptan, Namespace ns)
+    private Element individualStopXml(String naptan, Namespace ns)
     {
         // Create root "StopMonitoringRequest" element.
         Element stopMonitoringRequest = new Element("StopMonitoringRequest", ns);

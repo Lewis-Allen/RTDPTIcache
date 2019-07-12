@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * TODO: what this class is for, same for other classes
+ */
 @Entity
 @Table(name = "template")
 public class Template

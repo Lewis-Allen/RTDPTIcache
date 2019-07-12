@@ -3,6 +3,7 @@ package com.lewisallen.rtdptiCache.logging;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO: empty class
 public class ErrorHandler
 {
     private static Logger logger = Logger.getLogger("ErrorHandler");

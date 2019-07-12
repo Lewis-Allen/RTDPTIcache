@@ -29,21 +29,11 @@ public class Station
         this.crsCode = crsCode;
     }
 
-    /**
-     * Getter for Station Name.
-     *
-     * @return Station Name
-     */
     public String getStationName()
     {
         return stationName;
     }
 
-    /**
-     * Getter for CRS Code.
-     *
-     * @return CRS Code
-     */
     public String getCrsCode()
     {
         return crsCode;
