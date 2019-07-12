@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache.parser;
+package com.lewisallen.rtdptiCache.busInterfacer;
 
 import com.lewisallen.rtdptiCache.caches.BusCodesCache;
 import com.lewisallen.rtdptiCache.caches.Caches;
@@ -68,7 +68,6 @@ public class SIRIResponseParser
             }
 
 
-
             // Go through the JSON list and group items by into lists by their MonitoringRef
             Map<String, List<JSONObject>> groupedList = monitoredStopsList.parallelStream()
                     .collect(Collectors.groupingBy(this::getMonitoringRef));
@@ -104,12 +103,15 @@ public class SIRIResponseParser
 
     private int getSecondsUntilDeparture(JSONObject o)
     {
-        try {
+        try
+        {
             return Integer.parseInt(o.getJSONObject("MonitoredVehicleJourney")
                     .getJSONObject("MonitoredCall")
                     .get("DepartureSeconds").toString());
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             String message = String.format("Error extracting departure seconds from %s", o);
             ErrorHandler.handle(e, Level.WARNING, message);
             return 0;
@@ -165,17 +167,21 @@ public class SIRIResponseParser
      */
     private long getDepartureSeconds(JSONObject json)
     {
-        String[] jsonKeys = new String[] {
+        String[] jsonKeys = new String[]{
                 "ExpectedDepartureTime",
                 "AimedDepartureTime",
                 "ExpectedArrivalTime",
                 "AimedArrivalTime"
         };
 
-        for (String key : jsonKeys) {
-            try {
+        for (String key : jsonKeys)
+        {
+            try
+            {
                 return parseTime(json, key);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 // empty
             }
         }

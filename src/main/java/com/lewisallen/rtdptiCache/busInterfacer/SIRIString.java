@@ -1,4 +1,4 @@
-package com.lewisallen.rtdptiCache.requests;
+package com.lewisallen.rtdptiCache.busInterfacer;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -10,11 +10,10 @@ import org.jdom.output.XMLOutputter;
 public class SIRIString
 {
 
-    // Xml string that will be sent to SIRI
-    private String xmlString;
-
     // Max stops to receive in response from SIRI.
     private static final int MAX_STOP_VISITS = 9;
+    // Xml string that will be sent to SIRI
+    private String xmlString;
 
     /**
      * Builds an XML String to send as a POST request to the SIRI Service.

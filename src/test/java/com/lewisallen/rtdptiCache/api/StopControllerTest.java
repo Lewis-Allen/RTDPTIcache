@@ -1,16 +1,13 @@
 package com.lewisallen.rtdptiCache.api;
 
 
-import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.caches.Caches;
-import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootTest
@@ -43,7 +40,6 @@ public class StopControllerTest
     @Test
     void singleStopRequests()
     {
-        //BusDataCache.siriCache = new HashMap<>();
         Caches.resetBusData(new ConcurrentHashMap<>());
         JSONObject req = new JSONObject();
         req.put("codes", "14900000670");
@@ -55,7 +51,6 @@ public class StopControllerTest
         Assertions.assertTrue(res.getJSONObject("payload").getJSONObject("busStops").has("14900000670"));
         Assertions.assertTrue(res.getJSONObject("payload").getJSONObject("busStops").getJSONObject("14900000670").isEmpty());
 
-        //TrainDataCache.trainDepartureCache = new HashMap<>();
         Caches.resetTrainData(new ConcurrentHashMap<>());
         req = new JSONObject();
         req.put("CRS", "MCB");
@@ -72,7 +67,7 @@ public class StopControllerTest
     void multipleStopRequests()
     {
         // Query multiple buses
-        BusDataCache.siriCache = new HashMap<>();
+        Caches.resetBusData(new ConcurrentHashMap<>());
         JSONObject req = new JSONObject();
         JSONArray codes = new JSONArray();
         codes.put("14900000670");
@@ -87,7 +82,7 @@ public class StopControllerTest
         Assertions.assertTrue(res.getJSONObject("payload").getJSONObject("busStops").has("14900000671"));
 
         // Query multiple trains.
-        TrainDataCache.trainDepartureCache = new HashMap<>();
+        Caches.resetTrainData(new ConcurrentHashMap<>());
         req = new JSONObject();
         codes = new JSONArray();
         codes.put("MCB");

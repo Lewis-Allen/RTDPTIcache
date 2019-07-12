@@ -1,8 +1,6 @@
 package com.lewisallen.rtdptiCache.api;
 
-import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.caches.Caches;
-import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;

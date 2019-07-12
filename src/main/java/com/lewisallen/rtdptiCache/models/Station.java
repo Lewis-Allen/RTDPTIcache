@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * model for a station configuration.
+ * Used by JPA to retrieve and save records to database.
+ */
 @Entity
 @Table(name = "stations")
 public class Station
@@ -19,6 +23,7 @@ public class Station
     @Column(name = "retrieve")
     private int retrieve;
 
+    // Default constructor used by Spring
     public Station()
     {
     }

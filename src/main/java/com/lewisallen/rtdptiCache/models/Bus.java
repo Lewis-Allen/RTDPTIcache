@@ -5,6 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Model for a naptan object.
+ * Used by JPA to retrieve and save records to database.
+ * This object contains a unique identifier for a bus stop.
+ * Along with a description (name) and identifier (opposite, adjacent etc)
+ */
 @Entity
 @Table(name = "naptan")
 public class Bus
@@ -22,7 +28,7 @@ public class Bus
     @Column(name = "retrieve")
     private int retrieve;
 
-    // TODO: add a comment to say why we need empty ctor and also in other models
+    // Default constructor used by Spring
     public Bus()
     {
     }

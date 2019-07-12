@@ -1,7 +1,6 @@
 package com.lewisallen.rtdptiCache.api;
 
-import com.lewisallen.rtdptiCache.caches.BusDataCache;
-import com.lewisallen.rtdptiCache.caches.TrainDataCache;
+import com.lewisallen.rtdptiCache.caches.Caches;
 import com.lewisallen.rtdptiCache.jobs.ScheduledTasks;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,8 +15,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
     WARNING: Contains tests that rely on the data inserted by migrations.
@@ -122,7 +121,7 @@ class DashboardControllerTest
 
         // Test existing stop but no data
         // Wipe Bus Departure cache
-        BusDataCache.siriCache = new HashMap<>();
+        Caches.resetBusData(new ConcurrentHashMap<>());
         this.wtc
                 .get()
                 .uri(builder -> builder.path("/dashboard/1").build())
@@ -131,7 +130,7 @@ class DashboardControllerTest
                 .is2xxSuccessful();
 
         // Wipe Train Departures
-        TrainDataCache.trainDepartureCache = new HashMap<>();
+        Caches.resetTrainData(new ConcurrentHashMap<>());
 
         // Test empty station
         this.wtc

@@ -13,18 +13,11 @@ class TimetableTest
     void testTimetable()
     {
         Timetable timetable = new Timetable("Hello World", "1,2,3");
-        timetable.getId();
-        timetable.getCreatedDate();
-
-        timetable.setName("Goodbye World");
-        timetable.setData("2,3,4");
-        timetable.setLastUsedDate(LocalDateTime.MAX);
 
         Assertions.assertAll(
-                () -> assertEquals(timetable.getName(), "Goodbye World"),
-                () -> assertEquals(timetable.getData(), "2,3,4"),
-                () -> assertEquals(timetable.getLastUsedDate(),LocalDateTime.MAX),
-                () -> assertTrue(timetable.toString().contains("Goodbye World"))
+                () -> assertEquals(timetable.getName(), "Hello World"),
+                () -> assertEquals(timetable.getData(), "1,2,3"),
+                () -> assertTrue(timetable.toString().contains("Hello World"))
         );
     }
 }

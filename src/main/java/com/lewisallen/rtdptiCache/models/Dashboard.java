@@ -3,6 +3,11 @@ package com.lewisallen.rtdptiCache.models;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Model for a dashboard configuration
+ * Used by JPA to retrieve and save records to database.
+ * dashboard data is the raw data for a dashboard in the form of a JSONObject
+ */
 @Entity
 @Table(name = "dashboard")
 public class Dashboard
@@ -30,6 +35,7 @@ public class Dashboard
     @Column(name = "lastuseddate")
     private LocalDateTime lastUsedDate = LocalDateTime.now();
 
+    // Default constructor used by Spring
     public Dashboard()
     {
     }
@@ -57,21 +63,6 @@ public class Dashboard
         return data;
     }
 
-    public void setData(String data)
-    {
-        this.data = data;
-    }
-
-    public LocalDateTime getCreatedDate()
-    {
-        return createdDate;
-    }
-
-    public LocalDateTime getLastUsedDate()
-    {
-        return lastUsedDate;
-    }
-
     public void setLastUsedDate(LocalDateTime lastUsedDate)
     {
         this.lastUsedDate = lastUsedDate;
@@ -90,12 +81,6 @@ public class Dashboard
         return template;
     }
 
-    // TODO: remove setters if not used in production code
-    public void setTemplate(String template)
-    {
-        this.template = template;
-    }
-
     public Long getSwitchId()
     {
         return switchId;
@@ -109,10 +94,5 @@ public class Dashboard
     public String getOverrideName()
     {
         return overrideName;
-    }
-
-    public void setOverrideName(String overrideName)
-    {
-        this.overrideName = overrideName;
     }
 }

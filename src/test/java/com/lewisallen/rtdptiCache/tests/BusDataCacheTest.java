@@ -1,22 +1,16 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.caches.BusDataCache;
 import com.lewisallen.rtdptiCache.caches.Caches;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class BusDataCacheTest
 {
-
-    @Test
-    void testInitialisation()
-    {
-        @SuppressWarnings("unused")
-        BusDataCache cache = new BusDataCache();
-    }
-
     /**
      * Asserts getting from cache wraps in payload.
      */
@@ -39,7 +33,9 @@ public class BusDataCacheTest
         }
 
         // Insert JSON Object into cache
-        BusDataCache.siriCache.put("1", j);
+        Map<Object, JSONObject> map = new ConcurrentHashMap<>();
+        map.put("1", j);
+        Caches.resetBusData(map);
 
         // Ensure method returns stops.
         try

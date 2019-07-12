@@ -6,7 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * TODO: what this class is for, same for other classes
+ * Model is used to represent a database record for a template.
+ * Used by JPA to retrieve and save records to database.
+ * Templates are html files used to construct the webpages in the application.
+ * Templates can be found in resources/templates
  */
 @Entity
 @Table(name = "template")
@@ -19,6 +22,7 @@ public class Template
     @Column(name = "name")
     private String templateName;
 
+    // Default constructor used by Spring
     public Template()
     {
     }

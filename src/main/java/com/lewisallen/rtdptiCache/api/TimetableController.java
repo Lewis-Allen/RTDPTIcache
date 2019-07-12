@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "timetable")
 public class TimetableController
 {
+    private static final int TIMETABLE_MAX_DEPARTURES = 9; // Maximum departures displayable on a timetable.
     private final TimetableRepository repository;
 
     public TimetableController(TimetableRepository repository)
@@ -34,7 +35,7 @@ public class TimetableController
     {
         Optional<Timetable> result = repository.findById(timetableId);
         if (!result.isPresent())
-            throw new ResourceNotFoundException("No resource found for this URL.");
+            throw new ResourceNotFoundException();
 
         Timetable timetable = result.get();
 
@@ -67,9 +68,8 @@ public class TimetableController
 
     /**
      * TODO: example format of formData
-     *
+     * <p>
      * formData = " =  "
-     *
      *
      * @param formData
      * @return
@@ -98,10 +98,23 @@ public class TimetableController
     }
 
     /**
-     * TODO: example format of depatureData
+     * Parse departure data from csv form.
+     * Data in the form of:
+     * <p>
+     * BUS_STOP_NAME
+     * ARRIVAL_TIME,VEHICLE_NAME,DESTINATION
+     * ARRIVAL_TIME,VEHICLE_NAME,DESTINATION
+     * ...
+     * <p>
+     * e.g.
+     * <p>
+     * Brighton University North
+     * 12:00,UB1,Old Steine
+     * 13:00,UB1,Old Steine
+     * 14:00,UB1,Grand Parade
      *
-     * @param departureData
-     * @return
+     * @param departureData data to be parsed.
+     * @return JSONArray of departures
      */
     private JSONArray parseDepartureData(String departureData)
     {
@@ -113,8 +126,7 @@ public class TimetableController
 
         JSONArray stops = new JSONArray();
 
-        // TODO: create a constant var with value of 9 and explain what for
-        for (int i = 0; i < linesToDisplay.size() && i < 9; i++)
+        for (int i = 0; i < linesToDisplay.size() && i < TIMETABLE_MAX_DEPARTURES; i++)
         {
             String[] visit = linesToDisplay.get(i).split(",");
             JSONObject stop = new JSONObject();

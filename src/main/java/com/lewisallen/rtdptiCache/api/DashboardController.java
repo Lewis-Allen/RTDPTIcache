@@ -1,7 +1,9 @@
 package com.lewisallen.rtdptiCache.api;
 
 import com.google.gson.Gson;
-import com.lewisallen.rtdptiCache.caches.*;
+import com.lewisallen.rtdptiCache.caches.BusCodesCache;
+import com.lewisallen.rtdptiCache.caches.Caches;
+import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
 import com.lewisallen.rtdptiCache.logging.ResourceNotFoundException;
 import com.lewisallen.rtdptiCache.models.Bus;
 import com.lewisallen.rtdptiCache.models.Dashboard;
@@ -39,7 +41,6 @@ public class DashboardController
         SortedMap<String, Bus> busesCopy = new TreeMap<>(BusCodesCache.busCodeCache);
         SortedMap<String, Station> stationCopy = new TreeMap<>(TrainCodesCache.stationCache);
 
-        // ToDo: Sort the maps based on name
         model.addAttribute("buses", busesCopy);
         model.addAttribute("stations", stationCopy);
 
@@ -74,53 +75,32 @@ public class DashboardController
 
         Optional<Dashboard> dashboardOptional = dashboardRepository.findById(dashboardId);
 
-        if (!dashboardOptional.isPresent()) {
-            throw new ResourceNotFoundException("No resource found for this URL.");
+        if (!dashboardOptional.isPresent())
+        {
+            throw new ResourceNotFoundException();
         }
 
         Dashboard dashboard = dashboardOptional.get();
         String[] codes = new String[0];
         String[] crs = new String[0];
 
-
         // Parse data
         JSONObject dashboardData = new JSONObject(dashboard.getData());
         JSONObject departureInfoRequest = new JSONObject();
 
-        // TODO: duplication
         if (dashboardData.has("buses"))
         {
-            int length = dashboardData.getJSONArray("buses").length();
-            codes = new String[length];
-            for (int i = 0; i < length; i++)
-            {
-                codes[i] = dashboardData.getJSONArray("buses").getString(i);
-            }
+            codes = parseCodes(dashboardData, "buses");
             departureInfoRequest.put("codes", Arrays.asList(codes));
         }
 
         if (dashboardData.has("trains"))
         {
-            int length = dashboardData.getJSONArray("trains").length();
-            crs = new String[length];
-            for (int i = 0; i < length; i++)
-            {
-                crs[i] = dashboardData.getJSONArray("trains").getString(i);
-            }
+            crs = parseCodes(dashboardData, "trains");
             departureInfoRequest.put("crs", Arrays.asList(crs));
         }
 
         JSONObject departureInformation = getDepartureInformation(departureInfoRequest);
-
-
-
-
-
-
-
-
-
-
 
 
         // Fill in stop name for any locations that have no visits.
@@ -192,13 +172,6 @@ public class DashboardController
         }
 
 
-
-
-
-
-
-
-
         // Add list of codes to the model, making sure we remove any codes that were removed previously.
         // We use this so we can add stops in the correct order on the template.
         List<String> modelBusCodes = new ArrayList<>();
@@ -216,13 +189,6 @@ public class DashboardController
             modelTrainCodes.removeAll(removedTrainCodes);
         }
         model.addAttribute("trainCodes", modelTrainCodes);
-
-
-
-
-
-
-
 
 
         // Thymeleaf apparently doesn't like transversing JSON...
@@ -337,5 +303,20 @@ public class DashboardController
         response.put("payload", busesAndTrains);
 
         return response;
+    }
+
+    private String[] parseCodes(JSONObject data, String identifier)
+    {
+        String[] codes = new String[0];
+        if (data.has(identifier))
+        {
+            int length = data.getJSONArray(identifier).length();
+            codes = new String[length];
+            for (int i = 0; i < length; i++)
+            {
+                codes[i] = data.getJSONArray(identifier).getString(i);
+            }
+        }
+        return codes;
     }
 }

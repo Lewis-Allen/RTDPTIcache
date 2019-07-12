@@ -1,12 +1,11 @@
 package com.lewisallen.rtdptiCache.jobs;
 
+import com.lewisallen.rtdptiCache.busInterfacer.SIRIRequester;
+import com.lewisallen.rtdptiCache.busInterfacer.SIRIResponseParser;
+import com.lewisallen.rtdptiCache.busInterfacer.SIRIString;
 import com.lewisallen.rtdptiCache.caches.BusCodesCache;
 import com.lewisallen.rtdptiCache.caches.Caches;
 import com.lewisallen.rtdptiCache.caches.TrainCodesCache;
-import com.lewisallen.rtdptiCache.caches.TrainDataCache;
-import com.lewisallen.rtdptiCache.parser.SIRIResponseParser;
-import com.lewisallen.rtdptiCache.requests.SIRIRequester;
-import com.lewisallen.rtdptiCache.requests.SIRIString;
 import com.thalesgroup.rtti._2012_01_13.ldb.types.ArrayOfNRCCMessages;
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
 import com.thalesgroup.rtti._2017_10_01.ldb.GetBoardRequestParams;
@@ -198,7 +197,6 @@ public class ScheduledTasks
         }
 
         // Replace the global cache with the just created one.
-        //TrainDataCache.trainDepartureCache = temporaryDepartureCache;
         Caches.resetTrainData(temporaryDepartureCache);
 
         log.debug("updateTrainsDepartureCache: Trains cache update complete at {}", dateFormat.format(new Date()));

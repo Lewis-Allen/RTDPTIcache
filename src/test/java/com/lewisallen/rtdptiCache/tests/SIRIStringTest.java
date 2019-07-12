@@ -1,6 +1,6 @@
 package com.lewisallen.rtdptiCache.tests;
 
-import com.lewisallen.rtdptiCache.requests.SIRIString;
+import com.lewisallen.rtdptiCache.busInterfacer.SIRIString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

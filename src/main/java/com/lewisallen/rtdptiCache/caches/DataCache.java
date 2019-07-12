@@ -10,13 +10,13 @@ public class DataCache
 {
     private Map<Object, JSONObject> cache = new ConcurrentHashMap<>();
 
-    public void reset(Map<Object, JSONObject> cache) {
+    public void reset(Map<Object, JSONObject> cache)
+    {
         this.cache.clear();
         this.cache.putAll(cache);
     }
 
     /**
-     *
      * @param codes
      * @return
      * @throws JSONException
@@ -36,8 +36,5 @@ public class DataCache
         return result;
     }
 
-    public Map<Object, JSONObject> getCache()
-    {
-        return cache;
-    }
+
 }

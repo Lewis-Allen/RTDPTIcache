@@ -3,6 +3,10 @@ package com.lewisallen.rtdptiCache.models;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Object to represent a hand crafted timetable.
+ * Used by JPA to retrieve and save records to database.
+ */
 @Entity
 @Table(name = "timetable")
 public class Timetable
@@ -24,6 +28,7 @@ public class Timetable
     @Column(name = "lastuseddate")
     private LocalDateTime lastUsedDate = LocalDateTime.now();
 
+    // Default constructor used by Spring
     public Timetable()
     {
     }
@@ -44,29 +49,9 @@ public class Timetable
         return name;
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
     public String getData()
     {
         return data;
-    }
-
-    public void setData(String data)
-    {
-        this.data = data;
-    }
-
-    public LocalDateTime getCreatedDate()
-    {
-        return createdDate;
-    }
-
-    public LocalDateTime getLastUsedDate()
-    {
-        return lastUsedDate;
     }
 
     public void setLastUsedDate(LocalDateTime lastUsedDate)

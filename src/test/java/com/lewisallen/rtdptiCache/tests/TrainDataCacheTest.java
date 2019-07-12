@@ -1,12 +1,14 @@
 package com.lewisallen.rtdptiCache.tests;
 
 import com.lewisallen.rtdptiCache.caches.Caches;
-import com.lewisallen.rtdptiCache.caches.TrainDataCache;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TrainDataCacheTest
@@ -15,16 +17,18 @@ public class TrainDataCacheTest
     @BeforeAll
     void InitialiseTrainDepartureCache()
     {
-        new TrainDataCache();
+        Caches.resetTrainData(new ConcurrentHashMap<>());
     }
 
     @Test
     void testTrainCache()
     {
+        Map<Object, JSONObject> map = new ConcurrentHashMap<>();
         for (int i = 0; i < 10; i++)
         {
-            TrainDataCache.trainDepartureCache.put(Integer.toString(i), new JSONObject());
+            map.put(Integer.toString(i), new JSONObject());
         }
+        Caches.resetTrainData(map);
 
         // Generate list of keys to pass to function.
         String[] stationCodes = new String[10];
