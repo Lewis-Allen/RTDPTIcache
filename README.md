@@ -71,6 +71,10 @@ Run using the maven wrapper. Use `./mvnw` for Batch or `./mvnw.cmd` for Windows 
 
 To Do!
 
+## Terminology
+
+To Do!
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
