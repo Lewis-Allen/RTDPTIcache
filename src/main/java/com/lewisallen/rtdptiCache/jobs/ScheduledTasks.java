@@ -65,7 +65,7 @@ public class ScheduledTasks
         updateSIRICache();
         updateStationCache();
         updateTrainsDepartureCache();
-        log.info("updateCaches: Caches update complete at {}, taking {} milliseconds on {}",
+        log.debug("updateCaches: Caches update complete at {}, taking {} milliseconds on {}",
                 dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
     }
 
@@ -75,7 +75,7 @@ public class ScheduledTasks
         LocalDateTime start = LocalDateTime.now();
         updateBusCodesCache();
         updateSIRICache();
-        log.info("updateBusCaches: Buses update complete at {}, taking {} milliseconds on {}",
+        log.debug("updateBusCaches: Buses update complete at {}, taking {} milliseconds on {}",
                 dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
     }
 
@@ -85,7 +85,7 @@ public class ScheduledTasks
         LocalDateTime start = LocalDateTime.now();
         updateStationCache();
         updateTrainsDepartureCache();
-        log.info("updateStationCaches: Stations update complete at {}, taking {} milliseconds on {}",
+        log.debug("updateStationCaches: Stations update complete at {}, taking {} milliseconds on {}",
                 dateFormat.format(new Date()), start.until(LocalDateTime.now(), ChronoUnit.MILLIS), Thread.currentThread().getName());
     }
 
