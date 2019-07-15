@@ -18,7 +18,6 @@ public class BusCodesCacheTest
     void testNaPTANStopNames()
     {
         BusCodesCache.busCodeCache = new ConcurrentHashMap<>();
-
         // Populate data.
         for (int i = 0; i < 10; i++)
         {

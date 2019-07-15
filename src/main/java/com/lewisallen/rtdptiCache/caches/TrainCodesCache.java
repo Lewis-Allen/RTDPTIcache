@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class TrainCodesCache
 {
-    public static TrainRepository repository;
+    private static TrainRepository repository;
 
     public static Map<String, Station> stationCache = new ConcurrentHashMap<>();
 

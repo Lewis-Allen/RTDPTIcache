@@ -33,6 +33,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Terminology] (#terminology)
 * [License](#license)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
