@@ -54,7 +54,7 @@ class TimetableControllerTest {
         MockMultipartFile file = new MockMultipartFile("file",
                 "example.csv",
                 "text/plain",
-                ("Test Stop 2" + System.lineSeparator() + "11:59,UB1,Old Steine").getBytes());
+                ("Test Stop 2" + System.lineSeparator() + "23:59,UB1,Old Steine").getBytes());
 
         mockMvc.perform(MockMvcRequestBuilders
                 .multipart("/timetable")

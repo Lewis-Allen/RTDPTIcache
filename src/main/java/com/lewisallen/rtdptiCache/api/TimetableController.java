@@ -71,7 +71,7 @@ public class TimetableController {
 
     @GetMapping
     public String showListOfTimetables(Model model) {
-        List<Timetable> timetables = repository.findAll();
+        List<Timetable> timetables = repository.findAllByOrderByLastUsedDateDesc();
 
         model.addAttribute("timetables", timetables);
 

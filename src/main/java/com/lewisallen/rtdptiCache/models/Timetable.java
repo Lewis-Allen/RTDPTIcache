@@ -58,4 +58,12 @@ public class Timetable {
                 "Timetable[id=%d, name='%s', data='%s']",
                 id, name, data);
     }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDateTime getLastUsedDate() {
+        return lastUsedDate;
+    }
 }
