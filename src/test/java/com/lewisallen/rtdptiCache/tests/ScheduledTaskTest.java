@@ -33,7 +33,6 @@ public class ScheduledTaskTest {
         tasks.updateTrainsDepartureCache();
     }
 
-    // All at once.
     @Test
     void testUpdateAllCaches() {
         tasks.updateCaches();
