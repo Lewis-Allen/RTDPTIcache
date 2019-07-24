@@ -9,25 +9,20 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BusDataCacheTest
-{
+public class BusDataCacheTest {
     /**
      * Asserts getting from cache wraps in payload.
      */
     @Test
-    void testSIRICacheWrapping()
-    {
+    void testSIRICacheWrapping() {
 
         // Create a JSON Object with a random key/value
         String randomInt = Double.toString(Math.random());
 
         JSONObject j = new JSONObject();
-        try
-        {
+        try {
             j.put("Key", randomInt);
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             Assertions.fail("Failed to add key with random integer");
         }
@@ -38,31 +33,24 @@ public class BusDataCacheTest
         Caches.resetBusData(map);
 
         // Ensure method returns stops.
-        try
-        {
+        try {
             JSONObject res = Caches.getSiriJSON(new String[]{"1"});
             Assertions.assertTrue(res.getJSONObject("busStops").has("1"));
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             Assertions.fail();
         }
     }
 
     @Test
-    void testDodgyCode()
-    {
-        try
-        {
+    void testDodgyCode() {
+        try {
             JSONObject res = Caches.getSiriJSON(new String[]{"Dodgy"});
             System.out.println(res.toString());
             Assertions.assertTrue(res.has("busStops"));
             Assertions.assertTrue(res.getJSONObject("busStops").has("Dodgy"));
             Assertions.assertTrue(res.getJSONObject("busStops").getJSONObject("Dodgy").isEmpty());
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             Assertions.fail();
         }

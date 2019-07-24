@@ -13,8 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "naptan")
-public class Bus
-{
+public class Bus {
     @Id
     @Column(name = "systemcodenumber")
     private String systemCodeNumber;
@@ -29,29 +28,24 @@ public class Bus
     private int retrieve;
 
     // Default constructor used by Spring
-    public Bus()
-    {
+    public Bus() {
     }
 
-    public Bus(String systemCodeNumber, String longDescription, String identifier)
-    {
+    public Bus(String systemCodeNumber, String longDescription, String identifier) {
         this.systemCodeNumber = systemCodeNumber;
         this.longDescription = longDescription;
         this.identifier = identifier;
     }
 
-    public String getSystemCodeNumber()
-    {
+    public String getSystemCodeNumber() {
         return systemCodeNumber;
     }
 
-    public String getLongDescription()
-    {
+    public String getLongDescription() {
         return longDescription;
     }
 
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return identifier;
     }
 }

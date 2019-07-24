@@ -8,15 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /*
     WARNING: Contains tests that rely on the data inserted by migrations.
@@ -24,126 +29,94 @@ import java.util.concurrent.ConcurrentHashMap;
     Migrations located in db/migrations
  */
 
-@AutoConfigureWebTestClient
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DashboardControllerTest
-{
+@AutoConfigureMockMvc
+class DashboardControllerTest {
     @Autowired
-    private WebTestClient wtc;
+    private MockMvc mockMvc;
 
     @Autowired
     private ScheduledTasks tasks;
 
     @BeforeAll
-    void setup()
-    {
+    void setup() {
         tasks.updateCaches();
     }
 
     @Test
-    void showDashboardCreatePage()
-    {
-        this.wtc
-                .get()
-                .uri("/dashboard/create")
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    void showDashboardCreatePage() throws Exception {
+        mockMvc.perform(get("/dashboard/create"))
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
-    void testGetDashboard()
-    {
-        // Test dashboard with that does not exist.
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/10000").build())
-                .exchange()
-                .expectStatus()
-                .is4xxClientError();
+    void testMissingDashboard() throws Exception {
+        mockMvc.perform(get("/dashboard/10000"))
+                .andExpect(status().is4xxClientError());
+    }
 
-        // One bus.
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/1").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    @Test
+    void testOneBusDashboard() throws Exception {
+        mockMvc.perform(get("/dashboard/1"))
+                .andExpect(status().is2xxSuccessful());
+    }
 
-        // One train.
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/2").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    @Test
+    void testOneTrain() throws Exception {
+        mockMvc.perform(get("/dashboard/2"))
+                .andExpect(status().is2xxSuccessful());
+    }
 
-        // Multiple buses.
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/3").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    @Test
+    void testMultipleBuses() throws Exception {
+        mockMvc.perform(get("/dashboard/3"))
+                .andExpect(status().is2xxSuccessful());
+    }
 
-        // Multiple trains.
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/4").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    @Test
+    void testMultipleTrains() throws Exception {
+        mockMvc.perform(get("/dashboard/4"))
+                .andExpect(status().is2xxSuccessful());
+    }
 
-        // Flipping
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/5").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    @Test
+    void testFlipping() throws Exception {
+        mockMvc.perform(get("/dashboard/5"))
+                .andExpect(status().is2xxSuccessful());
 
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/6").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+        mockMvc.perform(get("/dashboard/6"))
+                .andExpect(status().is2xxSuccessful());
+    }
 
-        // Name override.
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/7").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    @Test
+    void testNameOverride() throws Exception {
+        mockMvc.perform(get("/dashboard/7"))
+                .andExpect(status().is2xxSuccessful());
+    }
 
-        // Test existing stop but no data
-        // Wipe Bus Departure cache
+
+    /**
+     * This test must run after prior tests due to the wiping of the static caches.
+     * The 'Order' annotation ensures this.
+     */
+    @Test
+    @Order(2)
+    void testNoData() throws Exception {
         Caches.resetBusData(new ConcurrentHashMap<>());
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/1").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
 
-        // Wipe Train Departures
+        mockMvc.perform(get("/dashboard/1"))
+                .andExpect(status().is2xxSuccessful());
+
         Caches.resetTrainData(new ConcurrentHashMap<>());
 
-        // Test empty station
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/dashboard/2").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+        mockMvc.perform(get("/dashboard/2"))
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
-    void testPostDashboard()
-    {
+    void testPostDashboard() throws Exception {
         JSONObject body = new JSONObject();
         List<String> codes = new ArrayList<>();
 
@@ -152,30 +125,19 @@ class DashboardControllerTest
         body.put("template", "single");
         body.put("flipTo", "default");
 
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/dashboard").build())
-                .body(BodyInserters.fromObject(body.toString()))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
+        mockMvc.perform(post("/dashboard")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())).andExpect(status().is3xxRedirection());
 
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/dashboard").build())
-                .body(BodyInserters.fromObject(body.toString()))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
+        // Make request again to make sure redirect to already created resource.
+        mockMvc.perform(post("/dashboard")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())).andExpect(status().is3xxRedirection());
 
         body.remove("flipTo");
 
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/dashboard").build())
-                .body(BodyInserters.fromObject(body.toString()))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
+        mockMvc.perform(post("/dashboard")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())).andExpect(status().is3xxRedirection());
     }
 }

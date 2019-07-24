@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>Upload Timetable</title>
+</head>
+<style>
+    body {
+        font-size: 20px;
+        font-family: 'Roboto', Arial;
+    }
+
+    .title {
+        text-align: center;
+    }
+
+    .wrapper {
+        text-align: center;
+    }
+
+    .item {
+        display: inline-block;
+    }
+
+</style>
+<body>
+<h1 class="title">Upload a Template</h1>
+<div class="wrapper">
+    <div class="item">
+        <form action="/timetable" enctype="text/plain" method="post">
+            <textarea cols=50 name="response" rows=20 type="text"></textarea>
+            <input type="submit" value="submit"/>
+        </form>
+    </div>
+
+    <div>
+        <form action="/timetable" enctype="multipart/form-data" method="POST">
+            <table>
+                <tr>
+                    <td>File to upload:</td>
+                    <td><input name="file" type="file"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Upload"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>

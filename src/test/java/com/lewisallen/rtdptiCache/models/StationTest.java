@@ -1,15 +1,12 @@
 package com.lewisallen.rtdptiCache.models;
 
-import com.lewisallen.rtdptiCache.models.Station;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class StationTest
-{
+public class StationTest {
 
     @Test
-    void stationTest()
-    {
+    void stationTest() {
         Station stationDefaultConstructor = new Station();
         Station station = new Station("Moulsecoomb", "MCB");
 

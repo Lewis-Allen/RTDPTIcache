@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class DashboardTest
-{
+class DashboardTest {
     @Test
-    void testDashboard()
-    {
+    void testDashboard() {
         Dashboard dashboard = new Dashboard("Template", "OverrideName", "Data", 2L);
 
         dashboard.setSwitchId(1L);

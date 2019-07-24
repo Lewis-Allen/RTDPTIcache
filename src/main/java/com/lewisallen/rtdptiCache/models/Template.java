@@ -13,8 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "template")
-public class Template
-{
+public class Template {
     @Id
     @Column(name = "templateid")
     private int templateId;
@@ -23,12 +22,10 @@ public class Template
     private String templateName;
 
     // Default constructor used by Spring
-    public Template()
-    {
+    public Template() {
     }
 
-    public String getTemplateName()
-    {
+    public String getTemplateName() {
         return templateName;
     }
 }

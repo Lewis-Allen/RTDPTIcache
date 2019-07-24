@@ -18,8 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class SIRIResponseParser
-{
+public class SIRIResponseParser {
 
     private OffsetDateTime responseTime;
 
@@ -28,8 +27,7 @@ public class SIRIResponseParser
      *
      * @param response An XML response received from the SIRI service.
      */
-    public void parse(ResponseEntity<String> response)
-    {
+    public void parse(ResponseEntity<String> response) {
         // TODO: split up into multiple
 
         JSONObject siriResponse = XML.toJSONObject(response.getBody());
@@ -40,27 +38,22 @@ public class SIRIResponseParser
                 .get("ResponseTimestamp").toString());
 
         // Check if there are any visits, if not then we can simply wipe the cache.
-        if (responsePathTransverser(siriResponse, "StopMonitoringDelivery").has("MonitoredStopVisit"))
-        {
+        if (responsePathTransverser(siriResponse, "StopMonitoringDelivery").has("MonitoredStopVisit")) {
             JSONArray monitoredStops;
             List<JSONObject> monitoredStopsList = new ArrayList<>();
 
             // Handle when only one monitored stop is available (it is returned as a JSONObject rather than a JSONArray).
             if (responsePathTransverser(siriResponse, "StopMonitoringDelivery")
-                    .get("MonitoredStopVisit") instanceof JSONArray)
-            {
+                    .get("MonitoredStopVisit") instanceof JSONArray) {
                 // If there are multiple stops, we get all stops as a JSONArray, then add each to a ArrayList.
                 monitoredStops = responsePathTransverser(siriResponse, "StopMonitoringDelivery")
                         .getJSONArray("MonitoredStopVisit");
 
                 // Convert JSONArray to standard List<JSONObject>
-                for (int i = 0; i < monitoredStops.length(); i++)
-                {
+                for (int i = 0; i < monitoredStops.length(); i++) {
                     monitoredStopsList.add(monitoredStops.getJSONObject(i));
                 }
-            }
-            else
-            {
+            } else {
                 // If there is only a single stop, we get the singular stop JSONObject and add it to an ArrayList.
                 JSONObject stop = responsePathTransverser(siriResponse, "MonitoredStopVisit");
 
@@ -73,8 +66,7 @@ public class SIRIResponseParser
                     .collect(Collectors.groupingBy(this::getMonitoringRef));
 
             // Create a cache to hold list of stops alongside other info.
-            for (String naptanKey : groupedList.keySet())
-            {
+            for (String naptanKey : groupedList.keySet()) {
 
                 // Remove irrelevant info from json and add departure. Sort stops by departure time.
                 List<JSONObject> trimmedList = groupedList.get(naptanKey)
@@ -101,17 +93,13 @@ public class SIRIResponseParser
         Caches.resetBusData(cache);
     }
 
-    private int getSecondsUntilDeparture(JSONObject o)
-    {
-        try
-        {
+    private int getSecondsUntilDeparture(JSONObject o) {
+        try {
             return Integer.parseInt(o.getJSONObject("MonitoredVehicleJourney")
                     .getJSONObject("MonitoredCall")
                     .get("DepartureSeconds").toString());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             String message = String.format("Error extracting departure seconds from %s", o);
             ErrorHandler.handle(e, Level.WARNING, message);
             return 0;
@@ -124,8 +112,7 @@ public class SIRIResponseParser
      * @param j JSONObject to remove fields from.
      * @return Processed JSONObject.
      */
-    private JSONObject removeFields(JSONObject j)
-    {
+    private JSONObject removeFields(JSONObject j) {
         j.remove("RecordedAtTime");
         j.remove("MonitoringRef");
 
@@ -146,8 +133,7 @@ public class SIRIResponseParser
      * @param j Stop visit JSONObject
      * @return Stop visit JSONObject with departure time key.
      */
-    private JSONObject addDeparture(JSONObject j)
-    {
+    private JSONObject addDeparture(JSONObject j) {
         // Get the object that holds the time values.
         JSONObject parent = j.getJSONObject("MonitoredVehicleJourney").getJSONObject("MonitoredCall");
 
@@ -165,8 +151,7 @@ public class SIRIResponseParser
      * @param json Monitored call JSONObject
      * @return Seconds until journey departure.
      */
-    private long getDepartureSeconds(JSONObject json)
-    {
+    private long getDepartureSeconds(JSONObject json) {
         String[] jsonKeys = new String[]{
                 "ExpectedDepartureTime",
                 "AimedDepartureTime",
@@ -174,14 +159,10 @@ public class SIRIResponseParser
                 "AimedArrivalTime"
         };
 
-        for (String key : jsonKeys)
-        {
-            try
-            {
+        for (String key : jsonKeys) {
+            try {
                 return parseTime(json, key);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 // empty
             }
         }
@@ -199,8 +180,7 @@ public class SIRIResponseParser
      * @param key  key to parse
      * @return Time in seconds until departure.
      */
-    private long parseTime(JSONObject json, String key)
-    {
+    private long parseTime(JSONObject json, String key) {
         OffsetDateTime expectedDepartureTime = OffsetDateTime.parse(json.get(key).toString());
         return responseTime.until(expectedDepartureTime, ChronoUnit.SECONDS);
     }
@@ -212,18 +192,14 @@ public class SIRIResponseParser
      * @param key          the key to look for in the response. If no key is supplied, Service Delivery will be returned.
      * @return JSONObject for key.
      */
-    private JSONObject responsePathTransverser(JSONObject siriResponse, String key)
-    {
+    private JSONObject responsePathTransverser(JSONObject siriResponse, String key) {
         // We never need anything above the Siri and ServiceDelivery nodes.
         JSONObject result = siriResponse.getJSONObject("Siri")
                 .getJSONObject("ServiceDelivery");
 
-        if (key.equals("StopMonitoringDelivery"))
-        {
+        if (key.equals("StopMonitoringDelivery")) {
             result = result.getJSONObject(key);
-        }
-        else if (key.equals("MonitoredStopVisit"))
-        {
+        } else if (key.equals("MonitoredStopVisit")) {
             result = result.getJSONObject("StopMonitoringDelivery")
                     .getJSONObject("MonitoredStopVisit");
         }
@@ -237,8 +213,7 @@ public class SIRIResponseParser
      * @param json JSON to parse
      * @return value of MontoringRef key.
      */
-    private String getMonitoringRef(JSONObject json)
-    {
+    private String getMonitoringRef(JSONObject json) {
         return json.get("MonitoringRef").toString();
     }
 }

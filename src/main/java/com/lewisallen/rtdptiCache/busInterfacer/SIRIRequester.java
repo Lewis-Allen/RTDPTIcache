@@ -6,12 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class SIRIRequester
-{
+public class SIRIRequester {
     private String uri;
 
-    public SIRIRequester(String uri)
-    {
+    public SIRIRequester(String uri) {
         this.uri = uri;
     }
 
@@ -21,8 +19,7 @@ public class SIRIRequester
      * @param xml XML to be placed in the body of the POST request.
      * @return SIRI response.
      */
-    public ResponseEntity<String> makeSIRIRequest(String xml)
-    {
+    public ResponseEntity<String> makeSIRIRequest(String xml) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_XML);
 

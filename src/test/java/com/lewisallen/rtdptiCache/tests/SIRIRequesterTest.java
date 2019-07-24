@@ -11,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
-public class SIRIRequesterTest
-{
+public class SIRIRequesterTest {
     @Value("${rtdpti.siriuri}")
     private String siriuri;
 
@@ -30,8 +29,7 @@ public class SIRIRequesterTest
      */
 
     @Test
-    void testSiriRequest()
-    {
+    void testSiriRequest() {
         SIRIRequester siriRequest = new SIRIRequester(siriuri);
         ResponseEntity<String> response = siriRequest.makeSIRIRequest("<ServiceDelivery></ServiceDelivery>");
 

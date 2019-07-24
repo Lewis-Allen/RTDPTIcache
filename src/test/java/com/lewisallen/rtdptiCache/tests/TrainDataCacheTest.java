@@ -11,29 +11,24 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TrainDataCacheTest
-{
+public class TrainDataCacheTest {
 
     @BeforeAll
-    void InitialiseTrainDepartureCache()
-    {
+    void InitialiseTrainDepartureCache() {
         Caches.resetTrainData(new ConcurrentHashMap<>());
     }
 
     @Test
-    void testTrainCache()
-    {
+    void testTrainCache() {
         Map<Object, JSONObject> map = new ConcurrentHashMap<>();
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             map.put(Integer.toString(i), new JSONObject());
         }
         Caches.resetTrainData(map);
 
         // Generate list of keys to pass to function.
         String[] stationCodes = new String[10];
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             stationCodes[i] = Integer.toString(i);
         }
 
@@ -41,8 +36,7 @@ public class TrainDataCacheTest
         JSONObject res = Caches.getTrainJSON(stationCodes);
 
         // Test response.
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             Assertions.assertTrue(res.getJSONObject("trainStations").has(Integer.toString(i)));
         }
     }

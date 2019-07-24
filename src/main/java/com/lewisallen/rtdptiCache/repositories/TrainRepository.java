@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface TrainRepository extends JpaRepository<Station, String>
-{
+public interface TrainRepository extends JpaRepository<Station, String> {
     List<Station> findByRetrieve(int retrieve);
 }

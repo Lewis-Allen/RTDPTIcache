@@ -11,14 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootTest
-public class StopControllerTest
-{
+public class StopControllerTest {
 
     private StopController controller = new StopController();
 
     @Test
-    void testEmptyRequest()
-    {
+    void testEmptyRequest() {
         JSONObject req = new JSONObject();
         JSONObject res = new JSONObject(controller.stops(req).getBody());
 
@@ -26,8 +24,7 @@ public class StopControllerTest
     }
 
     @Test
-    void testDodgyRequest()
-    {
+    void testDodgyRequest() {
         JSONObject req = new JSONObject();
         req.put("codes", "dfghjkdfghjkdfghjkl");
         JSONObject res = new JSONObject(controller.stops(req).getBody());
@@ -38,8 +35,7 @@ public class StopControllerTest
     }
 
     @Test
-    void singleStopRequests()
-    {
+    void singleStopRequests() {
         Caches.resetBusData(new ConcurrentHashMap<>());
         JSONObject req = new JSONObject();
         req.put("codes", "14900000670");
@@ -64,8 +60,7 @@ public class StopControllerTest
     }
 
     @Test
-    void multipleStopRequests()
-    {
+    void multipleStopRequests() {
         // Query multiple buses
         Caches.resetBusData(new ConcurrentHashMap<>());
         JSONObject req = new JSONObject();

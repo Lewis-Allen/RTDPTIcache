@@ -4,11 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /*
     WARNING: Contains tests that rely on the data inserted by migrations.
@@ -16,79 +20,57 @@ import org.springframework.web.reactive.function.BodyInserters;
     Migrations located in db/migrations
  */
 
-@AutoConfigureWebTestClient
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TimetableControllerTest
-{
+@AutoConfigureMockMvc
+class TimetableControllerTest {
     @Autowired
-    private WebTestClient wtc;
+    private MockMvc mockMvc;
 
     @Test
-    void testTimetableScreenCreate()
-    {
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/timetable/create").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    void testTimetableScreenCreate() throws Exception {
+        mockMvc.perform(get("/timetable/create"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void testViewTimetable()
-    {
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/timetable/1").build())
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful();
+    void testViewTimetable() throws Exception {
+        mockMvc.perform(get("/timetable/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/timetable/2"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void testMissingTimetable()
-    {
-        this.wtc
-                .get()
-                .uri(builder -> builder.path("/timetable/10000").build())
-                .exchange()
-                .expectStatus()
-                .is4xxClientError();
+    void testMissingTimetable() throws Exception {
+        mockMvc.perform(get("/timetable/10000"))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
-    void testLateStops()
-    {
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/timetable").build())
-                .body(BodyInserters.fromObject("data =Test Stop" + System.lineSeparator() +
-                        "11:59,UB1,Old Steine"))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
-    }
+    void testPostTimetable() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file",
+                "example.csv",
+                "text/plain",
+                ("Test Stop 2" + System.lineSeparator() + "11:59,UB1,Old Steine").getBytes());
 
-    @Test
-    void testPostTimetable()
-    {
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/timetable").build())
-                .body(BodyInserters.fromObject("data=Test Stop" + System.lineSeparator() + "18:00,UB1,Old Steine"))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
+        mockMvc.perform(MockMvcRequestBuilders
+                .multipart("/timetable")
+                .file(file))
+                .andExpect(status().is3xxRedirection());
 
         // Make request again to make sure redirect to already created resource.
-        this.wtc
-                .post()
-                .uri(builder -> builder.path("/timetable").build())
-                .body(BodyInserters.fromObject("data=Test Stop" + System.lineSeparator() + "18:00,UB1,Old Steine"))
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection();
+        mockMvc.perform(MockMvcRequestBuilders
+                .multipart("/timetable")
+                .file(file))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void testGetTimetableList() throws Exception {
+        mockMvc.perform(get("/timetable"))
+                .andExpect(status().isOk());
     }
 }

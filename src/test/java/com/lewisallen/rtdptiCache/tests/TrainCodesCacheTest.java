@@ -11,21 +11,17 @@ import java.util.Map;
 import java.util.Set;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TrainCodesCacheTest
-{
+public class TrainCodesCacheTest {
     @Test
-    void testStationNames()
-    {
+    void testStationNames() {
         // Populate data.
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             TrainCodesCache.stationCache.put(Integer.toString(i), new Station("Example Location" + i, Integer.toString(i)));
         }
 
         // Generate list of keys to pass to function.
         String[] codesList = new String[10];
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             codesList[i] = Integer.toString(i);
         }
 
@@ -33,19 +29,16 @@ public class TrainCodesCacheTest
         Map<String, String> res = TrainCodesCache.getStationNames(codesList);
 
         // Test response.
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             Assertions.assertEquals(res.containsKey(Integer.toString(i)), true);
         }
     }
 
     @Test
-    void testCachedCodes()
-    {
+    void testCachedCodes() {
         TrainCodesCache.stationCache = new HashMap<>();
 
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             TrainCodesCache.stationCache.put(Integer.toString(i), new Station("Example Location" + i, Integer.toString(i)));
         }
 
@@ -55,14 +48,12 @@ public class TrainCodesCacheTest
     }
 
     @Test
-    void testCachePopulate()
-    {
+    void testCachePopulate() {
         TrainCodesCache.populateCache();
     }
 
     @Test
-    void testDoesStopExist()
-    {
+    void testDoesStopExist() {
         Assertions.assertFalse(TrainCodesCache.checkStopExists("shouldn't exist"));
 
         TrainCodesCache.stationCache.put("shouldn't exist", new Station("shouldn't exist'", "Test"));
@@ -71,8 +62,7 @@ public class TrainCodesCacheTest
     }
 
     @Test
-    void testGetStation()
-    {
+    void testGetStation() {
         Station station = new Station("TestStation", "TST");
         Assertions.assertEquals(TrainCodesCache.getStation("TST"), null);
 

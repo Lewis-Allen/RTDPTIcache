@@ -11,8 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "stations")
-public class Station
-{
+public class Station {
     @Column(name = "stationname")
     private String stationName;
 
@@ -24,23 +23,19 @@ public class Station
     private int retrieve;
 
     // Default constructor used by Spring
-    public Station()
-    {
+    public Station() {
     }
 
-    public Station(String stationName, String crsCode)
-    {
+    public Station(String stationName, String crsCode) {
         this.stationName = stationName;
         this.crsCode = crsCode;
     }
 
-    public String getStationName()
-    {
+    public String getStationName() {
         return stationName;
     }
 
-    public String getCrsCode()
-    {
+    public String getCrsCode() {
         return crsCode;
     }
 }

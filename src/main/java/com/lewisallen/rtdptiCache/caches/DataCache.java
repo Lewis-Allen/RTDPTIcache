@@ -6,12 +6,10 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DataCache
-{
+public class DataCache {
     private Map<Object, JSONObject> cache = new ConcurrentHashMap<>();
 
-    public void reset(Map<Object, JSONObject> cache)
-    {
+    public void reset(Map<Object, JSONObject> cache) {
         this.cache.clear();
         this.cache.putAll(cache);
     }
@@ -21,13 +19,11 @@ public class DataCache
      * @return
      * @throws JSONException
      */
-    public JSONObject getJSON(String[] codes, String identifier) throws JSONException
-    {
+    public JSONObject getJSON(String[] codes, String identifier) throws JSONException {
         JSONObject result = new JSONObject();
         JSONObject entry = new JSONObject();
 
-        for (String s : codes)
-        {
+        for (String s : codes) {
             entry.put(s, cache.containsKey(s) ? cache.get(s) : new JSONObject());
         }
 

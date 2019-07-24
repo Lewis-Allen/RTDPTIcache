@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "dashboard")
-public class Dashboard
-{
+public class Dashboard {
     @Column(name = "dashboardid")
     private @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -36,63 +35,52 @@ public class Dashboard
     private LocalDateTime lastUsedDate = LocalDateTime.now();
 
     // Default constructor used by Spring
-    public Dashboard()
-    {
+    public Dashboard() {
     }
 
-    public Dashboard(String template, String overrideName, String data)
-    {
+    public Dashboard(String template, String overrideName, String data) {
         this.data = data;
         this.overrideName = overrideName;
         this.template = template;
     }
 
-    public Dashboard(String template, String overrideName, String data, Long switchId)
-    {
+    public Dashboard(String template, String overrideName, String data, Long switchId) {
         this(template, overrideName, data);
         this.switchId = switchId;
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public String getData()
-    {
+    public String getData() {
         return data;
     }
 
-    public void setLastUsedDate(LocalDateTime lastUsedDate)
-    {
+    public void setLastUsedDate(LocalDateTime lastUsedDate) {
         this.lastUsedDate = lastUsedDate;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format(
                 "Dashboard[id=%d, data='%s']",
                 id, data);
     }
 
-    public String getTemplate()
-    {
+    public String getTemplate() {
         return template;
     }
 
-    public Long getSwitchId()
-    {
+    public Long getSwitchId() {
         return switchId;
     }
 
-    public void setSwitchId(Long switchId)
-    {
+    public void setSwitchId(Long switchId) {
         this.switchId = switchId;
     }
 
-    public String getOverrideName()
-    {
+    public String getOverrideName() {
         return overrideName;
     }
 }

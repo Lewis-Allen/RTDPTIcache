@@ -1,7 +1,8 @@
 <div class="clock" th:fragment="clock" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="clockContainer">
         <div class="longFormatContainer">
-            <p class="longFormat" th:text="${#temporals.dayOfWeekName(localDateTime) + ', ' + #temporals.day(localDateTime) + ' ' + #temporals.monthName(localDateTime) + ', ' + #temporals.year(localDateTime)}"></p>
+            <p class="longFormat"
+               th:text="${#temporals.dayOfWeekName(localDateTime) + ', ' + #temporals.day(localDateTime) + ' ' + #temporals.monthName(localDateTime) + ', ' + #temporals.year(localDateTime)}"></p>
         </div>
         <div class="TwentyFourContainer">
             <p class="TwentyFourTime" th:text="${#temporals.format(localDateTime, 'HH:mm')}"></p>
@@ -30,14 +31,16 @@
         <tbody>
         <!-- Bus Visits -->
         <tr th:each="busVisit : ${busStop.MonitoredStopVisits}">
-            <td class="shrink" th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}" ></td>
+            <td class="shrink"
+                th:text="${#strings.replace(busVisit.MonitoredVehicleJourney.PublishedLineName,'.0','')}"></td>
             <td class="destination" th:text="${busVisit.MonitoredVehicleJourney.DestinationName}"></td>
-            <td class="shrink" th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}" ></td>
+            <td class="shrink"
+                th:text="${busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60 < 2 ? 'Due' : #numbers.formatDecimal(T(Math).floor(busVisit.MonitoredVehicleJourney.MonitoredCall.DepartureSeconds / 60), 0, 0) + ' mins'}"></td>
         </tr>
 
         <!-- Padding -->
         <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(busStop.MonitoredStopVisits), 1)}">
-            <td class="shrink" ></td>
+            <td class="shrink"></td>
             <td>&nbsp;</td>
             <td class="shrink"></td>
         </tr>
@@ -81,7 +84,7 @@
                     <td class="shrink" th:text="${departure.status}"></td>
                     <th:block th:switch="${#maps.containsKey(departure, 'platform')}">
                         <td class="shrink" th:case="true" th:text="${departure.platform}"></td>
-                        <td class="shrink" th:case="false"> - </td>
+                        <td class="shrink" th:case="false"> -</td>
                     </th:block>
                 </tr>
 
@@ -112,14 +115,14 @@
         <tbody>
         <!-- Bus Visits -->
         <tr th:each="visit : ${timetable.visits}">
-            <td class="shrink" th:text="${visit.Vehicle}" ></td>
+            <td class="shrink" th:text="${visit.Vehicle}"></td>
             <td class="destination" th:text="${visit.Destination}"></td>
-            <td class="shrink" th:text="${visit.Departure}" ></td>
+            <td class="shrink" th:text="${visit.Departure}"></td>
         </tr>
 
         <!-- Padding -->
         <tr th:each="i : ${#numbers.sequence(0, 8 - #lists.size(timetable.visits), 1)}">
-            <td class="shrink" ></td>
+            <td class="shrink"></td>
             <td>&nbsp;</td>
             <td class="shrink"></td>
         </tr>

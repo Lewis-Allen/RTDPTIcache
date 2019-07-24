@@ -3,15 +3,12 @@ package com.lewisallen.rtdptiCache.models;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class TimetableTest
-{
+class TimetableTest {
     @Test
-    void testTimetable()
-    {
+    void testTimetable() {
         Timetable timetable = new Timetable("Hello World", "1,2,3");
 
         Assertions.assertAll(

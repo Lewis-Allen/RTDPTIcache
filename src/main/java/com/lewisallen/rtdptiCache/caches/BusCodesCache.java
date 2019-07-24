@@ -13,13 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 // TODO: remove duplication here + TrainCodesCache
 
 @Component
-public class BusCodesCache
-{
+public class BusCodesCache {
     public static Map<String, Bus> busCodeCache = new ConcurrentHashMap<>();
     private static BusRepository repository;
 
-    public BusCodesCache(BusRepository repository)
-    {
+    public BusCodesCache(BusRepository repository) {
         BusCodesCache.repository = repository;
     }
 
@@ -29,11 +27,9 @@ public class BusCodesCache
      * @param codes Codes for stop names.
      * @return Map of code to stop name
      */
-    public static Map<String, String> getStopNames(String[] codes)
-    {
+    public static Map<String, String> getStopNames(String[] codes) {
         Map<String, String> res = new HashMap<>();
-        for (String s : codes)
-        {
+        for (String s : codes) {
             res.put(s, BusCodesCache.busCodeCache.get(s).getLongDescription());
         }
 
@@ -43,14 +39,12 @@ public class BusCodesCache
     /**
      * Populates the Bus Codes cache with values based off active stops in DB.
      */
-    public static void populateCache()
-    {
+    public static void populateCache() {
         List<Bus> retrieveBuses = repository.findByRetrieve(1);
 
         Map<String, Bus> busCodes = new ConcurrentHashMap<>();
 
-        for (Bus bus : retrieveBuses)
-        {
+        for (Bus bus : retrieveBuses) {
             busCodes.put(bus.getSystemCodeNumber(), bus);
         }
 
@@ -63,8 +57,7 @@ public class BusCodesCache
      * @param busCode Bus code of stop to check.
      * @return Whether stop exists or not.
      */
-    public static boolean checkStopExists(String busCode)
-    {
+    public static boolean checkStopExists(String busCode) {
         return BusCodesCache.busCodeCache.containsKey(busCode);
     }
 
@@ -74,8 +67,7 @@ public class BusCodesCache
      * @param busCode the Bus code to get
      * @return Bus object for given code.
      */
-    public static Bus getBus(String busCode)
-    {
+    public static Bus getBus(String busCode) {
         return BusCodesCache.busCodeCache.getOrDefault(busCode, null);
     }
 
@@ -84,8 +76,7 @@ public class BusCodesCache
      *
      * @return Set of codes cached.
      */
-    public static Set<String> getCachedCodes()
-    {
+    public static Set<String> getCachedCodes() {
         return BusCodesCache.busCodeCache.keySet();
     }
 

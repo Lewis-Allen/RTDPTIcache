@@ -7,8 +7,7 @@ import org.jdom.Text;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-public class SIRIString
-{
+public class SIRIString {
 
     // Max stops to receive in response from SIRI.
     private static final int MAX_STOP_VISITS = 9;
@@ -21,8 +20,7 @@ public class SIRIString
      * @param naptans list of NaPTAN codes to build the request for.
      * @return XML String of request
      */
-    public String generateXml(String[] naptans)
-    {
+    public String generateXml(String[] naptans) {
         Document doc = new Document();
 
         Namespace ns = Namespace.getNamespace("http://www.siri.org.uk/siri");
@@ -38,8 +36,7 @@ public class SIRIString
         Element serviceRequest = new Element("ServiceRequest", ns);
         siri.addContent(serviceRequest);
 
-        for (String s : naptans)
-        {
+        for (String s : naptans) {
             serviceRequest.addContent(individualStopXml(s, ns));
         }
 
@@ -56,8 +53,7 @@ public class SIRIString
      * @param ns     Namespace
      * @return Element for individual stop
      */
-    private Element individualStopXml(String naptan, Namespace ns)
-    {
+    private Element individualStopXml(String naptan, Namespace ns) {
         // Create root "StopMonitoringRequest" element.
         Element stopMonitoringRequest = new Element("StopMonitoringRequest", ns);
         stopMonitoringRequest.setAttribute("version", "1.3");
@@ -88,8 +84,7 @@ public class SIRIString
      *
      * @return XML String
      */
-    public String getXml()
-    {
+    public String getXml() {
         return xmlString;
     }
 }

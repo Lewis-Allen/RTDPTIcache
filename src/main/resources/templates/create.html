@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Create - RTDPTI</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
     <style>
@@ -49,78 +49,80 @@
             flex-grow: 1;
             background-color: #ffeead;
         }
+
     </style>
 </head>
 <body>
-    <noscript>
-        <h1 class="scriptWarning" style="text-align: center;">This page requires JavaScript to function properly.</h1>
-    </noscript>
-    <h1 class="title">Create Dashboard</h1>
-    <div class="wrapper">
-        <h2>Template</h2>
-        <p>Choose a template for displaying transport information.</p>
-        <select id="template" selected="default">
-            <th:block th:each="template : ${availableTemplates}">
-                <option th:text="${template}" th:value="${template}"></option>
-            </th:block>
-        </select>
+<noscript>
+    <h1 class="scriptWarning" style="text-align: center;">This page requires JavaScript to function properly.</h1>
+</noscript>
+<h1 class="title">Create Dashboard</h1>
+<div class="wrapper">
+    <h2>Template</h2>
+    <p>Choose a template for displaying transport information.</p>
+    <select id="template" selected="default">
+        <th:block th:each="template : ${availableTemplates}">
+            <option th:text="${template}" th:value="${template}"></option>
+        </th:block>
+    </select>
 
-        <h2>Switch To</h2>
-        <p>If appropriate, choose a template in which to switch to every 15 seconds.</p>
-        <select id="flipTo">
-            <option></option>
-            <th:block th:each="template : ${availableTemplates}">
-                <option th:text="${template}" th:value="${template}"></option>
-            </th:block>
-        </select>
+    <h2>Switch To</h2>
+    <p>If appropriate, choose a template in which to switch to every 15 seconds.</p>
+    <select id="flipTo">
+        <option></option>
+        <th:block th:each="template : ${availableTemplates}">
+            <option th:text="${template}" th:value="${template}"></option>
+        </th:block>
+    </select>
 
-        <h2>Override Name</h2>
-        <p>Single template only - Override the default name of the selected transport stop.</p>
-        <form>
-            <input id="name" type="text">
-        </form>
+    <h2>Override Name</h2>
+    <p>Single template only - Override the default name of the selected transport stop.</p>
+    <form>
+        <input id="name" type="text">
+    </form>
 
-        <h2>Timetable File</h2>
-        <p>Alternatively, <a href="/timetable/create">upload a timetable</a> to be displayed</p>
+    <h2>Timetable File</h2>
+    <p>Alternatively, <a href="/timetable/create">upload a timetable</a> to be displayed</p>
 
-        <h2>Select Transport</h2>
-        <p>Drag and Drop transport locations to appear on the selected dashboard template:</p>
+    <h2>Select Transport</h2>
+    <p>Drag and Drop transport locations to appear on the selected dashboard template:</p>
 
-        <div class="container">
-            <div id="busList-A">
-                <h3>Bus Stop List</h3>
-                <ul class="sortableBus">
-                    <th:block th:each="bus : ${buses}">
-                        <li th:id="${bus.key}" th:text="${bus.value.getLongDescription() + ' ' + bus.value.getIdentifier()}" ></li>
-                    </th:block>
-                </ul>
-            </div>
-
-            <div id="busList-B">
-                <h3>Selected Bus Stops</h3>
-                <ul class="sortableBus selectedBuses">
-                </ul>
-            </div>
-
-            <div id="stationList-A">
-                <h3>Station List</h3>
-                <ul class="sortableStation">
-                    <th:block th:each="station : ${stations}">
-                        <li th:id="${station.key}" th:text="${station.value.getStationName()}"></li>
-                    </th:block>
-                </ul>
-            </div>
-
-            <div id="stationList-B">
-                <h3>Selected Stations</h3>
-                <ul class="sortableStation selectedStations">
-                </ul>
-            </div>
+    <div class="container">
+        <div id="busList-A">
+            <h3>Bus Stop List</h3>
+            <ul class="sortableBus">
+                <th:block th:each="bus : ${buses}">
+                    <li th:id="${bus.key}"
+                        th:text="${bus.value.getLongDescription() + ' ' + bus.value.getIdentifier()}"></li>
+                </th:block>
+            </ul>
         </div>
 
-        <p id="warning"></p>
-        <button onclick="loadDashboard()">Submit</button>
+        <div id="busList-B">
+            <h3>Selected Bus Stops</h3>
+            <ul class="sortableBus selectedBuses">
+            </ul>
+        </div>
+
+        <div id="stationList-A">
+            <h3>Station List</h3>
+            <ul class="sortableStation">
+                <th:block th:each="station : ${stations}">
+                    <li th:id="${station.key}" th:text="${station.value.getStationName()}"></li>
+                </th:block>
+            </ul>
+        </div>
+
+        <div id="stationList-B">
+            <h3>Selected Stations</h3>
+            <ul class="sortableStation selectedStations">
+            </ul>
+        </div>
     </div>
+
+    <p id="warning"></p>
+    <button onclick="loadDashboard()">Submit</button>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -220,6 +222,7 @@
             });
         }
     }
+
 </script>
 </body>
 </html>

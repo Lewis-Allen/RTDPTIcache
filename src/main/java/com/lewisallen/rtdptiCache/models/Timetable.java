@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "timetable")
-public class Timetable
-{
+public class Timetable {
     @Id
     @Column(name = "timetableid")
     private @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,39 +28,32 @@ public class Timetable
     private LocalDateTime lastUsedDate = LocalDateTime.now();
 
     // Default constructor used by Spring
-    public Timetable()
-    {
+    public Timetable() {
     }
 
-    public Timetable(String name, String data)
-    {
+    public Timetable(String name, String data) {
         this.name = name;
         this.data = data;
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public String getData()
-    {
+    public String getData() {
         return data;
     }
 
-    public void setLastUsedDate(LocalDateTime lastUsedDate)
-    {
+    public void setLastUsedDate(LocalDateTime lastUsedDate) {
         this.lastUsedDate = lastUsedDate;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format(
                 "Timetable[id=%d, name='%s', data='%s']",
                 id, name, data);

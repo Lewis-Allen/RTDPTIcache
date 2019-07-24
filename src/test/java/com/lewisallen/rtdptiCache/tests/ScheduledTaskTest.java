@@ -9,52 +9,44 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
-public class ScheduledTaskTest
-{
+public class ScheduledTaskTest {
     @Autowired
     private ScheduledTasks tasks;
 
     @Test
-    void testUpdateNaPTANCache()
-    {
+    void testUpdateNaPTANCache() {
         tasks.updateBusCodesCache();
     }
 
     @Test
-    void testUpdateTrainStationCache()
-    {
+    void testUpdateTrainStationCache() {
         tasks.updateStationCache();
     }
 
     @Test
     @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
-    void testUpdateSIRICache()
-    {
+    void testUpdateSIRICache() {
         tasks.updateSIRICache();
     }
 
     @Test
-    void testUpdateStationDeparturesCache()
-    {
+    void testUpdateStationDeparturesCache() {
         tasks.updateTrainsDepartureCache();
     }
 
     // All at once.
     @Test
-    void testUpdateAllCaches()
-    {
+    void testUpdateAllCaches() {
         tasks.updateCaches();
     }
 
     @Test
-    void testUpdateBuses()
-    {
+    void testUpdateBuses() {
         tasks.updateBusCaches();
     }
 
     @Test
-    void testUpdateTrains()
-    {
+    void testUpdateTrains() {
         tasks.updateTrainCaches();
     }
 }

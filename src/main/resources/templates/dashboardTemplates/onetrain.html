@@ -5,14 +5,14 @@
     <title>Dashboard - RTDPTI</title>
     <div th:switch="${flipUrl == null}">
         <div th:case="true">
-            <meta http-equiv="refresh" content="15">
+            <meta content="15" http-equiv="refresh">
         </div>
         <div th:case="false">
-            <meta http-equiv="refresh" th:content="${'15;' + flipUrl}" />
+            <meta http-equiv="refresh" th:content="${'15;' + flipUrl}"/>
         </div>
     </div>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <style>
         * {
            box-sizing: border-box;
@@ -161,7 +161,8 @@
             padding-left: 1vw;
             padding-right: 1vw;
         }
-  </style>
+
+    </style>
 </head>
 <body>
 <div class="parent">
