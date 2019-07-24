@@ -24,7 +24,6 @@ public class ScheduledTaskTest {
     }
 
     @Test
-    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
     void testUpdateSIRICache() {
         tasks.updateSIRICache();
     }
